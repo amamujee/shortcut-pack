@@ -1,0 +1,16 @@
+{
+  "name": "shortcut-pack",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "shortcut-pack": "./cli.mjs"
+  },
+  "scripts": {
+    "build:standalone": "node ./build-standalone.mjs",
+    "setup": "node ./cli.mjs setup",
+    "list": "node ./cli.mjs list",
+    "generate": "node ./cli.mjs generate",
+    "doctor": "node ./cli.mjs doctor"
+  }
+}

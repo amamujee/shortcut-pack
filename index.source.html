@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Shortcut Kit</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">macOS text replacements</p>
+          <h1>Build a reusable shortcut pack in a few minutes.</h1>
+          <p class="lede">
+            Open one HTML file, fill in the personal details behind your most
+            common snippets, tune the generated shortcuts, and export a
+            macOS-compatible <code>Text Substitutions.plist</code> file.
+          </p>
+          <div class="hero-notes">
+            <span>One-file download</span>
+            <span>Works offline</span>
+            <span>No coding required</span>
+            <span>No signup</span>
+            <span>Local-only</span>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <p class="card-label">Suggested flow</p>
+          <ol>
+            <li>Download the HTML file and double-click it.</li>
+            <li>Fill in the details you repeat every week.</li>
+            <li>Export the plist and drag it into macOS Text Replacements.</li>
+          </ol>
+        </aside>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 1</p>
+              <h2>Profile</h2>
+            </div>
+            <button id="resetGenerated" class="ghost-button" type="button">
+              Reset generated text
+            </button>
+          </div>
+
+          <form id="profileForm" class="form-grid">
+            <label>
+              Prefix
+              <input id="prefix" name="prefix" type="text" maxlength="12" value=">" />
+              <span class="hint">Use something hard to trigger accidentally.</span>
+            </label>
+
+            <label>
+              Full name
+              <input id="fullName" name="fullName" type="text" placeholder="Aadil Mamujee" />
+            </label>
+
+            <label>
+              First name
+              <input id="firstName" name="firstName" type="text" placeholder="Aadil" />
+            </label>
+
+            <label>
+              Email
+              <input id="email" name="email" type="email" placeholder="you@example.com" />
+            </label>
+
+            <label>
+              Phone
+              <input id="phone" name="phone" type="text" placeholder="+1 555 555 5555" />
+            </label>
+
+            <label>
+              Website
+              <input id="website" name="website" type="url" placeholder="https://your-site.com" />
+            </label>
+
+            <label>
+              Company
+              <input id="company" name="company" type="text" placeholder="Your Company Name" />
+            </label>
+
+            <label>
+              Family detail
+              <input
+                id="family"
+                name="family"
+                type="text"
+                placeholder="A personal detail you often paste"
+              />
+            </label>
+
+            <label class="span-2">
+              Address
+              <textarea
+                id="address"
+                name="address"
+                rows="3"
+                placeholder="123 Main Street, Apt 4B, Brooklyn, NY 11201"
+              ></textarea>
+            </label>
+
+            <label class="span-2">
+              Scheduling link
+              <input
+                id="calendly"
+                name="calendly"
+                type="url"
+                placeholder="https://calendly.com/your-name"
+              />
+            </label>
+
+            <label class="span-2">
+              Short bio
+              <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                placeholder="A short paragraph you often paste into introductions, bios, or forms."
+              ></textarea>
+            </label>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 2</p>
+              <h2>Starter shortcuts</h2>
+            </div>
+          </div>
+
+          <p class="panel-intro">
+            Everything here is editable. Turn rows off, rename the suffixes,
+            or rewrite the generated text before you export.
+          </p>
+
+          <div id="starterList" class="starter-list"></div>
+
+          <div class="panel-subsection">
+            <div class="subsection-header">
+              <div>
+                <p class="section-kicker">Step 3</p>
+                <h3>Custom shortcuts</h3>
+              </div>
+              <button id="addCustomShortcut" class="secondary-button" type="button">
+                Add custom shortcut
+              </button>
+            </div>
+
+            <div id="customList" class="custom-list"></div>
+          </div>
+        </section>
+
+        <section class="panel panel-wide">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 4</p>
+              <h2>Export pack</h2>
+            </div>
+            <div class="export-actions">
+              <button id="downloadPlist" class="primary-button" type="button">
+                Download plist
+              </button>
+            </div>
+          </div>
+
+          <div id="statusBanner" class="status-banner" aria-live="polite"></div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <p class="summary-label">Enabled shortcuts</p>
+              <p id="shortcutCount" class="summary-value">0</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Prefix</p>
+              <p id="prefixPreview" class="summary-value">&gt;</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Duplicates</p>
+              <p id="duplicateCount" class="summary-value">0</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Replace</th>
+                  <th>With</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+
+          <div class="instructions">
+            <div>
+              <p class="section-kicker">Import on Mac</p>
+              <ol>
+                <li>Open System Settings.</li>
+                <li>Go to Keyboard, then open Text Replacements.</li>
+                <li>Drag the downloaded <code>Text Substitutions.plist</code> into the list.</li>
+              </ol>
+            </div>
+
+            <div>
+              <p class="section-kicker">Why this route</p>
+              <p>
+                This generator creates the same plist format that macOS supports
+                importing directly, which is safer than writing to hidden
+                internal stores that can change between macOS versions.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="starterTemplate">
+      <article class="starter-card">
+        <div class="starter-topline">
+          <div>
+            <p class="starter-category"></p>
+            <label class="toggle-label">
+              <input class="starter-enabled" type="checkbox" />
+              <span class="starter-title"></span>
+            </label>
+          </div>
+          <p class="starter-description"></p>
+        </div>
+
+        <p class="starter-note" hidden></p>
+
+        <div class="shortcut-row">
+          <label>
+            Shortcut suffix
+            <div class="shortcut-input-wrap">
+              <span class="prefix-chip"></span>
+              <input class="starter-suffix" type="text" />
+            </div>
+          </label>
+        </div>
+
+        <label>
+          Expanded text
+          <textarea class="starter-phrase" rows="3"></textarea>
+        </label>
+      </article>
+    </template>
+
+    <template id="customTemplate">
+      <article class="custom-card">
+        <div class="custom-card-header">
+          <label class="toggle-label">
+            <input class="custom-enabled" type="checkbox" checked />
+            <span>Custom shortcut</span>
+          </label>
+          <button class="link-button custom-remove" type="button">Remove</button>
+        </div>
+
+        <div class="custom-grid">
+          <label>
+            Shortcut suffix
+            <div class="shortcut-input-wrap">
+              <span class="prefix-chip"></span>
+              <input class="custom-suffix" type="text" placeholder="team" />
+            </div>
+          </label>
+
+          <label class="span-2">
+            Expanded text
+            <textarea
+              class="custom-phrase"
+              rows="3"
+              placeholder="Paste the exact text that should appear."
+            ></textarea>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <script src="./starter-pack.cjs"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
