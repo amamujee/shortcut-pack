@@ -8,6 +8,8 @@
       name="description"
       content="Build a personal Shortcut Pack for Apple text replacements. Add the details you reuse, keep the rows you want, and export a ready-to-import plist."
     />
+    <meta name="theme-color" content="#181612" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <script>
       window.va =
         window.va ||
@@ -306,6 +308,28 @@ h3,
 .panel-header {
   align-items: center;
   margin-bottom: 18px;
+}
+
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.panel-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.panel-meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: right;
 }
 
 .subsection-header {
@@ -884,6 +908,19 @@ tbody tr.duplicate-row {
     align-items: flex-start;
     flex-direction: column;
   }
+
+  .panel-actions {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .panel-action-buttons {
+    justify-content: flex-start;
+  }
+
+  .panel-meta {
+    text-align: left;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -924,6 +961,7 @@ tbody tr.duplicate-row {
 
       <div class="topbar-actions" aria-label="Builder navigation">
         <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack">GitHub</a>
+        <a class="builder-badge" href="#step-export">Jump to download</a>
         <a class="builder-badge" href="./index.html">Back to site</a>
       </div>
     </header>
@@ -972,9 +1010,17 @@ tbody tr.duplicate-row {
               <p class="section-kicker">Step 1</p>
               <h2>Your details</h2>
             </div>
-            <button id="resetGenerated" class="ghost-button" type="button">
-              Reset smart picks
-            </button>
+            <div class="panel-actions">
+              <p id="draftStatus" class="panel-meta">Saved locally in this browser.</p>
+              <div class="panel-action-buttons">
+                <button id="clearSavedDraft" class="secondary-button" type="button">
+                  Clear local draft
+                </button>
+                <button id="resetGenerated" class="ghost-button" type="button">
+                  Reset smart picks
+                </button>
+              </div>
+            </div>
           </div>
 
           <p class="panel-intro">
@@ -1111,6 +1157,44 @@ tbody tr.duplicate-row {
                 maxlength="32"
                 data-validate="documentId"
                 placeholder="ID-12345678"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="airlineLoyaltyNumber"
+              data-preview-starter="airlineLoyalty"
+            >
+              <span class="field-head">
+                <span class="field-title">Airline loyalty number</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="airlineLoyaltyNumber"
+                name="airlineLoyaltyNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="ABC123456"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="knownTravelerNumber"
+              data-preview-starter="knownTravelerNumber"
+            >
+              <span class="field-head">
+                <span class="field-title">Known Traveler Number (KTN)</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="knownTravelerNumber"
+                name="knownTravelerNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="123456789"
               />
             </label>
 
@@ -1500,6 +1584,8 @@ tbody tr.duplicate-row {
     dob: "",
     passportNumber: "",
     idNumber: "",
+    airlineLoyaltyNumber: "",
+    knownTravelerNumber: "",
     website: "",
     whatsappNumber: "",
     telegramUsername: "",
@@ -1604,6 +1690,26 @@ tbody tr.duplicate-row {
       requiredProfileFields: ["idNumber"],
       placeholder: "ID-12345678",
       build: (profile) => profile.idNumber || "ID-12345678",
+    },
+    {
+      id: "airlineLoyalty",
+      category: "Travel",
+      title: "Airline loyalty number",
+      description: "Useful for bookings when you want your frequent-flyer number close at hand.",
+      suffix: "air",
+      requiredProfileFields: ["airlineLoyaltyNumber"],
+      placeholder: "ABC123456",
+      build: (profile) => profile.airlineLoyaltyNumber || "ABC123456",
+    },
+    {
+      id: "knownTravelerNumber",
+      category: "Travel",
+      title: "Known Traveler Number (KTN)",
+      description: "Helpful for TSA PreCheck or other trusted-traveler forms.",
+      suffix: "ktn",
+      requiredProfileFields: ["knownTravelerNumber"],
+      placeholder: "123456789",
+      build: (profile) => profile.knownTravelerNumber || "123456789",
     },
     {
       id: "homeAddress",
@@ -1734,6 +1840,7 @@ tbody tr.duplicate-row {
       title: "Signature block",
       description: "A plain-text signature with your core contact info.",
       suffix: "sig",
+      autoEnable: false,
       requiredProfileFields: ["fullName", "email", "website"],
       requiredProfileMode: "any",
       placeholder: "Your Full Name\nyour@email.com\nhttps://your-site.com",
@@ -1752,6 +1859,7 @@ tbody tr.duplicate-row {
       title: "Intro thank-you",
       description: "A reusable note after someone makes an introduction.",
       suffix: "intro",
+      autoEnable: false,
       requiredProfileFields: ["fullName"],
       placeholder:
         "Thanks so much for the introduction. Great to meet you, and I will follow up directly from here.\n\nBest,\nYour first name",
@@ -1766,6 +1874,7 @@ tbody tr.duplicate-row {
       title: "Intro nice-to-meet-you",
       description: "A shorter first-reply snippet for new connections.",
       suffix: "intro2",
+      autoEnable: false,
       requiredProfileFields: ["fullName"],
       placeholder:
         "Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\nYour first name",
@@ -1914,17 +2023,22 @@ tbody tr.duplicate-row {
 const shortcutData = globalThis.AI_SHORTCUTS_DATA;
 const emptyProfile = shortcutData.emptyProfile;
 const starterPack = shortcutData.starterPack;
+const DRAFT_STORAGE_KEY = "shortcut-pack-draft-v1";
 
-const state = {
-  profile: { ...emptyProfile },
-  starters: starterPack.map((definition) => ({
+function buildDefaultStarters(profile = emptyProfile) {
+  return starterPack.map((definition) => ({
     id: definition.id,
     enabled: false,
     suffix: definition.suffix,
-    phrase: definition.build(emptyProfile),
+    phrase: definition.build(profile),
     customized: false,
     manuallySetEnabled: false,
-  })),
+  }));
+}
+
+const state = {
+  profile: { ...emptyProfile },
+  starters: buildDefaultStarters(),
   custom: [],
 };
 
@@ -1935,6 +2049,8 @@ const profileShortcutPreviewMap = [
   { field: "dob", starterId: "dob" },
   { field: "passportNumber", starterId: "passport" },
   { field: "idNumber", starterId: "idNumber" },
+  { field: "airlineLoyaltyNumber", starterId: "airlineLoyalty" },
+  { field: "knownTravelerNumber", starterId: "knownTravelerNumber" },
   { field: "website", starterId: "website" },
   { field: "whatsappNumber", starterId: "whatsapp" },
   { field: "telegramUsername", starterId: "telegram" },
@@ -1958,6 +2074,129 @@ function escapeXml(value) {
 
 function definitionById(id) {
   return starterPack.find((item) => item.id === id);
+}
+
+function storageAvailable() {
+  try {
+    return typeof window !== "undefined" && "localStorage" in window && window.localStorage;
+  } catch {
+    return false;
+  }
+}
+
+function resetStateToDefaults() {
+  state.profile = { ...emptyProfile };
+  state.starters = buildDefaultStarters();
+  state.custom = [];
+}
+
+function serializeState() {
+  return {
+    profile: state.profile,
+    starters: state.starters.map((starter) => ({
+      id: starter.id,
+      enabled: Boolean(starter.enabled),
+      suffix: starter.suffix,
+      phrase: starter.phrase,
+      customized: Boolean(starter.customized),
+      manuallySetEnabled: Boolean(starter.manuallySetEnabled),
+    })),
+    custom: state.custom.map((row) => ({
+      id: row.id,
+      enabled: Boolean(row.enabled),
+      suffix: row.suffix,
+      phrase: row.phrase,
+    })),
+  };
+}
+
+function applySavedState(saved) {
+  resetStateToDefaults();
+
+  if (saved?.profile && typeof saved.profile === "object") {
+    state.profile = {
+      ...emptyProfile,
+      ...Object.fromEntries(
+        Object.keys(emptyProfile).map((key) => [key, String(saved.profile[key] || "")]),
+      ),
+    };
+  }
+
+  if (Array.isArray(saved?.starters)) {
+    const savedById = new Map(saved.starters.map((starter) => [starter.id, starter]));
+    state.starters = starterPack.map((definition) => {
+      const starter = savedById.get(definition.id);
+      if (!starter) {
+        return {
+          id: definition.id,
+          enabled: false,
+          suffix: definition.suffix,
+          phrase: definition.build(state.profile),
+          customized: false,
+          manuallySetEnabled: false,
+        };
+      }
+
+      return {
+        id: definition.id,
+        enabled: Boolean(starter.enabled),
+        suffix: String(starter.suffix ?? definition.suffix ?? ""),
+        phrase: String(starter.phrase ?? definition.build(state.profile)),
+        customized: Boolean(starter.customized),
+        manuallySetEnabled: Boolean(starter.manuallySetEnabled),
+      };
+    });
+  }
+
+  if (Array.isArray(saved?.custom)) {
+    state.custom = saved.custom
+      .filter((row) => row && typeof row === "object")
+      .map((row) => ({
+        id: String(row.id || makeId()),
+        enabled: row.enabled !== false,
+        suffix: String(row.suffix || ""),
+        phrase: String(row.phrase || ""),
+      }));
+  }
+}
+
+function updateDraftStatus(message) {
+  const node = document.querySelector("#draftStatus");
+  if (node) {
+    node.textContent = message;
+  }
+}
+
+function loadDraft() {
+  if (!storageAvailable()) {
+    return false;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) {
+      return false;
+    }
+    applySavedState(JSON.parse(raw));
+    refreshGeneratedStarters();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function saveDraft() {
+  if (!storageAvailable()) {
+    updateDraftStatus("Local draft unavailable in this browser.");
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(serializeState()));
+    updateDraftStatus("Saved locally in this browser.");
+  } catch {
+    updateDraftStatus("Could not save a local draft in this browser.");
+  }
 }
 
 function validateTriggerValue(value, label = "Trigger") {
@@ -2038,6 +2277,8 @@ function validateProfileValue(key, value) {
         : "Use a real date like 14 March 1990 or 1990-03-14.";
     case "passportNumber":
     case "idNumber":
+    case "airlineLoyaltyNumber":
+    case "knownTravelerNumber":
       return /^[A-Za-z0-9][A-Za-z0-9\-\/ ]{2,31}$/.test(trimmed)
         ? ""
         : "Use letters, numbers, spaces, /, or - only.";
@@ -2145,6 +2386,10 @@ function starterRequirementsMet(definition) {
 }
 
 function starterShouldAutoEnable(definition, profile = state.profile) {
+  if (definition?.autoEnable === false) {
+    return false;
+  }
+
   if (!definition?.requiredProfileFields?.length) {
     return false;
   }
@@ -2168,6 +2413,8 @@ function formatMissingFields(definition) {
     dob: "date of birth",
     passportNumber: "passport number",
     idNumber: "ID number",
+    airlineLoyaltyNumber: "airline loyalty number",
+    knownTravelerNumber: "Known Traveler Number",
     website: "website",
     whatsappNumber: "WhatsApp number",
     telegramUsername: "Telegram username",
@@ -2445,6 +2692,9 @@ function renderStarters() {
     } else if (starter.enabled) {
       status.textContent = "Needs info";
       status.className = "starter-status is-warning";
+    } else if (exportable && definition.autoEnable === false) {
+      status.textContent = "Optional";
+      status.className = "starter-status is-ready";
     } else if (autoEnabled) {
       status.textContent = "Ready";
       status.className = "starter-status is-ready";
@@ -2614,6 +2864,7 @@ function render() {
   renderStarters();
   renderCustomRows();
   renderPreview();
+  saveDraft();
 }
 
 function addCustomRow() {
@@ -2624,6 +2875,16 @@ function addCustomRow() {
     phrase: "",
   });
   render();
+}
+
+function syncProfileFormValues() {
+  Object.keys(emptyProfile).forEach((key) => {
+    const input = document.querySelector(`#${key}`);
+    if (input) {
+      input.value = state.profile[key];
+      validateFieldElement(input);
+    }
+  });
 }
 
 function wireProfileForm() {
@@ -2643,6 +2904,21 @@ function wireProfileForm() {
     });
     validateFieldElement(input);
   });
+}
+
+function clearDraft() {
+  if (!storageAvailable()) {
+    updateDraftStatus("Local draft unavailable in this browser.");
+    return;
+  }
+
+  window.localStorage.removeItem(DRAFT_STORAGE_KEY);
+  resetStateToDefaults();
+  refreshGeneratedStarters(true);
+  syncProfileFormValues();
+  render();
+  updateDraftStatus("Local draft cleared from this browser.");
+  setStatus("Local draft cleared. You can start fresh now.", "success");
 }
 
 function exportPlist() {
@@ -2682,15 +2958,23 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  const loadedDraft = loadDraft();
   wireProfileForm();
   document.querySelector("#addCustomShortcut").addEventListener("click", addCustomRow);
   document.querySelector("#downloadPlist").addEventListener("click", exportPlist);
+  document.querySelector("#clearSavedDraft").addEventListener("click", clearDraft);
   document.querySelector("#resetGenerated").addEventListener("click", () => {
     refreshGeneratedStarters(true);
     render();
   });
 
   render();
+
+  if (loadedDraft) {
+    updateDraftStatus("Loaded your local draft from this browser.");
+  } else {
+    updateDraftStatus("Saved locally in this browser.");
+  }
 });
 
 </script>

@@ -1,17 +1,22 @@
 const shortcutData = globalThis.AI_SHORTCUTS_DATA;
 const emptyProfile = shortcutData.emptyProfile;
 const starterPack = shortcutData.starterPack;
+const DRAFT_STORAGE_KEY = "shortcut-pack-draft-v1";
 
-const state = {
-  profile: { ...emptyProfile },
-  starters: starterPack.map((definition) => ({
+function buildDefaultStarters(profile = emptyProfile) {
+  return starterPack.map((definition) => ({
     id: definition.id,
     enabled: false,
     suffix: definition.suffix,
-    phrase: definition.build(emptyProfile),
+    phrase: definition.build(profile),
     customized: false,
     manuallySetEnabled: false,
-  })),
+  }));
+}
+
+const state = {
+  profile: { ...emptyProfile },
+  starters: buildDefaultStarters(),
   custom: [],
 };
 
@@ -22,6 +27,8 @@ const profileShortcutPreviewMap = [
   { field: "dob", starterId: "dob" },
   { field: "passportNumber", starterId: "passport" },
   { field: "idNumber", starterId: "idNumber" },
+  { field: "airlineLoyaltyNumber", starterId: "airlineLoyalty" },
+  { field: "knownTravelerNumber", starterId: "knownTravelerNumber" },
   { field: "website", starterId: "website" },
   { field: "whatsappNumber", starterId: "whatsapp" },
   { field: "telegramUsername", starterId: "telegram" },
@@ -45,6 +52,129 @@ function escapeXml(value) {
 
 function definitionById(id) {
   return starterPack.find((item) => item.id === id);
+}
+
+function storageAvailable() {
+  try {
+    return typeof window !== "undefined" && "localStorage" in window && window.localStorage;
+  } catch {
+    return false;
+  }
+}
+
+function resetStateToDefaults() {
+  state.profile = { ...emptyProfile };
+  state.starters = buildDefaultStarters();
+  state.custom = [];
+}
+
+function serializeState() {
+  return {
+    profile: state.profile,
+    starters: state.starters.map((starter) => ({
+      id: starter.id,
+      enabled: Boolean(starter.enabled),
+      suffix: starter.suffix,
+      phrase: starter.phrase,
+      customized: Boolean(starter.customized),
+      manuallySetEnabled: Boolean(starter.manuallySetEnabled),
+    })),
+    custom: state.custom.map((row) => ({
+      id: row.id,
+      enabled: Boolean(row.enabled),
+      suffix: row.suffix,
+      phrase: row.phrase,
+    })),
+  };
+}
+
+function applySavedState(saved) {
+  resetStateToDefaults();
+
+  if (saved?.profile && typeof saved.profile === "object") {
+    state.profile = {
+      ...emptyProfile,
+      ...Object.fromEntries(
+        Object.keys(emptyProfile).map((key) => [key, String(saved.profile[key] || "")]),
+      ),
+    };
+  }
+
+  if (Array.isArray(saved?.starters)) {
+    const savedById = new Map(saved.starters.map((starter) => [starter.id, starter]));
+    state.starters = starterPack.map((definition) => {
+      const starter = savedById.get(definition.id);
+      if (!starter) {
+        return {
+          id: definition.id,
+          enabled: false,
+          suffix: definition.suffix,
+          phrase: definition.build(state.profile),
+          customized: false,
+          manuallySetEnabled: false,
+        };
+      }
+
+      return {
+        id: definition.id,
+        enabled: Boolean(starter.enabled),
+        suffix: String(starter.suffix ?? definition.suffix ?? ""),
+        phrase: String(starter.phrase ?? definition.build(state.profile)),
+        customized: Boolean(starter.customized),
+        manuallySetEnabled: Boolean(starter.manuallySetEnabled),
+      };
+    });
+  }
+
+  if (Array.isArray(saved?.custom)) {
+    state.custom = saved.custom
+      .filter((row) => row && typeof row === "object")
+      .map((row) => ({
+        id: String(row.id || makeId()),
+        enabled: row.enabled !== false,
+        suffix: String(row.suffix || ""),
+        phrase: String(row.phrase || ""),
+      }));
+  }
+}
+
+function updateDraftStatus(message) {
+  const node = document.querySelector("#draftStatus");
+  if (node) {
+    node.textContent = message;
+  }
+}
+
+function loadDraft() {
+  if (!storageAvailable()) {
+    return false;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) {
+      return false;
+    }
+    applySavedState(JSON.parse(raw));
+    refreshGeneratedStarters();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function saveDraft() {
+  if (!storageAvailable()) {
+    updateDraftStatus("Local draft unavailable in this browser.");
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(serializeState()));
+    updateDraftStatus("Saved locally in this browser.");
+  } catch {
+    updateDraftStatus("Could not save a local draft in this browser.");
+  }
 }
 
 function validateTriggerValue(value, label = "Trigger") {
@@ -125,6 +255,8 @@ function validateProfileValue(key, value) {
         : "Use a real date like 14 March 1990 or 1990-03-14.";
     case "passportNumber":
     case "idNumber":
+    case "airlineLoyaltyNumber":
+    case "knownTravelerNumber":
       return /^[A-Za-z0-9][A-Za-z0-9\-\/ ]{2,31}$/.test(trimmed)
         ? ""
         : "Use letters, numbers, spaces, /, or - only.";
@@ -232,6 +364,10 @@ function starterRequirementsMet(definition) {
 }
 
 function starterShouldAutoEnable(definition, profile = state.profile) {
+  if (definition?.autoEnable === false) {
+    return false;
+  }
+
   if (!definition?.requiredProfileFields?.length) {
     return false;
   }
@@ -255,6 +391,8 @@ function formatMissingFields(definition) {
     dob: "date of birth",
     passportNumber: "passport number",
     idNumber: "ID number",
+    airlineLoyaltyNumber: "airline loyalty number",
+    knownTravelerNumber: "Known Traveler Number",
     website: "website",
     whatsappNumber: "WhatsApp number",
     telegramUsername: "Telegram username",
@@ -532,6 +670,9 @@ function renderStarters() {
     } else if (starter.enabled) {
       status.textContent = "Needs info";
       status.className = "starter-status is-warning";
+    } else if (exportable && definition.autoEnable === false) {
+      status.textContent = "Optional";
+      status.className = "starter-status is-ready";
     } else if (autoEnabled) {
       status.textContent = "Ready";
       status.className = "starter-status is-ready";
@@ -701,6 +842,7 @@ function render() {
   renderStarters();
   renderCustomRows();
   renderPreview();
+  saveDraft();
 }
 
 function addCustomRow() {
@@ -711,6 +853,16 @@ function addCustomRow() {
     phrase: "",
   });
   render();
+}
+
+function syncProfileFormValues() {
+  Object.keys(emptyProfile).forEach((key) => {
+    const input = document.querySelector(`#${key}`);
+    if (input) {
+      input.value = state.profile[key];
+      validateFieldElement(input);
+    }
+  });
 }
 
 function wireProfileForm() {
@@ -730,6 +882,21 @@ function wireProfileForm() {
     });
     validateFieldElement(input);
   });
+}
+
+function clearDraft() {
+  if (!storageAvailable()) {
+    updateDraftStatus("Local draft unavailable in this browser.");
+    return;
+  }
+
+  window.localStorage.removeItem(DRAFT_STORAGE_KEY);
+  resetStateToDefaults();
+  refreshGeneratedStarters(true);
+  syncProfileFormValues();
+  render();
+  updateDraftStatus("Local draft cleared from this browser.");
+  setStatus("Local draft cleared. You can start fresh now.", "success");
 }
 
 function exportPlist() {
@@ -769,13 +936,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  const loadedDraft = loadDraft();
   wireProfileForm();
   document.querySelector("#addCustomShortcut").addEventListener("click", addCustomRow);
   document.querySelector("#downloadPlist").addEventListener("click", exportPlist);
+  document.querySelector("#clearSavedDraft").addEventListener("click", clearDraft);
   document.querySelector("#resetGenerated").addEventListener("click", () => {
     refreshGeneratedStarters(true);
     render();
   });
 
   render();
+
+  if (loadedDraft) {
+    updateDraftStatus("Loaded your local draft from this browser.");
+  } else {
+    updateDraftStatus("Saved locally in this browser.");
+  }
 });

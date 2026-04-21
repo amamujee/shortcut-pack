@@ -289,6 +289,28 @@ h3,
   margin-bottom: 18px;
 }
 
+.panel-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.panel-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.panel-meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
 .subsection-header {
   align-items: center;
   margin-bottom: 12px;
@@ -864,6 +886,19 @@ tbody tr.duplicate-row {
   .live-shortcut-preview-head {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .panel-actions {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .panel-action-buttons {
+    justify-content: flex-start;
+  }
+
+  .panel-meta {
+    text-align: left;
   }
 }
 

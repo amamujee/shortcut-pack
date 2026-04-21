@@ -8,6 +8,8 @@
       name="description"
       content="Build a personal Shortcut Pack for Apple text replacements. Add the details you reuse, keep the rows you want, and export a ready-to-import plist."
     />
+    <meta name="theme-color" content="#181612" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <script>
       window.va =
         window.va ||
@@ -27,6 +29,7 @@
 
       <div class="topbar-actions" aria-label="Builder navigation">
         <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack">GitHub</a>
+        <a class="builder-badge" href="#step-export">Jump to download</a>
         <a class="builder-badge" href="./index.html">Back to site</a>
       </div>
     </header>
@@ -75,9 +78,17 @@
               <p class="section-kicker">Step 1</p>
               <h2>Your details</h2>
             </div>
-            <button id="resetGenerated" class="ghost-button" type="button">
-              Reset smart picks
-            </button>
+            <div class="panel-actions">
+              <p id="draftStatus" class="panel-meta">Saved locally in this browser.</p>
+              <div class="panel-action-buttons">
+                <button id="clearSavedDraft" class="secondary-button" type="button">
+                  Clear local draft
+                </button>
+                <button id="resetGenerated" class="ghost-button" type="button">
+                  Reset smart picks
+                </button>
+              </div>
+            </div>
           </div>
 
           <p class="panel-intro">
@@ -214,6 +225,44 @@
                 maxlength="32"
                 data-validate="documentId"
                 placeholder="ID-12345678"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="airlineLoyaltyNumber"
+              data-preview-starter="airlineLoyalty"
+            >
+              <span class="field-head">
+                <span class="field-title">Airline loyalty number</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="airlineLoyaltyNumber"
+                name="airlineLoyaltyNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="ABC123456"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="knownTravelerNumber"
+              data-preview-starter="knownTravelerNumber"
+            >
+              <span class="field-head">
+                <span class="field-title">Known Traveler Number (KTN)</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="knownTravelerNumber"
+                name="knownTravelerNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="123456789"
               />
             </label>
 
