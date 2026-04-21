@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "header",
+          "key": "host",
+          "value": "www.shortcutpack.com"
+        }
+      ],
+      "destination": "https://shortcutpack.com/:path*",
+      "permanent": true
+    }
+  ]
+}

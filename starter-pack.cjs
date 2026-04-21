@@ -12,15 +12,22 @@
   const emptyProfile = {
     prefix: ">",
     fullName: "",
-    firstName: "",
     email: "",
     phone: "",
+    dob: "",
+    passportNumber: "",
+    idNumber: "",
     website: "",
-    address: "",
+    whatsappNumber: "",
+    telegramUsername: "",
+    xUsername: "",
+    linkedinUsername: "",
+    homeAddress: "",
+    workAddress: "",
     calendly: "",
     bio: "",
+    bankInfo: "",
     company: "",
-    family: "",
   };
 
   function firstTruthy() {
@@ -32,6 +39,28 @@
     return "";
   }
 
+  function firstNameFromFullName(fullName) {
+    const trimmed = String(fullName || "").trim();
+    return trimmed ? trimmed.split(/\s+/)[0] : "";
+  }
+
+  function normalizeHandle(value, prefixes = []) {
+    let normalized = String(value || "").trim();
+
+    for (const prefix of prefixes) {
+      if (normalized.toLowerCase().startsWith(prefix.toLowerCase())) {
+        normalized = normalized.slice(prefix.length);
+      }
+    }
+
+    normalized = normalized.replace(/^@+/, "").replace(/^\/+/, "");
+    return normalized.replace(/\/+$/, "").trim();
+  }
+
+  function normalizeWhatsAppNumber(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+
   const starterPack = [
     {
       id: "name",
@@ -40,7 +69,7 @@
       description: "A quick full-name shortcut for forms and signatures.",
       suffix: "name",
       requiredProfileFields: ["fullName"],
-      placeholder: "Your Full Name",
+      placeholder: "Bob Jones",
       build: (profile) => profile.fullName || "Your Full Name",
     },
     {
@@ -64,14 +93,56 @@
       build: (profile) => profile.phone || "+1 555 555 5555",
     },
     {
-      id: "address",
+      id: "dob",
       category: "Identity",
-      title: "Address",
-      description: "Helpful for shipping details, invoices, and invites.",
+      title: "Date of birth",
+      description: "Useful for forms, travel bookings, and admin paperwork.",
+      suffix: "dob",
+      requiredProfileFields: ["dob"],
+      placeholder: "7 July 1975",
+      build: (profile) => profile.dob || "7 August 1982",
+    },
+    {
+      id: "passport",
+      category: "Identity",
+      title: "Passport number",
+      description: "A quick shortcut for a passport number you do not want to remember.",
+      suffix: "pp",
+      requiredProfileFields: ["passportNumber"],
+      placeholder: "A1234567",
+      build: (profile) => profile.passportNumber || "A1234567",
+    },
+    {
+      id: "idNumber",
+      category: "Identity",
+      title: "ID number",
+      description: "Good for national ID, license, or another personal identifier.",
+      suffix: "id",
+      requiredProfileFields: ["idNumber"],
+      placeholder: "ID-12345678",
+      build: (profile) => profile.idNumber || "ID-12345678",
+    },
+    {
+      id: "homeAddress",
+      category: "Identity",
+      title: "Home address",
+      description: "Useful for shipping details, forms, and personal logistics.",
       suffix: "addr",
-      requiredProfileFields: ["address"],
-      placeholder: "123 Main Street, City, State ZIP",
-      build: (profile) => profile.address || "123 Main Street, City, State ZIP",
+      requiredProfileFields: ["homeAddress"],
+      placeholder: "123 Main Street, Apt 4B, Brooklyn, NY 11201",
+      build: (profile) =>
+        profile.homeAddress || "123 Main Street, Apt 4B, Brooklyn, NY 11201",
+    },
+    {
+      id: "workAddress",
+      category: "Identity",
+      title: "Work address",
+      description: "Helpful for invoices, meetings, and office logistics.",
+      suffix: "workaddr",
+      requiredProfileFields: ["workAddress"],
+      placeholder: "200 Broadway, Floor 8, New York, NY 10038",
+      build: (profile) =>
+        profile.workAddress || "200 Broadway, Floor 8, New York, NY 10038",
     },
     {
       id: "website",
@@ -84,6 +155,75 @@
       build: (profile) => profile.website || "https://your-site.com",
     },
     {
+      id: "whatsapp",
+      category: "Links / Social",
+      title: "WhatsApp link",
+      description: "A direct WhatsApp link built from your WhatsApp number.",
+      suffix: "wa",
+      requiredProfileFields: ["whatsappNumber"],
+      placeholder: "https://wa.me/16175105178",
+      build: (profile) => {
+        const digits = normalizeWhatsAppNumber(profile.whatsappNumber);
+        return digits ? `https://wa.me/${digits}` : "https://wa.me/16175105178";
+      },
+    },
+    {
+      id: "telegram",
+      category: "Links / Social",
+      title: "Telegram link",
+      description: "A direct Telegram link built from your username.",
+      suffix: "tg",
+      requiredProfileFields: ["telegramUsername"],
+      placeholder: "https://telegram.me/amamujee",
+      build: (profile) => {
+        const username = normalizeHandle(profile.telegramUsername, [
+          "https://telegram.me/",
+          "https://t.me/",
+          "http://telegram.me/",
+          "http://t.me/",
+        ]);
+        return username ? `https://telegram.me/${username}` : "https://telegram.me/amamujee";
+      },
+    },
+    {
+      id: "x",
+      category: "Links / Social",
+      title: "X profile",
+      description: "Your X profile link built from your username.",
+      suffix: "x",
+      requiredProfileFields: ["xUsername"],
+      placeholder: "https://x.com/amamujee",
+      build: (profile) => {
+        const username = normalizeHandle(profile.xUsername, [
+          "https://x.com/",
+          "http://x.com/",
+          "https://twitter.com/",
+          "http://twitter.com/",
+        ]);
+        return username ? `https://x.com/${username}` : "https://x.com/amamujee";
+      },
+    },
+    {
+      id: "linkedin",
+      category: "Links / Social",
+      title: "LinkedIn profile",
+      description: "Your LinkedIn profile link built from your username.",
+      suffix: "li",
+      requiredProfileFields: ["linkedinUsername"],
+      placeholder: "https://www.linkedin.com/in/amamujee",
+      build: (profile) => {
+        const username = normalizeHandle(profile.linkedinUsername, [
+          "https://www.linkedin.com/in/",
+          "http://www.linkedin.com/in/",
+          "https://linkedin.com/in/",
+          "http://linkedin.com/in/",
+        ]);
+        return username
+          ? `https://www.linkedin.com/in/${username}`
+          : "https://www.linkedin.com/in/amamujee";
+      },
+    },
+    {
       id: "bio",
       category: "Identity",
       title: "Short bio",
@@ -92,6 +232,18 @@
       requiredProfileFields: ["bio"],
       placeholder: "A short professional bio goes here.",
       build: (profile) => profile.bio || "A short professional bio goes here.",
+    },
+    {
+      id: "bankInfo",
+      category: "Identity",
+      title: "Bank info",
+      description: "A reusable bank details block for invoices or transfers.",
+      suffix: "bank",
+      requiredProfileFields: ["bankInfo"],
+      placeholder: "Account name: Your Name\nBank: Example Bank\nAccount number: 12345678",
+      build: (profile) =>
+        profile.bankInfo ||
+        "Account name: Your Name\nBank: Example Bank\nAccount number: 12345678",
     },
     {
       id: "signature",
@@ -117,12 +269,11 @@
       title: "Intro thank-you",
       description: "A reusable note after someone makes an introduction.",
       suffix: "intro",
-      requiredProfileFields: ["firstName", "fullName"],
-      requiredProfileMode: "any",
+      requiredProfileFields: ["fullName"],
       placeholder:
-        "Thanks so much for the introduction. Great to meet you, and I will follow up directly from here.\n\nBest,\nYour First Name",
+        "Thanks so much for the introduction. Great to meet you, and I will follow up directly from here.\n\nBest,\nYour first name",
       build: (profile) => {
-        const sender = firstTruthy(profile.firstName, profile.fullName, "Your First Name");
+        const sender = firstTruthy(firstNameFromFullName(profile.fullName), "Your first name");
         return `Thanks so much for the introduction. Great to meet you, and I will follow up directly from here.\n\nBest,\n${sender}`;
       },
     },
@@ -132,12 +283,11 @@
       title: "Intro nice-to-meet-you",
       description: "A shorter first-reply snippet for new connections.",
       suffix: "intro2",
-      requiredProfileFields: ["firstName", "fullName"],
-      requiredProfileMode: "any",
+      requiredProfileFields: ["fullName"],
       placeholder:
-        "Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\nYour First Name",
+        "Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\nYour first name",
       build: (profile) => {
-        const sender = firstTruthy(profile.firstName, profile.fullName, "Your First Name");
+        const sender = firstTruthy(firstNameFromFullName(profile.fullName), "Your first name");
         return `Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\n${sender}`;
       },
     },
@@ -225,24 +375,14 @@
       build: (profile) => profile.company || "Your Company Name",
     },
     {
-      id: "family",
-      category: "Personal / Custom",
-      title: "Family details",
-      description: "A placeholder slot for a personal snippet you reuse often.",
-      suffix: "family",
-      requiredProfileFields: ["family"],
-      placeholder: "A family-related detail you repeat often.",
-      build: (profile) => profile.family || "A family-related detail you repeat often.",
-    },
-    {
       id: "shipping",
       category: "Personal / Custom",
       title: "Shipping address",
-      description: "A shipping variant of your address.",
+      description: "A shipping variant of your home address.",
       suffix: "shipping",
-      requiredProfileFields: ["address"],
+      requiredProfileFields: ["homeAddress"],
       placeholder: "Your shipping address",
-      build: (profile) => profile.address || "Your shipping address",
+      build: (profile) => profile.homeAddress || "Your shipping address",
     },
     {
       id: "link",

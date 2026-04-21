@@ -6,13 +6,34 @@ const state = {
   profile: { ...emptyProfile },
   starters: starterPack.map((definition) => ({
     id: definition.id,
-    enabled: true,
+    enabled: false,
     suffix: definition.suffix,
     phrase: definition.build(emptyProfile),
     customized: false,
+    manuallySetEnabled: false,
   })),
   custom: [],
 };
+
+const profileShortcutPreviewMap = [
+  { field: "fullName", starterId: "name" },
+  { field: "email", starterId: "email" },
+  { field: "phone", starterId: "phone" },
+  { field: "dob", starterId: "dob" },
+  { field: "passportNumber", starterId: "passport" },
+  { field: "idNumber", starterId: "idNumber" },
+  { field: "website", starterId: "website" },
+  { field: "whatsappNumber", starterId: "whatsapp" },
+  { field: "telegramUsername", starterId: "telegram" },
+  { field: "xUsername", starterId: "x" },
+  { field: "linkedinUsername", starterId: "linkedin" },
+  { field: "company", starterId: "company" },
+  { field: "homeAddress", starterId: "homeAddress" },
+  { field: "workAddress", starterId: "workAddress" },
+  { field: "calendly", starterId: "calendar" },
+  { field: "bankInfo", starterId: "bankInfo" },
+  { field: "bio", starterId: "bio" },
+];
 
 function escapeXml(value) {
   return String(value)
@@ -26,24 +47,196 @@ function definitionById(id) {
   return starterPack.find((item) => item.id === id);
 }
 
-function profileValuePresent(key) {
-  return Boolean(state.profile[key] && String(state.profile[key]).trim());
+function validateTriggerValue(value, label = "Trigger") {
+  const trimmed = String(value || "").trim();
+
+  if (!trimmed) {
+    return `${label} cannot be blank.`;
+  }
+
+  if (/\s/.test(trimmed)) {
+    return `${label} cannot contain spaces.`;
+  }
+
+  if (trimmed.length > 24) {
+    return `${label} should stay under 24 characters.`;
+  }
+
+  return "";
 }
 
-function starterRequirementsMet(definition) {
+function isLikelyValidDate(value) {
+  const trimmed = String(value || "").trim();
+
+  if (!trimmed) {
+    return true;
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+    const parsed = Date.parse(`${trimmed}T00:00:00`);
+    return !Number.isNaN(parsed);
+  }
+
+  return !Number.isNaN(Date.parse(trimmed));
+}
+
+function normalizeSocialHandle(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//i, "")
+    .replace(/^https?:\/\/(www\.)?x\.com\//i, "")
+    .replace(/^https?:\/\/(www\.)?twitter\.com\//i, "")
+    .replace(/^https?:\/\/(www\.)?telegram\.me\//i, "")
+    .replace(/^https?:\/\/(www\.)?t\.me\//i, "")
+    .replace(/^@+/, "")
+    .replace(/^\/+/, "")
+    .replace(/\/+$/, "");
+}
+
+function validateProfileValue(key, value) {
+  const trimmed = String(value || "").trim();
+
+  if (!trimmed) {
+    return "";
+  }
+
+  switch (key) {
+    case "prefix":
+      return validateTriggerValue(trimmed, "Trigger prefix");
+    case "fullName":
+      return trimmed.length < 2 ? "Full name looks too short." : "";
+    case "email":
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)
+        ? ""
+        : "Enter a valid email address.";
+    case "phone": {
+      const digits = trimmed.replace(/\D/g, "");
+      return digits.length >= 7 && /^[0-9+().\-\s/x]+$/i.test(trimmed)
+        ? ""
+        : "Enter a valid phone number.";
+    }
+    case "whatsappNumber": {
+      const digits = trimmed.replace(/\D/g, "");
+      return digits.length >= 8 ? "" : "Enter a valid WhatsApp number with country code.";
+    }
+    case "dob":
+      return isLikelyValidDate(trimmed)
+        ? ""
+        : "Use a real date like 7 August 1982 or 1982-08-07.";
+    case "passportNumber":
+    case "idNumber":
+      return /^[A-Za-z0-9][A-Za-z0-9\-\/ ]{2,31}$/.test(trimmed)
+        ? ""
+        : "Use letters, numbers, spaces, /, or - only.";
+    case "telegramUsername":
+    case "xUsername":
+    case "linkedinUsername":
+      return /^[A-Za-z0-9_.-]{2,100}$/.test(normalizeSocialHandle(trimmed))
+        ? ""
+        : "Use a username without spaces.";
+    case "website":
+    case "calendly":
+      try {
+        const url = new URL(trimmed);
+        return /^https?:$/.test(url.protocol)
+          ? ""
+          : "Use a full URL starting with http:// or https://.";
+      } catch {
+        return "Use a full URL starting with http:// or https://.";
+      }
+    default:
+      return "";
+  }
+}
+
+function profileValuePresent(key) {
+  return (
+    Boolean(state.profile[key] && String(state.profile[key]).trim()) &&
+    !validateProfileValue(key, state.profile[key])
+  );
+}
+
+function validateFieldElement(input) {
+  if (!input) {
+    return "";
+  }
+
+  const rowCard = input.closest(".starter-card, .custom-card");
+  const rowToggle = rowCard?.querySelector(".starter-enabled, .custom-enabled");
+
+  if (rowToggle && !rowToggle.checked) {
+    input.setCustomValidity("");
+    input.classList.remove("is-invalid");
+    return "";
+  }
+
+  const rule = input.dataset.validate;
+  let message = "";
+
+  if (rule === "triggerPrefix") {
+    message = validateProfileValue("prefix", input.value);
+  } else if (rule === "triggerEnding") {
+    message = validateTriggerValue(input.value, "Trigger");
+  } else if (rule === "customTriggerEnding") {
+    message = validateTriggerValue(input.value, "Custom trigger");
+  } else if (rule === "whatsappNumber" || rule === "socialHandle") {
+    message = validateProfileValue(input.id, input.value);
+  } else if (rule === "documentId") {
+    message = validateProfileValue(input.id, input.value);
+  } else if (rule) {
+    message = validateProfileValue(input.id, input.value);
+  }
+
+  input.setCustomValidity(message);
+  input.classList.toggle("is-invalid", Boolean(message));
+  return message;
+}
+
+function validateForm(report = false) {
+  const inputs = document.querySelectorAll("[data-validate]");
+
+  for (const input of inputs) {
+    const message = validateFieldElement(input);
+    if (message) {
+      if (report) {
+        input.reportValidity();
+        input.focus();
+      }
+      return message;
+    }
+  }
+
+  return "";
+}
+
+function starterRequirementsMetForProfile(definition, profile) {
   const requiredFields = definition?.requiredProfileFields || [];
 
   if (!requiredFields.length) {
     return true;
   }
 
-  const matches = requiredFields.map(profileValuePresent);
+  const matches = requiredFields.map(
+    (key) => Boolean(profile[key] && String(profile[key]).trim()),
+  );
 
   if (definition.requiredProfileMode === "any") {
     return matches.some(Boolean);
   }
 
   return matches.every(Boolean);
+}
+
+function starterRequirementsMet(definition) {
+  return starterRequirementsMetForProfile(definition, state.profile);
+}
+
+function starterShouldAutoEnable(definition, profile = state.profile) {
+  if (!definition?.requiredProfileFields?.length) {
+    return false;
+  }
+
+  return starterRequirementsMetForProfile(definition, profile);
 }
 
 function starterIsExportable(item) {
@@ -57,15 +250,22 @@ function starterIsExportable(item) {
 function formatMissingFields(definition) {
   const labels = {
     fullName: "full name",
-    firstName: "first name",
     email: "email",
     phone: "phone",
+    dob: "date of birth",
+    passportNumber: "passport number",
+    idNumber: "ID number",
     website: "website",
-    address: "address",
+    whatsappNumber: "WhatsApp number",
+    telegramUsername: "Telegram username",
+    xUsername: "X username",
+    linkedinUsername: "LinkedIn username",
+    homeAddress: "home address",
+    workAddress: "work address",
     calendly: "scheduling link",
     bio: "short bio",
+    bankInfo: "bank info",
     company: "company",
-    family: "family detail",
   };
 
   const requiredFields = definition?.requiredProfileFields || [];
@@ -79,6 +279,99 @@ function computeStarterPhrase(id) {
   return definition ? definition.build(state.profile) : "";
 }
 
+function truncatePreviewText(value, maxLength = 72) {
+  const singleLine = String(value || "").replace(/\s+/g, " ").trim();
+  if (!singleLine) {
+    return "";
+  }
+  return singleLine.length > maxLength
+    ? `${singleLine.slice(0, maxLength - 1).trimEnd()}…`
+    : singleLine;
+}
+
+function renderProfileShortcutPreviews() {
+  const prefix = state.profile.prefix || "";
+  const previewRoot = document.querySelector("#liveShortcutPreview");
+  const prefixExample = document.querySelector("#prefixExample");
+
+  if (prefixExample) {
+    prefixExample.textContent = `${prefix}email`;
+  }
+
+  document
+    .querySelectorAll("[data-preview-field][data-preview-starter]")
+    .forEach((field) => {
+      const profileField = field.dataset.previewField;
+      const starterId = field.dataset.previewStarter;
+      const badge = field.querySelector(".field-shortcut-preview");
+      const definition = definitionById(starterId);
+
+      if (!badge || !definition) {
+        return;
+      }
+
+      if (!profileValuePresent(profileField)) {
+        badge.hidden = true;
+        badge.textContent = "";
+        return;
+      }
+
+      badge.hidden = false;
+      badge.textContent = `${prefix}${definition.suffix}`;
+    });
+
+  if (!previewRoot) {
+    return;
+  }
+
+  const entries = profileShortcutPreviewMap
+    .map(({ field, starterId }) => {
+      const definition = definitionById(starterId);
+      if (!definition || !profileValuePresent(field)) {
+        return null;
+      }
+
+      return {
+        field,
+        label: definition.title,
+        shortcut: `${prefix}${definition.suffix}`,
+        value: truncatePreviewText(computeStarterPhrase(starterId)),
+      };
+    })
+    .filter(Boolean);
+
+  previewRoot.innerHTML = "";
+
+  if (!entries.length) {
+    const empty = document.createElement("div");
+    empty.className = "live-shortcut-empty";
+    empty.textContent = "Add a detail to see the shortcut it creates.";
+    previewRoot.appendChild(empty);
+    return;
+  }
+
+  entries.forEach((entry) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "live-shortcut-card";
+    card.dataset.previewTarget = entry.field;
+    card.innerHTML = `
+      <p class="live-shortcut-label">${escapeXml(entry.label)}</p>
+      <p class="live-shortcut-code"><code>${escapeXml(entry.shortcut)}</code></p>
+      <p class="live-shortcut-value">${escapeXml(entry.value)}</p>
+    `;
+    card.addEventListener("click", () => {
+      const target = document.querySelector(`#${entry.field}`);
+      if (!target) {
+        return;
+      }
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      window.setTimeout(() => target.focus(), 120);
+    });
+    previewRoot.appendChild(card);
+  });
+}
+
 function makeId() {
   if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
     return globalThis.crypto.randomUUID();
@@ -89,14 +382,34 @@ function makeId() {
 
 function refreshGeneratedStarters(force = false) {
   state.starters = state.starters.map((item) => {
+    const definition = definitionById(item.id);
+    const autoEnabled = starterShouldAutoEnable(definition);
+    let nextItem = item;
+
     if (!item.customized || force) {
-      return {
-        ...item,
+      nextItem = {
+        ...nextItem,
         phrase: computeStarterPhrase(item.id),
         customized: false,
       };
     }
-    return item;
+
+    if (force) {
+      return {
+        ...nextItem,
+        enabled: autoEnabled,
+        manuallySetEnabled: false,
+      };
+    }
+
+    if (!item.manuallySetEnabled) {
+      return {
+        ...nextItem,
+        enabled: autoEnabled,
+      };
+    }
+
+    return nextItem;
   });
 }
 
@@ -191,42 +504,84 @@ function renderStarters() {
   state.starters.forEach((starter) => {
     const definition = definitionById(starter.id);
     const node = template.content.cloneNode(true);
+    const autoEnabled = starterShouldAutoEnable(definition);
+    const exportable = starterIsExportable(starter);
+    const missingFields = formatMissingFields(definition);
 
     node.querySelector(".starter-enabled").checked = starter.enabled;
     node.querySelector(".starter-category").textContent = definition.category;
     node.querySelector(".starter-title").textContent = definition.title;
     node.querySelector(".starter-description").textContent = definition.description;
+    node.querySelector(".starter-trigger-preview").textContent = `${
+      state.profile.prefix || ""
+    }${starter.suffix || ""}`;
     node.querySelector(".starter-suffix").value = starter.suffix;
     node.querySelector(".starter-phrase").value = starter.phrase;
     node.querySelector(".prefix-chip").textContent = state.profile.prefix || " ";
+    node.querySelector(".starter-suffix").dataset.validate = "triggerEnding";
 
     const card = node.querySelector(".starter-card");
     const note = node.querySelector(".starter-note");
-    const exportable = starterIsExportable(starter);
-    const missingFields = formatMissingFields(definition);
+    const status = node.querySelector(".starter-status");
+
+    card.classList.toggle("is-disabled", !starter.enabled);
+
+    if (starter.enabled && exportable) {
+      status.textContent = starter.customized ? "Manual" : "On";
+      status.className = "starter-status is-on";
+    } else if (starter.enabled) {
+      status.textContent = "Needs info";
+      status.className = "starter-status is-warning";
+    } else if (autoEnabled) {
+      status.textContent = "Ready";
+      status.className = "starter-status is-ready";
+    } else {
+      status.textContent = "Off";
+      status.className = "starter-status";
+    }
 
     if (!exportable && !starter.customized && missingFields.length) {
       note.hidden = false;
-      note.textContent = `Excluded from export until you fill in: ${missingFields.join(", ")}.`;
+      note.textContent = `Auto-on with: ${missingFields.join(", ")}.`;
     }
 
     card.querySelector(".starter-enabled").addEventListener("change", (event) => {
       starter.enabled = event.target.checked;
-      render();
+      starter.manuallySetEnabled = true;
+      validateFieldElement(card.querySelector(".starter-suffix"));
+      renderStarters();
+      renderPreview();
     });
 
     card.querySelector(".starter-suffix").addEventListener("input", (event) => {
+      validateFieldElement(event.target);
       starter.suffix = event.target.value;
+      starter.enabled = true;
+      starter.manuallySetEnabled = true;
+      card.classList.remove("is-disabled");
+      card.querySelector(".starter-enabled").checked = true;
+      status.textContent = "Manual";
+      status.className = "starter-status is-on";
+      card.querySelector(".starter-trigger-preview").textContent = `${
+        state.profile.prefix || ""
+      }${starter.suffix || ""}`;
       renderPreview();
     });
 
     card.querySelector(".starter-phrase").addEventListener("input", (event) => {
       starter.phrase = event.target.value;
       starter.customized = true;
+      starter.enabled = true;
+      starter.manuallySetEnabled = true;
+      card.classList.remove("is-disabled");
+      card.querySelector(".starter-enabled").checked = true;
+      status.textContent = "Manual";
+      status.className = "starter-status is-on";
       renderPreview();
     });
 
     root.appendChild(node);
+    validateFieldElement(card.querySelector(".starter-suffix"));
   });
 }
 
@@ -238,7 +593,8 @@ function renderCustomRows() {
   if (!state.custom.length) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = "No custom rows yet. Add any extra shortcut that is unique to you.";
+    empty.textContent =
+      "No custom shortcuts yet. Add anything the starter list does not already cover.";
     root.appendChild(empty);
     return;
   }
@@ -249,16 +605,23 @@ function renderCustomRows() {
     node.querySelector(".custom-suffix").value = row.suffix;
     node.querySelector(".custom-phrase").value = row.phrase;
     node.querySelector(".prefix-chip").textContent = state.profile.prefix || " ";
+    node.querySelector(".custom-trigger-preview").textContent = `${state.profile.prefix || ""}${row.suffix || ""}`;
+    node.querySelector(".custom-suffix").dataset.validate = "customTriggerEnding";
 
     const card = node.querySelector(".custom-card");
+    card.classList.toggle("is-disabled", !row.enabled);
 
     card.querySelector(".custom-enabled").addEventListener("change", (event) => {
       row.enabled = event.target.checked;
+      card.classList.toggle("is-disabled", !row.enabled);
+      validateFieldElement(card.querySelector(".custom-suffix"));
       renderPreview();
     });
 
     card.querySelector(".custom-suffix").addEventListener("input", (event) => {
+      validateFieldElement(event.target);
       row.suffix = event.target.value;
+      card.querySelector(".custom-trigger-preview").textContent = `${state.profile.prefix || ""}${row.suffix || ""}`;
       renderPreview();
     });
 
@@ -273,6 +636,7 @@ function renderCustomRows() {
     });
 
     root.appendChild(node);
+    validateFieldElement(card.querySelector(".custom-suffix"));
   });
 }
 
@@ -293,7 +657,7 @@ function renderPreview() {
   if (!entries.length) {
     const row = document.createElement("tr");
     row.innerHTML =
-      '<td colspan="3" class="empty-state">Fill in some profile details or add a custom shortcut to see the export preview.</td>';
+      '<td colspan="3" class="empty-state">Add a detail above or turn on a shortcut to preview what will export.</td>';
     previewBody.appendChild(row);
   } else {
     entries.forEach((entry) => {
@@ -313,26 +677,27 @@ function renderPreview() {
 
   if (!entries.length) {
     setStatus(
-      "No valid shortcuts yet. Add at least one shortcut with both a suffix and expanded text.",
+      "Nothing is ready yet. Add a detail above or turn on a shortcut to preview your export.",
     );
     return;
   }
 
   if (duplicates.size) {
     setStatus(
-      "Duplicate shortcuts detected. Adjust the suffixes before exporting so macOS only sees one phrase for each trigger.",
+      "Duplicate triggers detected. Change one of them before you export.",
       "warning",
     );
     return;
   }
 
   setStatus(
-    "Your shortcut pack is ready to export. Download the plist and drag it into macOS Text Replacements.",
+    "Ready to export. Only the shortcuts you kept and completed will be included.",
     "success",
   );
 }
 
 function render() {
+  renderProfileShortcutPreviews();
   renderStarters();
   renderCustomRows();
   renderPreview();
@@ -356,29 +721,41 @@ function wireProfileForm() {
     input.value = state.profile[key];
     input.addEventListener("input", (event) => {
       state.profile[key] = event.target.value;
+      validateFieldElement(event.target);
       refreshGeneratedStarters();
       render();
     });
+    input.addEventListener("blur", (event) => {
+      validateFieldElement(event.target);
+    });
+    validateFieldElement(input);
   });
 }
 
 function exportPlist() {
+  const validationMessage = validateForm(true);
+
+  if (validationMessage) {
+    setStatus(validationMessage, "warning");
+    return;
+  }
+
   const entries = buildEntries();
   const duplicates = findDuplicates(entries);
 
   if (!entries.length) {
-    setStatus("Nothing to export yet. Add at least one valid shortcut first.", "warning");
+    setStatus("Nothing to export yet. Add a detail above or switch on a shortcut first.", "warning");
     return;
   }
 
   if (duplicates.size) {
-    setStatus("Resolve duplicate shortcuts before exporting.", "warning");
+    setStatus("Resolve the duplicate triggers before exporting.", "warning");
     return;
   }
 
   downloadTextFile("Text Substitutions.plist", buildPlist(entries));
   setStatus(
-    "Downloaded Text Substitutions.plist. Import it by dragging it into macOS Text Replacements.",
+    "Downloaded Text Substitutions.plist. Open System Settings > Keyboard > Text Replacements and drag it in.",
     "success",
   );
 }
@@ -386,7 +763,7 @@ function exportPlist() {
 document.addEventListener("DOMContentLoaded", () => {
   if (!shortcutData) {
     setStatus(
-      "The starter pack failed to load. Try reopening this folder in a browser or let me know and I will tighten it further.",
+      "Shortcut Pack did not load correctly. Reopen the file or download the builder again.",
       "warning",
     );
     return;

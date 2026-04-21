@@ -3,290 +3,799 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Text Shortcut Kit</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <title>Shortcut Pack | Type Less. Remember Less.</title>
+    <meta
+      name="description"
+      content="Shortcut Pack helps busy people type less, remember less, and move faster with Apple-native text shortcuts for repeated details, IDs, and canned replies."
+    />
+    <meta property="og:title" content="Shortcut Pack" />
+    <meta
+      property="og:description"
+      content="Type less. Remember less. Move faster with Apple-native text shortcuts."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://shortcutpack.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+:root {
+  --bg: #f5f1e8;
+  --paper: #fbf8f1;
+  --ink: #181612;
+  --ink-soft: #5b554c;
+  --line: rgba(24, 22, 18, 0.14);
+  --line-soft: rgba(24, 22, 18, 0.08);
+  --accent: #9c5c21;
+  --accent-soft: rgba(156, 92, 33, 0.1);
+  --shadow: 0 24px 60px rgba(47, 34, 17, 0.08);
+  --container: min(1120px, calc(100vw - 40px));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: linear-gradient(180deg, #f8f5ee 0%, #f2ede3 100%);
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(156, 92, 33, 0.08), transparent 24%),
+    radial-gradient(circle at 85% 14%, rgba(156, 92, 33, 0.05), transparent 18%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code,
+.trigger {
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+h1,
+h2,
+h3,
+.brand-word {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.topbar,
+.hero,
+.section,
+.footer-cta {
+  width: var(--container);
+  margin: 0 auto;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 0 18px;
+  margin-bottom: 8px;
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.brand-word {
+  font-size: 1.35rem;
+}
+
+.topnav {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+}
+
+.topnav a:hover,
+.topnav a:focus-visible {
+  color: var(--ink);
+}
+
+.topbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar-link {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition:
+    transform 180ms ease,
+    color 180ms ease;
+}
+
+.topbar-link:hover,
+.topbar-link:focus-visible {
+  transform: translateY(-1px);
+  color: var(--ink);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.94rem;
+  font-weight: 700;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  transform: translateY(-1px);
+}
+
+.button-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button-secondary {
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 380px);
+  gap: 42px;
+  align-items: start;
+  padding: 48px 0 22px;
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.hero h1 {
+  max-width: 8ch;
+  font-size: clamp(4rem, 8vw, 6.4rem);
+  line-height: 0.92;
+}
+
+.hero-copy > p {
+  max-width: 54ch;
+  margin-top: 22px;
+  color: var(--ink-soft);
+  font-size: 1.12rem;
+}
+
+.hero-actions,
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.trust-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 22px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.hero-privacy-note {
+  max-width: 58ch;
+  margin-top: 14px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.example-panel {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow);
+}
+
+.example-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.example-list {
+  display: grid;
+  gap: 12px;
+}
+
+.example-item {
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.trigger {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.example-item p {
+  color: var(--ink-soft);
+}
+
+.section {
+  padding-top: 86px;
+}
+
+.section-head {
+  display: grid;
+  gap: 12px;
+  max-width: 58ch;
+}
+
+.section-label {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.section-head h2 {
+  font-size: clamp(2.25rem, 4.2vw, 3.9rem);
+  line-height: 0.96;
+}
+
+.section-head p {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+.benefit-grid,
+.paired-heads,
+.use-grid,
+.split-grid,
+.faq-grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.benefit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.benefit-card,
+.use-card,
+.text-card,
+.faq-card,
+.privacy-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.46);
+  box-shadow: var(--shadow);
+}
+
+.benefit-card h3,
+.use-card h3,
+.text-card h3,
+.faq-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+.benefit-card p,
+.use-card p,
+.text-card p,
+.faq-card p,
+.privacy-card p,
+.privacy-card li {
+  color: var(--ink-soft);
+}
+
+.use-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.use-card p + p {
+  margin-top: 10px;
+  font-size: 0.92rem;
+}
+
+.paired-heads {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+}
+
+.paired-head {
+  display: grid;
+  gap: 12px;
+}
+
+.paired-head h2 {
+  font-size: clamp(2.25rem, 4.2vw, 3.9rem);
+  line-height: 0.96;
+}
+
+.paired-head p {
+  max-width: 28ch;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+.split-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.privacy-card ul {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding-left: 20px;
+}
+
+.faq-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.footer-cta {
+  padding: 86px 0 72px;
+}
+
+.footer-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.52);
+  box-shadow: var(--shadow);
+}
+
+.footer-card h2 {
+  max-width: 10ch;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  line-height: 0.96;
+}
+
+.footer-card p {
+  max-width: 52ch;
+  margin-top: 12px;
+  color: var(--ink-soft);
+}
+
+.footer-meta {
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.inline-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(24, 22, 18, 0.28);
+  text-underline-offset: 0.18em;
+}
+
+.inline-link:hover,
+.inline-link:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 1080px) {
+  .hero,
+  .benefit-grid,
+  .paired-heads,
+  .use-grid,
+  .split-grid,
+  .faq-grid,
+  .footer-card {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-card {
+    display: grid;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .topnav {
+    order: 3;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container: min(100vw - 24px, 100vw - 24px);
+  }
+
+  .hero {
+    padding-top: 30px;
+  }
+
+  .section,
+  .footer-cta {
+    padding-top: 60px;
+  }
+
+  .benefit-card,
+  .use-card,
+  .text-card,
+  .faq-card,
+  .privacy-card,
+  .footer-card,
+  .example-panel {
+    padding: 18px;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .hero-actions,
+  .footer-actions {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .button {
+    transition: none;
+  }
+}
+    </style>
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Shortcut Pack home">
+        <span class="brand-mark">SP</span>
+        <span class="brand-word">Shortcut Pack</span>
+      </a>
+
+      <nav class="topnav" aria-label="Primary">
+        <a href="#uses">Use cases</a>
+        <a href="#native">Why it works</a>
+        <a href="#free">Free and private</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="topbar-actions" aria-label="Shortcut Pack actions">
+        <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack">GitHub</a>
+        <a class="button button-primary" href="./generator.html">Open builder</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">macOS text replacements</p>
-          <h1>Build a reusable shortcut pack in a few minutes.</h1>
-          <p class="lede">
-            Open one HTML file, fill in the personal details behind your most
-            common snippets, tune the generated shortcuts, and export a
-            macOS-compatible <code>Text Substitutions.plist</code> file.
+          <span class="eyebrow">Apple text shortcuts</span>
+          <h1>Type less. Remember less.</h1>
+          <p>
+            Shortcut Pack turns things like <code>&gt;home</code>, <code>&gt;pp</code>, and
+            <code>&gt;intro</code> into Apple text shortcuts so you can type less and remember
+            less.
           </p>
-          <div class="hero-notes">
-            <span>One-file download</span>
-            <span>Works offline</span>
-            <span>No coding required</span>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="./generator.html">Open the builder</a>
+            <a
+              class="button button-secondary"
+              href="./generator.html"
+              data-download-offline-builder
+              download="Shortcut Pack Builder.html"
+              >Download builder file</a
+            >
+          </div>
+
+          <div class="trust-line" aria-label="Trust signals">
+            <span>Totally free</span>
             <span>No signup</span>
-            <span>Local-only</span>
-          </div>
-        </div>
-
-        <aside class="hero-card">
-          <p class="card-label">Suggested flow</p>
-          <ol>
-            <li>Download the HTML file and double-click it.</li>
-            <li>Fill in the details you repeat every week.</li>
-            <li>Export the plist and drag it into macOS Text Replacements.</li>
-          </ol>
-        </aside>
-      </header>
-
-      <main class="layout">
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <p class="section-kicker">Step 1</p>
-              <h2>Profile</h2>
-            </div>
-            <button id="resetGenerated" class="ghost-button" type="button">
-              Reset generated text
-            </button>
+            <span>No saved personal data</span>
           </div>
 
-          <form id="profileForm" class="form-grid">
-            <label>
-              Prefix
-              <input id="prefix" name="prefix" type="text" maxlength="12" value=">" />
-              <span class="hint">Use something hard to trigger accidentally.</span>
-            </label>
-
-            <label>
-              Full name
-              <input id="fullName" name="fullName" type="text" placeholder="Aadil Mamujee" />
-            </label>
-
-            <label>
-              First name
-              <input id="firstName" name="firstName" type="text" placeholder="Aadil" />
-            </label>
-
-            <label>
-              Email
-              <input id="email" name="email" type="email" placeholder="you@example.com" />
-            </label>
-
-            <label>
-              Phone
-              <input id="phone" name="phone" type="text" placeholder="+1 555 555 5555" />
-            </label>
-
-            <label>
-              Website
-              <input id="website" name="website" type="url" placeholder="https://your-site.com" />
-            </label>
-
-            <label>
-              Company
-              <input id="company" name="company" type="text" placeholder="Your Company Name" />
-            </label>
-
-            <label>
-              Family detail
-              <input
-                id="family"
-                name="family"
-                type="text"
-                placeholder="A personal detail you often paste"
-              />
-            </label>
-
-            <label class="span-2">
-              Address
-              <textarea
-                id="address"
-                name="address"
-                rows="3"
-                placeholder="123 Main Street, Apt 4B, Brooklyn, NY 11201"
-              ></textarea>
-            </label>
-
-            <label class="span-2">
-              Scheduling link
-              <input
-                id="calendly"
-                name="calendly"
-                type="url"
-                placeholder="https://calendly.com/your-name"
-              />
-            </label>
-
-            <label class="span-2">
-              Short bio
-              <textarea
-                id="bio"
-                name="bio"
-                rows="4"
-                placeholder="A short paragraph you often paste into introductions, bios, or forms."
-              ></textarea>
-            </label>
-          </form>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <div>
-              <p class="section-kicker">Step 2</p>
-              <h2>Starter shortcuts</h2>
-            </div>
-          </div>
-
-          <p class="panel-intro">
-            Everything here is editable. Turn rows off, rename the suffixes,
-            or rewrite the generated text before you export.
+          <p class="hero-privacy-note">
+            Want the local version? Download one HTML file and use it offline.
           </p>
-
-          <div id="starterList" class="starter-list"></div>
-
-          <div class="panel-subsection">
-            <div class="subsection-header">
-              <div>
-                <p class="section-kicker">Step 3</p>
-                <h3>Custom shortcuts</h3>
-              </div>
-              <button id="addCustomShortcut" class="secondary-button" type="button">
-                Add custom shortcut
-              </button>
-            </div>
-
-            <div id="customList" class="custom-list"></div>
-          </div>
-        </section>
-
-        <section class="panel panel-wide">
-          <div class="panel-header">
-            <div>
-              <p class="section-kicker">Step 4</p>
-              <h2>Export pack</h2>
-            </div>
-            <div class="export-actions">
-              <button id="downloadPlist" class="primary-button" type="button">
-                Download plist
-              </button>
-            </div>
-          </div>
-
-          <div id="statusBanner" class="status-banner" aria-live="polite"></div>
-
-          <div class="summary-grid">
-            <div class="summary-card">
-              <p class="summary-label">Enabled shortcuts</p>
-              <p id="shortcutCount" class="summary-value">0</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Prefix</p>
-              <p id="prefixPreview" class="summary-value">&gt;</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Duplicates</p>
-              <p id="duplicateCount" class="summary-value">0</p>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Replace</th>
-                  <th>With</th>
-                  <th>Category</th>
-                </tr>
-              </thead>
-              <tbody id="previewBody"></tbody>
-            </table>
-          </div>
-
-          <div class="instructions">
-            <div>
-              <p class="section-kicker">Import on Mac</p>
-              <ol>
-                <li>Open System Settings.</li>
-                <li>Go to Keyboard, then open Text Replacements.</li>
-                <li>Drag the downloaded <code>Text Substitutions.plist</code> into the list.</li>
-              </ol>
-            </div>
-
-            <div>
-              <p class="section-kicker">Why this route</p>
-              <p>
-                This generator creates the same plist format that macOS supports
-                importing directly, which is safer than writing to hidden
-                internal stores that can change between macOS versions.
-              </p>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <template id="starterTemplate">
-      <article class="starter-card">
-        <div class="starter-topline">
-          <div>
-            <p class="starter-category"></p>
-            <label class="toggle-label">
-              <input class="starter-enabled" type="checkbox" />
-              <span class="starter-title"></span>
-            </label>
-          </div>
-          <p class="starter-description"></p>
         </div>
 
-        <p class="starter-note" hidden></p>
+        <aside class="example-panel" aria-label="Shortcut examples">
+          <div class="example-panel-header">
+            <span>Examples</span>
+            <span>Works with Apple text replacements</span>
+          </div>
 
-        <div class="shortcut-row">
-          <label>
-            Shortcut suffix
-            <div class="shortcut-input-wrap">
-              <span class="prefix-chip"></span>
-              <input class="starter-suffix" type="text" />
+          <div class="example-list">
+            <div class="example-item">
+              <span class="trigger">&gt;home</span>
+              <p>Your home address in a few characters.</p>
             </div>
-          </label>
-        </div>
 
-        <label>
-          Expanded text
-          <textarea class="starter-phrase" rows="3"></textarea>
-        </label>
-      </article>
-    </template>
-
-    <template id="customTemplate">
-      <article class="custom-card">
-        <div class="custom-card-header">
-          <label class="toggle-label">
-            <input class="custom-enabled" type="checkbox" checked />
-            <span>Custom shortcut</span>
-          </label>
-          <button class="link-button custom-remove" type="button">Remove</button>
-        </div>
-
-        <div class="custom-grid">
-          <label>
-            Shortcut suffix
-            <div class="shortcut-input-wrap">
-              <span class="prefix-chip"></span>
-              <input class="custom-suffix" type="text" placeholder="team" />
+            <div class="example-item">
+              <span class="trigger">&gt;pp</span>
+              <p>Passport or ID details without having to remember them.</p>
             </div>
-          </label>
 
-          <label class="span-2">
-            Expanded text
-            <textarea
-              class="custom-phrase"
-              rows="3"
-              placeholder="Paste the exact text that should appear."
-            ></textarea>
-          </label>
+            <div class="example-item">
+              <span class="trigger">&gt;intro</span>
+              <p>A ready-to-send reply on your Mac and iPhone.</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="benefit-grid">
+          <article class="benefit-card">
+            <h3>Less typing</h3>
+            <p>Turn repeated text into short triggers.</p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>Less remembering</h3>
+            <p>Stop keeping low-value details in your head.</p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>More speed</h3>
+            <p>Move faster with shortcuts built into Apple’s system.</p>
+          </article>
         </div>
-      </article>
-    </template>
+      </section>
 
-    <script src="./starter-pack.cjs"></script>
-    <script src="./app.js"></script>
+      <section id="uses" class="section">
+        <div class="section-head">
+          <span class="section-label">Use Cases</span>
+          <h2>Use it for what repeats.</h2>
+          <p>Start here. Add your own.</p>
+        </div>
+
+        <div class="use-grid">
+          <article class="use-card">
+            <span class="trigger">&gt;home</span>
+            <h3>Home address</h3>
+            <p>Your full home address without retyping it.</p>
+            <p>Good for forms, shipping, invoices, and travel.</p>
+          </article>
+
+          <article class="use-card">
+            <span class="trigger">&gt;pp</span>
+            <h3>Passport details</h3>
+            <p>Passport, ID, or any awkward number you never want to memorize.</p>
+            <p>Good for travel, admin, and anything annoying to retrieve.</p>
+          </article>
+
+          <article class="use-card">
+            <span class="trigger">&gt;intro</span>
+            <h3>Replies</h3>
+            <p>Saved replies for intros, thanks, follow-ups, and scheduling.</p>
+            <p>Good for moving faster when on the go.</p>
+          </article>
+
+          <article class="use-card">
+            <span class="trigger">&gt;custom</span>
+            <h3>Your own system</h3>
+            <p>Add whatever you use often.</p>
+            <p>Good for everything else.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="native" class="section">
+        <div class="paired-heads">
+          <div class="paired-head">
+            <span class="section-label">Why It Works</span>
+            <h2>Native speed.</h2>
+            <p>
+              It works with Apple’s built-in text replacements, so you do not need another app
+              or system.
+            </p>
+          </div>
+
+          <div class="paired-head">
+            <span class="section-label">Flexibility</span>
+            <h2>Make it yours.</h2>
+            <p>Start with the pack. Then make it your own.</p>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          <article class="text-card">
+            <h3>What you get</h3>
+            <p>Type faster, reply faster, and clear some mental clutter.</p>
+            <p>Start with identity, links, bios, and replies.</p>
+          </article>
+
+          <article class="text-card">
+            <h3>Why people stick with it</h3>
+            <p>Simple enough to keep using. Flexible enough to grow with you.</p>
+            <p>Keep adding shortcuts as your workflow grows.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="free" class="section">
+        <div class="privacy-card">
+          <div class="section-head">
+            <span class="section-label">Free And Private</span>
+            <h2>Free. Private.</h2>
+            <p>
+              Shortcut Pack is a free community project. We do not charge for it or save your
+              personal info.
+            </p>
+          </div>
+
+          <ul>
+            <li>No signup</li>
+            <li>No account</li>
+            <li>No saved personal data</li>
+            <li>No paywall</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="faq" class="section">
+        <div class="section-head">
+          <span class="section-label">FAQ</span>
+          <h2>Short answers.</h2>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>Is it free?</h3>
+            <p>Yes. Free to use.</p>
+          </article>
+
+          <article class="faq-card">
+            <h3>Do you save my data?</h3>
+            <p>No. We do not collect your personal text.</p>
+          </article>
+
+          <article class="faq-card">
+            <h3>Can I customize it?</h3>
+            <p>Yes. It is built to be customized.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-cta">
+      <div class="footer-card">
+        <div>
+          <span class="section-label">Get Started</span>
+          <h2>Start simple.</h2>
+          <p>Start with addresses, IDs, and replies.</p>
+          <p class="footer-meta">
+            Community-built and open source.
+            <a
+              class="inline-link"
+              href="https://github.com/amamujee/shortcut-pack"
+              target="_blank"
+              rel="noreferrer"
+              >View on GitHub</a
+            >.
+          </p>
+        </div>
+
+        <div class="footer-actions">
+          <a class="button button-primary" href="./generator.html">Open the builder</a>
+          <a
+            class="button button-secondary"
+            href="./generator.html"
+            data-download-offline-builder
+            download="Shortcut Pack Builder.html"
+            >Download builder file</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const offlineBuilderFilename = "Shortcut Pack Builder.html";
+      const offlineBuilderBase64 = __OFFLINE_BUILDER_BASE64__;
+
+      function decodeBase64Utf8(base64) {
+        const binary = window.atob(base64);
+        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+        return new TextDecoder().decode(bytes);
+      }
+
+      document.querySelectorAll("[data-download-offline-builder]").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          const offlineBuilderHtml = decodeBase64Utf8(offlineBuilderBase64);
+          const blob = new Blob([offlineBuilderHtml], {
+            type: "text/html;charset=utf-8",
+          });
+          const objectUrl = URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.href = objectUrl;
+          anchor.download = offlineBuilderFilename;
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+          window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        });
+      });
+    </script>
   </body>
 </html>

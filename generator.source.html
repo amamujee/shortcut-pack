@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shortcut Pack Builder</title>
+    <meta
+      name="description"
+      content="Build a personal Shortcut Pack for Apple text replacements. Add the details you reuse, keep the rows you want, and export a ready-to-import plist."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Shortcut Pack home">
+        <span class="brand-mark">SP</span>
+        <span class="brand-word">Shortcut Pack</span>
+      </a>
+
+      <div class="topbar-actions" aria-label="Builder navigation">
+        <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack">GitHub</a>
+        <a class="builder-badge" href="./index.html">Back to site</a>
+      </div>
+    </header>
+
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Apple text shortcuts</p>
+          <h1>Build your Shortcut Pack.</h1>
+          <p class="lede">
+            Add the details you reuse, keep the shortcuts you want, and export a
+            <code>Text Substitutions.plist</code> for Apple text replacements on Mac.
+          </p>
+          <div class="hero-notes">
+            <span>Apple-native</span>
+            <span>Works offline</span>
+            <span>Blank fields stay out</span>
+            <span>No signup</span>
+            <span>Saved locally</span>
+          </div>
+          <p class="privacy-note">
+            Your details stay in your browser and are not sent to us.
+          </p>
+        </div>
+
+        <aside class="hero-card">
+          <p class="card-label">Quick setup</p>
+          <ol class="quick-setup-list">
+            <li>
+              <a href="#step-details">Step 1. Add only the details you reuse.</a>
+            </li>
+            <li>
+              <a href="#step-starters">Steps 2-3. Keep the shortcuts you want and add your own.</a>
+            </li>
+            <li>
+              <a href="#step-export">Step 4. Download the plist and import it in Text Replacements.</a>
+            </li>
+          </ol>
+        </aside>
+      </header>
+
+      <main id="top" class="layout">
+        <section id="step-details" class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 1</p>
+              <h2>Your details</h2>
+            </div>
+            <button id="resetGenerated" class="ghost-button" type="button">
+              Reset smart picks
+            </button>
+          </div>
+
+          <p class="panel-intro">
+            Add only the details you actually reuse. Matching starter shortcuts
+            turn on automatically when they have enough information, and
+            anything left blank stays out of the export.
+          </p>
+
+          <form id="profileForm" class="form-grid">
+            <label class="profile-field prefix-field span-3">
+              <span class="field-head">
+                <span class="field-title">Trigger prefix</span>
+                <span id="prefixExample" class="field-shortcut-preview field-shortcut-preview-static"
+                  >&gt;email</span
+                >
+              </span>
+              <input
+                id="prefix"
+                name="prefix"
+                type="text"
+                maxlength="12"
+                value=">"
+                data-validate="triggerPrefix"
+              />
+              <span class="field-note">
+                Every shortcut uses this prefix. Default to <code>&gt;</code>. If you want
+                fewer accidental triggers, try <code>@@</code> or <code>&gt;&gt;</code>.
+              </span>
+            </label>
+
+            <div class="live-shortcut-preview span-3">
+              <div class="live-shortcut-preview-head">
+                <p class="section-kicker">Live preview</p>
+                <p class="live-shortcut-preview-copy">
+                  Preview only. Click a card to jump to the field you want to edit.
+                </p>
+              </div>
+              <div id="liveShortcutPreview" class="live-shortcut-preview-grid"></div>
+            </div>
+
+            <label class="profile-field" data-preview-field="fullName" data-preview-starter="name">
+              <span class="field-head">
+                <span class="field-title">Full name</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="fullName"
+                name="fullName"
+                type="text"
+                maxlength="120"
+                data-validate="fullName"
+                placeholder="Aadil Mamujee"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="email" data-preview-starter="email">
+              <span class="field-head">
+                <span class="field-title">Email</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                inputmode="email"
+                data-validate="email"
+                placeholder="you@example.com"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="phone" data-preview-starter="phone">
+              <span class="field-head">
+                <span class="field-title">Phone</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="phone"
+                name="phone"
+                type="text"
+                maxlength="32"
+                inputmode="tel"
+                data-validate="phone"
+                placeholder="+1 555 555 5555"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="dob" data-preview-starter="dob">
+              <span class="field-head">
+                <span class="field-title">Date of birth</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="dob"
+                name="dob"
+                type="text"
+                maxlength="40"
+                data-validate="dob"
+                placeholder="7 August 1982"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="passportNumber"
+              data-preview-starter="passport"
+            >
+              <span class="field-head">
+                <span class="field-title">Passport number</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="passportNumber"
+                name="passportNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="A1234567"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="idNumber"
+              data-preview-starter="idNumber"
+            >
+              <span class="field-head">
+                <span class="field-title">ID number</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="idNumber"
+                name="idNumber"
+                type="text"
+                maxlength="32"
+                data-validate="documentId"
+                placeholder="ID-12345678"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="website" data-preview-starter="website">
+              <span class="field-head">
+                <span class="field-title">Website</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="website"
+                name="website"
+                type="url"
+                inputmode="url"
+                data-validate="url"
+                placeholder="https://your-site.com"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="whatsappNumber"
+              data-preview-starter="whatsapp"
+            >
+              <span class="field-head">
+                <span class="field-title">WhatsApp number</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="whatsappNumber"
+                name="whatsappNumber"
+                type="text"
+                maxlength="32"
+                inputmode="tel"
+                data-validate="whatsappNumber"
+                placeholder="16175105178"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="telegramUsername"
+              data-preview-starter="telegram"
+            >
+              <span class="field-head">
+                <span class="field-title">Telegram username</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="telegramUsername"
+                name="telegramUsername"
+                type="text"
+                maxlength="80"
+                data-validate="socialHandle"
+                placeholder="amamujee"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="xUsername" data-preview-starter="x">
+              <span class="field-head">
+                <span class="field-title">X username</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="xUsername"
+                name="xUsername"
+                type="text"
+                maxlength="80"
+                data-validate="socialHandle"
+                placeholder="amamujee"
+              />
+            </label>
+
+            <label
+              class="profile-field"
+              data-preview-field="linkedinUsername"
+              data-preview-starter="linkedin"
+            >
+              <span class="field-head">
+                <span class="field-title">LinkedIn username</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="linkedinUsername"
+                name="linkedinUsername"
+                type="text"
+                maxlength="120"
+                data-validate="socialHandle"
+                placeholder="amamujee"
+              />
+            </label>
+
+            <label class="profile-field" data-preview-field="company" data-preview-starter="company">
+              <span class="field-head">
+                <span class="field-title">Company</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                maxlength="120"
+                placeholder="Your Company Name"
+              />
+            </label>
+
+            <label
+              class="profile-field span-3"
+              data-preview-field="homeAddress"
+              data-preview-starter="homeAddress"
+            >
+              <span class="field-head">
+                <span class="field-title">Home address</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <textarea
+                id="homeAddress"
+                name="homeAddress"
+                rows="3"
+                placeholder="123 Main Street, Apt 4B, Brooklyn, NY 11201"
+              ></textarea>
+            </label>
+
+            <label
+              class="profile-field span-3"
+              data-preview-field="workAddress"
+              data-preview-starter="workAddress"
+            >
+              <span class="field-head">
+                <span class="field-title">Work address</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <textarea
+                id="workAddress"
+                name="workAddress"
+                rows="3"
+                placeholder="200 Broadway, Floor 8, New York, NY 10038"
+              ></textarea>
+            </label>
+
+            <label class="profile-field span-2" data-preview-field="calendly" data-preview-starter="calendar">
+              <span class="field-head">
+                <span class="field-title">Scheduling link</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="calendly"
+                name="calendly"
+                type="url"
+                inputmode="url"
+                data-validate="url"
+                placeholder="https://calendly.com/your-name"
+              />
+            </label>
+
+            <label
+              class="profile-field span-3"
+              data-preview-field="bankInfo"
+              data-preview-starter="bankInfo"
+            >
+              <span class="field-head">
+                <span class="field-title">Bank info</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <textarea
+                id="bankInfo"
+                name="bankInfo"
+                rows="4"
+                maxlength="1000"
+                placeholder="Account name: Your Name&#10;Bank: Example Bank&#10;Account number: 12345678"
+              ></textarea>
+            </label>
+
+            <label class="profile-field span-3" data-preview-field="bio" data-preview-starter="bio">
+              <span class="field-head">
+                <span class="field-title">Short bio</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                maxlength="1000"
+                placeholder="A short paragraph you often paste into introductions, bios, or forms."
+              ></textarea>
+            </label>
+          </form>
+        </section>
+
+        <section id="step-starters" class="panel starter-panel">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 2</p>
+              <h2>Starter shortcuts</h2>
+            </div>
+          </div>
+
+          <p class="panel-intro">
+            Shortcut Pack starts with practical defaults for identity, links,
+            addresses, and replies. You can switch any row on or off, change the
+            trigger, or rewrite the expanded text.
+          </p>
+
+          <div class="starter-table" role="presentation">
+            <div class="starter-table-head" aria-hidden="true">
+              <span>Use</span>
+              <span>Starter row</span>
+              <span>Trigger</span>
+              <span>Expanded text</span>
+            </div>
+            <div id="starterList" class="starter-list"></div>
+          </div>
+
+          <div id="step-custom" class="panel-subsection">
+            <div class="subsection-header">
+              <div>
+                <p class="section-kicker">Step 3</p>
+                <h3>Custom shortcuts</h3>
+              </div>
+              <button id="addCustomShortcut" class="secondary-button" type="button">
+                Add custom shortcut
+              </button>
+            </div>
+
+            <div id="customList" class="custom-list"></div>
+          </div>
+        </section>
+
+        <section id="step-export" class="panel panel-wide">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">Step 4</p>
+              <h2>Export for Mac</h2>
+            </div>
+            <div class="export-actions">
+              <button id="downloadPlist" class="primary-button" type="button">
+                Download Text Substitutions.plist
+              </button>
+            </div>
+          </div>
+
+          <div id="statusBanner" class="status-banner" aria-live="polite"></div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <p class="summary-label">Included shortcuts</p>
+              <p id="shortcutCount" class="summary-value">0</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Shared prefix</p>
+              <p id="prefixPreview" class="summary-value">&gt;</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Duplicate triggers</p>
+              <p id="duplicateCount" class="summary-value">0</p>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Trigger</th>
+                  <th>Expanded text</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+
+          <div class="instructions">
+            <div>
+              <p class="section-kicker">Import on Mac</p>
+              <ol>
+                <li>Open System Settings, then go to Keyboard.</li>
+                <li>Open Text Replacements.</li>
+                <li>Drag in <code>Text Substitutions.plist</code>.</li>
+              </ol>
+            </div>
+
+            <div>
+              <p class="section-kicker">Why this works</p>
+              <p>
+                This uses the import format macOS already supports directly, so
+                it is simpler and more durable than writing into hidden system
+                stores.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="starterTemplate">
+      <article class="starter-card">
+        <div class="starter-main">
+          <label class="starter-toggle" aria-label="Use this starter row">
+            <input class="starter-enabled" type="checkbox" />
+          </label>
+
+          <div class="starter-meta">
+            <div class="starter-meta-topline">
+              <p class="starter-category"></p>
+              <span class="starter-status"></span>
+            </div>
+            <div class="starter-title-row">
+              <span class="starter-title"></span>
+              <code class="starter-trigger-preview"></code>
+            </div>
+            <p class="starter-description"></p>
+          </div>
+
+          <label class="starter-field">
+            <span class="field-label">Trigger</span>
+            <div class="shortcut-input-wrap">
+              <span class="prefix-chip"></span>
+              <input class="starter-suffix" type="text" maxlength="24" />
+            </div>
+          </label>
+
+          <label class="starter-field starter-field-phrase">
+            <span class="field-label">Expanded text</span>
+            <textarea class="starter-phrase" rows="2"></textarea>
+          </label>
+        </div>
+
+        <p class="starter-note" hidden></p>
+      </article>
+    </template>
+
+    <template id="customTemplate">
+      <article class="custom-card">
+        <div class="starter-main custom-main">
+          <label class="starter-toggle" aria-label="Use this custom row">
+            <input class="custom-enabled" type="checkbox" checked />
+          </label>
+
+          <div class="starter-meta">
+            <div class="starter-meta-topline">
+              <p class="starter-category">Custom</p>
+              <button class="link-button custom-remove" type="button">Remove</button>
+            </div>
+            <div class="starter-title-row">
+              <span class="starter-title">Custom row</span>
+              <code class="custom-trigger-preview"></code>
+            </div>
+            <p class="starter-description">Add any trigger and the exact text it should expand into.</p>
+          </div>
+
+          <label class="starter-field">
+            <span class="field-label">Trigger</span>
+            <div class="shortcut-input-wrap">
+              <span class="prefix-chip"></span>
+              <input class="custom-suffix" type="text" maxlength="24" placeholder="team" />
+            </div>
+          </label>
+
+          <label class="starter-field starter-field-phrase">
+            <span class="field-label">Expanded text</span>
+            <textarea
+              class="custom-phrase"
+              rows="2"
+              placeholder="Paste the exact text that should appear."
+            ></textarea>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <script src="./starter-pack.cjs"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

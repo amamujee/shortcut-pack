@@ -1,83 +1,103 @@
-# Text Shortcut Kit
+# Shortcut Pack
 
-Text Shortcut Kit is a small local-first tool for creating Apple text replacements without hand-entering dozens of snippets one by one.
+Shortcut Pack is a local-first builder for Apple text replacements.
 
-You download a single HTML file, open it on your Mac, fill in the details you repeat all the time, and export a `Text Substitutions.plist` file that macOS can import.
+It helps you turn the details you reuse all the time, like your email, address, links, IDs, bios, and replies, into a clean shortcut pack you can import into macOS in a few minutes.
 
-## What it does
+Live site: [shortcutpack.com](https://shortcutpack.com)
 
-- Starts you with a useful shortcut pack for identity, work, writing, and personal snippets
-- Lets you rename shortcut triggers before export
-- Lets you edit every generated phrase
-- Lets you add fully custom shortcuts
-- Skips blank profile-driven entries instead of exporting placeholder text
-- Exports a plist that macOS supports importing directly
+## What It Does
+
+- Starts with a sensible set of shortcut defaults for identity, links, addresses, and replies
+- Lets you choose a shared trigger prefix like `>` or `@@`
+- Shows live shortcut previews as you fill in your details
+- Lets you edit every trigger and every expanded text value before export
+- Supports fully custom shortcuts
+- Skips blank fields instead of exporting junk placeholders
+- Exports a `Text Substitutions.plist` file that macOS already knows how to import
 - Runs entirely in the browser with no signup, no backend, and no data leaving your machine
 
-## Quick start
+## Quick Start
 
-1. Download [`index.html`](./index.html).
-2. Double-click it, or open it in any browser on your Mac.
-3. Fill in the profile fields you want to reuse.
-4. Review the starter shortcuts and add any custom ones you want.
-5. Click `Download plist`.
-6. Open `System Settings` -> `Keyboard` -> `Text Replacements`.
-7. Drag the downloaded `Text Substitutions.plist` into the Text Replacements list.
+1. Go to [shortcutpack.com](https://shortcutpack.com) and open the builder, or download the standalone [`generator.html`](./generator.html) file from this repo.
+2. Open the builder in any browser on your Mac.
+3. Fill in only the details you actually reuse.
+4. Review the starter shortcuts, then change any trigger or expanded text you want.
+5. Add custom shortcuts for anything the starter list does not already cover.
+6. Click `Download Text Substitutions.plist`.
+7. On your Mac, open `System Settings` -> `Keyboard` -> `Text Replacements`.
+8. Drag the downloaded `Text Substitutions.plist` into the list.
 
-If you are viewing this on GitHub, open [`index.html`](./index.html) and use GitHub's raw-file download option, or grab the standalone HTML file from a release or blog post link.
+## Why This Exists
 
-## Why people use this
+Apple's built-in text replacement is genuinely useful once it is set up, but the setup is annoying:
 
-Apple's built-in text replacement is great once it is set up, but the setup is tedious:
+- you have to think up a system for naming shortcuts
+- you have to add rows one by one
+- you usually remember to do it when you are already in the middle of work
 
-- you have to invent consistent shortcut names
-- you have to add each row manually
-- you usually remember the idea after you are already busy
+Shortcut Pack removes the blank-page problem and gets you to a useful system quickly.
 
-This tool removes the blank-page problem and gets you to a usable starter pack quickly.
+## Who It Is For
 
-## What you can customize
+- people who type the same personal details over and over
+- founders, operators, recruiters, and assistants who send lots of repetitive replies
+- anyone who already likes Apple text replacement but has never taken the time to set it up properly
 
-- Prefix: choose something that is memorable but hard to trigger accidentally
-- Starter shortcuts: turn rows on or off, rename suffixes, and edit the expanded text
-- Custom shortcuts: add anything unique to your own life or workflow
-- Export preview: catch duplicates before you download the plist
+## What You Can Customize
 
-## Editing the default list and categories
+- Trigger prefix: pick something memorable but hard to trigger accidentally
+- Starter shortcuts: turn rows on or off, rename triggers, and rewrite expanded text
+- Custom shortcuts: add anything unique to your own workflow
+- Export preview: catch duplicate triggers before you download the plist
 
-If you want to change the built-in shortcuts before publishing your own version, edit [`starter-pack.cjs`](./starter-pack.cjs).
+## Editing The Defaults
+
+If you want to change the built-in shortcut pack before publishing your own version, start with [`starter-pack.cjs`](./starter-pack.cjs).
 
 That file is the main source of truth for:
 
 - categories
-- default suffixes
+- default triggers
 - descriptions
 - placeholder text
 - generated text logic
 
-Each starter entry looks like a small definition object with an `id`, `category`, `title`, `suffix`, and `build(profile)` function.
+Each starter entry is a small definition object with an `id`, `category`, `title`, `suffix`, and `build(profile)` function.
 
-After editing the starter pack or UI source files, rebuild the standalone HTML file:
+## Project Structure
+
+- [`index.source.html`](./index.source.html): source for the landing page
+- [`index.html`](./index.html): built landing page used by the public site
+- [`generator.source.html`](./generator.source.html): source for the standalone builder
+- [`generator.html`](./generator.html): built standalone builder for end users
+- [`styles.css`](./styles.css): builder styling
+- [`app.js`](./app.js): browser logic, live preview, and plist export
+- [`starter-pack.cjs`](./starter-pack.cjs): default shortcut definitions
+- [`build-standalone.mjs`](./build-standalone.mjs): builds the standalone HTML files
+- [`cli.mjs`](./cli.mjs): optional Node helper commands
+
+## Local Development
+
+Rebuild the standalone files after changing the landing page, builder, styles, or starter pack:
 
 ```bash
 node build-standalone.mjs
 ```
 
-## Project structure
+Quick checks:
 
-- [`index.html`](./index.html): standalone file for end users
-- [`index.source.html`](./index.source.html): source HTML template
-- [`styles.css`](./styles.css): app styling
-- [`app.js`](./app.js): browser logic and plist export
-- [`starter-pack.cjs`](./starter-pack.cjs): default categories and shortcuts
-- [`build-standalone.mjs`](./build-standalone.mjs): inlines the app into one HTML file
-- [`cli.mjs`](./cli.mjs): optional Node CLI
+```bash
+node --check app.js
+node --check build-standalone.mjs
+node cli.mjs doctor
+```
 
 ## Optional CLI
 
-Most people can ignore the CLI. The main experience is the standalone HTML file.
+Most people can ignore the CLI. The main experience is the standalone builder HTML file.
 
-If you want the Node helper commands:
+If you want the helper commands:
 
 ```bash
 node cli.mjs setup
@@ -93,21 +113,20 @@ node cli.mjs list --prefix="@@"
 node cli.mjs generate --format=markdown --prefix="@@"
 ```
 
-## Why the app exports a plist
+## Why Export A plist
 
 This project takes the safer route: it generates the import format that macOS already accepts instead of writing into hidden internal text replacement stores that may change across macOS versions.
 
-That makes it much easier to share publicly and much less fragile over time.
+That makes it easier to share publicly and much less fragile over time.
 
-## Publishing notes
+## Publishing Notes
 
 If you are sharing this with non-technical users, the easiest distribution options are:
 
-- link directly to the standalone [`index.html`](./index.html) file
-- attach the standalone HTML file to a GitHub release
-- include screenshots and a short import walkthrough in your blog post
-
-Screenshots are not checked into the repo yet, so the current README stays lightweight and download-first.
+- use [`index.html`](./index.html) as the website homepage
+- link directly to the standalone [`generator.html`](./generator.html) file
+- attach the standalone builder HTML file to a GitHub release
+- include a short import walkthrough in your blog post
 
 ## License
 

@@ -2,26 +2,36 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = "/Users/aadil/Documents/textshortcut";
-const sourceHtmlPath = path.join(root, "index.source.html");
-const outputHtmlPath = path.join(root, "index.html");
-const stylesPath = path.join(root, "styles.css");
+const landingSourcePath = path.join(root, "index.source.html");
+const landingOutputPath = path.join(root, "index.html");
+const generatorSourcePath = path.join(root, "generator.source.html");
+const generatorOutputPath = path.join(root, "generator.html");
+const generatorStylesPath = path.join(root, "styles.css");
 const starterDataPath = path.join(root, "starter-pack.cjs");
 const appJsPath = path.join(root, "app.js");
 
-const sourceHtml = fs.readFileSync(sourceHtmlPath, "utf8");
-const styles = fs.readFileSync(stylesPath, "utf8");
+const landingSource = fs.readFileSync(landingSourcePath, "utf8");
+const generatorSource = fs.readFileSync(generatorSourcePath, "utf8");
+const generatorStyles = fs.readFileSync(generatorStylesPath, "utf8");
 const starterData = fs.readFileSync(starterDataPath, "utf8");
 const appJs = fs.readFileSync(appJsPath, "utf8");
 
-const html = sourceHtml
+const generatorHtml = generatorSource
   .replace(
     '<link rel="stylesheet" href="./styles.css" />',
-    `<style>\n${styles}\n</style>`,
+    `<style>\n${generatorStyles}\n</style>`,
   )
   .replace(
     '    <script src="./starter-pack.cjs"></script>\n    <script src="./app.js"></script>',
     `    <script>\n${starterData}\n</script>\n    <script>\n${appJs}\n</script>`,
   );
 
-fs.writeFileSync(outputHtmlPath, html);
-console.log(`Wrote ${outputHtmlPath}`);
+const landingHtml = landingSource.replace(
+  "__OFFLINE_BUILDER_BASE64__",
+  JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
+);
+
+fs.writeFileSync(landingOutputPath, landingHtml);
+fs.writeFileSync(generatorOutputPath, generatorHtml);
+console.log(`Wrote ${landingOutputPath}`);
+console.log(`Wrote ${generatorOutputPath}`);
