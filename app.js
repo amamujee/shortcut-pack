@@ -122,7 +122,7 @@ function validateProfileValue(key, value) {
     case "dob":
       return isLikelyValidDate(trimmed)
         ? ""
-        : "Use a real date like 7 August 1982 or 1982-08-07.";
+        : "Use a real date like 14 March 1990 or 1990-03-14.";
     case "passportNumber":
     case "idNumber":
       return /^[A-Za-z0-9][A-Za-z0-9\-\/ ]{2,31}$/.test(trimmed)

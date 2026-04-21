@@ -1018,7 +1018,7 @@ tbody tr.duplicate-row {
                 type="text"
                 maxlength="120"
                 data-validate="fullName"
-                placeholder="Aadil Mamujee"
+                placeholder="Jordan Lee"
               />
             </label>
 
@@ -1064,7 +1064,7 @@ tbody tr.duplicate-row {
                 type="text"
                 maxlength="40"
                 data-validate="dob"
-                placeholder="7 August 1982"
+                placeholder="14 March 1990"
               />
             </label>
 
@@ -1137,7 +1137,7 @@ tbody tr.duplicate-row {
                 maxlength="32"
                 inputmode="tel"
                 data-validate="whatsappNumber"
-                placeholder="16175105178"
+                placeholder="15551234567"
               />
             </label>
 
@@ -1156,7 +1156,7 @@ tbody tr.duplicate-row {
                 type="text"
                 maxlength="80"
                 data-validate="socialHandle"
-                placeholder="amamujee"
+                placeholder="yourname"
               />
             </label>
 
@@ -1171,7 +1171,7 @@ tbody tr.duplicate-row {
                 type="text"
                 maxlength="80"
                 data-validate="socialHandle"
-                placeholder="amamujee"
+                placeholder="yourname"
               />
             </label>
 
@@ -1190,7 +1190,7 @@ tbody tr.duplicate-row {
                 type="text"
                 maxlength="120"
                 data-validate="socialHandle"
-                placeholder="amamujee"
+                placeholder="yourname"
               />
             </label>
 
@@ -1574,8 +1574,8 @@ tbody tr.duplicate-row {
       description: "Useful for forms, travel bookings, and admin paperwork.",
       suffix: "dob",
       requiredProfileFields: ["dob"],
-      placeholder: "7 July 1975",
-      build: (profile) => profile.dob || "7 August 1982",
+      placeholder: "14 March 1990",
+      build: (profile) => profile.dob || "14 March 1990",
     },
     {
       id: "passport",
@@ -1636,10 +1636,10 @@ tbody tr.duplicate-row {
       description: "A direct WhatsApp link built from your WhatsApp number.",
       suffix: "wa",
       requiredProfileFields: ["whatsappNumber"],
-      placeholder: "https://wa.me/16175105178",
+      placeholder: "https://wa.me/15551234567",
       build: (profile) => {
         const digits = normalizeWhatsAppNumber(profile.whatsappNumber);
-        return digits ? `https://wa.me/${digits}` : "https://wa.me/16175105178";
+        return digits ? `https://wa.me/${digits}` : "https://wa.me/15551234567";
       },
     },
     {
@@ -1649,7 +1649,7 @@ tbody tr.duplicate-row {
       description: "A direct Telegram link built from your username.",
       suffix: "tg",
       requiredProfileFields: ["telegramUsername"],
-      placeholder: "https://telegram.me/amamujee",
+      placeholder: "https://telegram.me/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.telegramUsername, [
           "https://telegram.me/",
@@ -1657,7 +1657,7 @@ tbody tr.duplicate-row {
           "http://telegram.me/",
           "http://t.me/",
         ]);
-        return username ? `https://telegram.me/${username}` : "https://telegram.me/amamujee";
+        return username ? `https://telegram.me/${username}` : "https://telegram.me/yourname";
       },
     },
     {
@@ -1667,7 +1667,7 @@ tbody tr.duplicate-row {
       description: "Your X profile link built from your username.",
       suffix: "x",
       requiredProfileFields: ["xUsername"],
-      placeholder: "https://x.com/amamujee",
+      placeholder: "https://x.com/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.xUsername, [
           "https://x.com/",
@@ -1675,7 +1675,7 @@ tbody tr.duplicate-row {
           "https://twitter.com/",
           "http://twitter.com/",
         ]);
-        return username ? `https://x.com/${username}` : "https://x.com/amamujee";
+        return username ? `https://x.com/${username}` : "https://x.com/yourname";
       },
     },
     {
@@ -1685,7 +1685,7 @@ tbody tr.duplicate-row {
       description: "Your LinkedIn profile link built from your username.",
       suffix: "li",
       requiredProfileFields: ["linkedinUsername"],
-      placeholder: "https://www.linkedin.com/in/amamujee",
+      placeholder: "https://www.linkedin.com/in/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.linkedinUsername, [
           "https://www.linkedin.com/in/",
@@ -1695,7 +1695,7 @@ tbody tr.duplicate-row {
         ]);
         return username
           ? `https://www.linkedin.com/in/${username}`
-          : "https://www.linkedin.com/in/amamujee";
+          : "https://www.linkedin.com/in/yourname";
       },
     },
     {
@@ -2027,7 +2027,7 @@ function validateProfileValue(key, value) {
     case "dob":
       return isLikelyValidDate(trimmed)
         ? ""
-        : "Use a real date like 7 August 1982 or 1982-08-07.";
+        : "Use a real date like 14 March 1990 or 1990-03-14.";
     case "passportNumber":
     case "idNumber":
       return /^[A-Za-z0-9][A-Za-z0-9\-\/ ]{2,31}$/.test(trimmed)

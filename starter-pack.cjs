@@ -99,8 +99,8 @@
       description: "Useful for forms, travel bookings, and admin paperwork.",
       suffix: "dob",
       requiredProfileFields: ["dob"],
-      placeholder: "7 July 1975",
-      build: (profile) => profile.dob || "7 August 1982",
+      placeholder: "14 March 1990",
+      build: (profile) => profile.dob || "14 March 1990",
     },
     {
       id: "passport",
@@ -161,10 +161,10 @@
       description: "A direct WhatsApp link built from your WhatsApp number.",
       suffix: "wa",
       requiredProfileFields: ["whatsappNumber"],
-      placeholder: "https://wa.me/16175105178",
+      placeholder: "https://wa.me/15551234567",
       build: (profile) => {
         const digits = normalizeWhatsAppNumber(profile.whatsappNumber);
-        return digits ? `https://wa.me/${digits}` : "https://wa.me/16175105178";
+        return digits ? `https://wa.me/${digits}` : "https://wa.me/15551234567";
       },
     },
     {
@@ -174,7 +174,7 @@
       description: "A direct Telegram link built from your username.",
       suffix: "tg",
       requiredProfileFields: ["telegramUsername"],
-      placeholder: "https://telegram.me/amamujee",
+      placeholder: "https://telegram.me/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.telegramUsername, [
           "https://telegram.me/",
@@ -182,7 +182,7 @@
           "http://telegram.me/",
           "http://t.me/",
         ]);
-        return username ? `https://telegram.me/${username}` : "https://telegram.me/amamujee";
+        return username ? `https://telegram.me/${username}` : "https://telegram.me/yourname";
       },
     },
     {
@@ -192,7 +192,7 @@
       description: "Your X profile link built from your username.",
       suffix: "x",
       requiredProfileFields: ["xUsername"],
-      placeholder: "https://x.com/amamujee",
+      placeholder: "https://x.com/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.xUsername, [
           "https://x.com/",
@@ -200,7 +200,7 @@
           "https://twitter.com/",
           "http://twitter.com/",
         ]);
-        return username ? `https://x.com/${username}` : "https://x.com/amamujee";
+        return username ? `https://x.com/${username}` : "https://x.com/yourname";
       },
     },
     {
@@ -210,7 +210,7 @@
       description: "Your LinkedIn profile link built from your username.",
       suffix: "li",
       requiredProfileFields: ["linkedinUsername"],
-      placeholder: "https://www.linkedin.com/in/amamujee",
+      placeholder: "https://www.linkedin.com/in/yourname",
       build: (profile) => {
         const username = normalizeHandle(profile.linkedinUsername, [
           "https://www.linkedin.com/in/",
@@ -220,7 +220,7 @@
         ]);
         return username
           ? `https://www.linkedin.com/in/${username}`
-          : "https://www.linkedin.com/in/amamujee";
+          : "https://www.linkedin.com/in/yourname";
       },
     },
     {
