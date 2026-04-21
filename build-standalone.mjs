@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = "/Users/aadil/Documents/textshortcut";
+const root = path.dirname(fileURLToPath(import.meta.url));
 const landingSourcePath = path.join(root, "index.source.html");
 const landingOutputPath = path.join(root, "index.html");
 const generatorSourcePath = path.join(root, "generator.source.html");
