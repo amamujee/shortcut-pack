@@ -252,6 +252,13 @@ h3,
   line-height: 1.8;
 }
 
+.instruction-note {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
 .quick-setup-list a {
   color: inherit;
   text-decoration: none;
@@ -413,6 +420,24 @@ label {
   border: 1px solid var(--line-soft);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.3);
+}
+
+.step-divider {
+  display: grid;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.step-divider h3,
+.instructions h3 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.step-divider p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
 }
 
 .live-shortcut-preview-head {

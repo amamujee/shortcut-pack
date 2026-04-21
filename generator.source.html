@@ -40,8 +40,8 @@
           <p class="eyebrow">Apple text shortcuts</p>
           <h1>Build your Shortcut Pack.</h1>
           <p class="lede">
-            Add the details you reuse, keep the shortcuts you want, and export a
-            <code>Text Substitutions.plist</code> for Apple text replacements on Mac.
+            Configure a trigger prefix, add the details you reuse, pick the shortcuts
+            you want, and export a <code>Text Substitutions.plist</code> for import on your Mac.
           </p>
           <div class="hero-notes">
             <span>Apple-native</span>
@@ -51,7 +51,8 @@
             <span>Saved locally</span>
           </div>
           <p class="privacy-note">
-            Your details stay in your browser and are not sent to us.
+            Your details stay in your browser and are not sent to us. The import step
+            only works on Mac, not on iPhone or iPad.
           </p>
         </div>
 
@@ -59,13 +60,19 @@
           <p class="card-label">Quick setup</p>
           <ol class="quick-setup-list">
             <li>
-              <a href="#step-details">Step 1. Add only the details you reuse.</a>
+              <a href="#prefix">Step 1. Configure your trigger prefix.</a>
             </li>
             <li>
-              <a href="#step-starters">Steps 2-3. Keep the shortcuts you want and add your own.</a>
+              <a href="#step-details">Step 2. Add your details.</a>
             </li>
             <li>
-              <a href="#step-export">Step 4. Download the plist and import it in Text Replacements.</a>
+              <a href="#step-starters">Step 3. Select your shortcuts.</a>
+            </li>
+            <li>
+              <a href="#step-export">Step 4. Download plist file.</a>
+            </li>
+            <li>
+              <a href="#step-export">Step 5. Add custom text replacements to your Mac.</a>
             </li>
           </ol>
         </aside>
@@ -76,7 +83,7 @@
           <div class="panel-header">
             <div>
               <p class="section-kicker">Step 1</p>
-              <h2>Your details</h2>
+              <h2>Configure your trigger prefix</h2>
             </div>
             <div class="panel-actions">
               <p id="draftStatus" class="panel-meta">Saved locally in this browser.</p>
@@ -92,9 +99,8 @@
           </div>
 
           <p class="panel-intro">
-            Add only the details you actually reuse. Matching starter shortcuts
-            turn on automatically when they have enough information, and
-            anything left blank stays out of the export.
+            Start with the shared prefix every shortcut will use. Then add only the
+            details you actually reuse so matching starter shortcuts can fill themselves in.
           </p>
 
           <form id="profileForm" class="form-grid">
@@ -118,6 +124,12 @@
                 fewer accidental triggers, try <code>@@</code> or <code>&gt;&gt;</code>.
               </span>
             </label>
+
+            <div class="step-divider span-3">
+              <p class="section-kicker">Step 2</p>
+              <h3>Add your details</h3>
+              <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
+            </div>
 
             <div class="live-shortcut-preview span-3">
               <div class="live-shortcut-preview-head">
@@ -354,20 +366,6 @@
               />
             </label>
 
-            <label class="profile-field" data-preview-field="company" data-preview-starter="company">
-              <span class="field-head">
-                <span class="field-title">Company</span>
-                <span class="field-shortcut-preview" hidden></span>
-              </span>
-              <input
-                id="company"
-                name="company"
-                type="text"
-                maxlength="120"
-                placeholder="Your Company Name"
-              />
-            </label>
-
             <label
               class="profile-field span-3"
               data-preview-field="homeAddress"
@@ -454,8 +452,8 @@
         <section id="step-starters" class="panel starter-panel">
           <div class="panel-header">
             <div>
-              <p class="section-kicker">Step 2</p>
-              <h2>Starter shortcuts</h2>
+              <p class="section-kicker">Step 3</p>
+              <h2>Select your shortcuts</h2>
             </div>
           </div>
 
@@ -478,7 +476,7 @@
           <div id="step-custom" class="panel-subsection">
             <div class="subsection-header">
               <div>
-                <p class="section-kicker">Step 3</p>
+                <p class="section-kicker">Add your own</p>
                 <h3>Custom shortcuts</h3>
               </div>
               <button id="addCustomShortcut" class="secondary-button" type="button">
@@ -494,7 +492,7 @@
           <div class="panel-header">
             <div>
               <p class="section-kicker">Step 4</p>
-              <h2>Export for Mac</h2>
+              <h2>Download plist file</h2>
             </div>
             <div class="export-actions">
               <button id="downloadPlist" class="primary-button" type="button">
@@ -535,12 +533,17 @@
 
           <div class="instructions">
             <div>
-              <p class="section-kicker">Import on Mac</p>
+              <p class="section-kicker">Step 5</p>
+              <h3>Add custom text replacements to your Mac</h3>
               <ol>
                 <li>Open System Settings, then go to Keyboard.</li>
                 <li>Open Text Replacements.</li>
                 <li>Drag in <code>Text Substitutions.plist</code>.</li>
               </ol>
+              <p class="instruction-note">
+                This import flow only works on Mac. Apple does not let you add the plist
+                from iPhone or iPad.
+              </p>
             </div>
 
             <div>

@@ -34,7 +34,6 @@ const profileShortcutPreviewMap = [
   { field: "telegramUsername", starterId: "telegram" },
   { field: "xUsername", starterId: "x" },
   { field: "linkedinUsername", starterId: "linkedin" },
-  { field: "company", starterId: "company" },
   { field: "homeAddress", starterId: "homeAddress" },
   { field: "workAddress", starterId: "workAddress" },
   { field: "calendly", starterId: "calendar" },
@@ -403,7 +402,6 @@ function formatMissingFields(definition) {
     calendly: "scheduling link",
     bio: "short bio",
     bankInfo: "bank info",
-    company: "company",
   };
 
   const requiredFields = definition?.requiredProfileFields || [];
