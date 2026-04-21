@@ -10,6 +10,8 @@ Shortcut Pack is a simple builder for Apple text replacements.
 
 You fill in the details you reuse, keep the shortcuts you want, and export a `Text Substitutions.plist` file that macOS can import directly.
 
+The import step is a Mac workflow. Once you import the file on your Mac, Apple can sync the resulting text replacements to your iPhone and iPad through iCloud.
+
 ## Why This Exists
 
 Apple's built-in text replacement is great once it is set up, but setting it up is tedious.
@@ -45,6 +47,8 @@ Shortcut Pack removes the blank-page problem and gives you a usable system fast.
 5. Download `Text Substitutions.plist`.
 6. On your Mac, open `System Settings` -> `Keyboard` -> `Text Replacements`.
 7. Drag the downloaded plist into the list.
+
+Note: You can build the pack in any browser, but the plist import step works on Mac only.
 
 ## Privacy
 

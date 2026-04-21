@@ -7,7 +7,9 @@
     "shortcut-pack": "./cli.mjs"
   },
   "scripts": {
+    "build": "node ./build-standalone.mjs",
     "build:standalone": "node ./build-standalone.mjs",
+    "vercel-build": "node ./build-standalone.mjs",
     "setup": "node ./cli.mjs setup",
     "list": "node ./cli.mjs list",
     "generate": "node ./cli.mjs generate",

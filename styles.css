@@ -275,7 +275,8 @@ h3,
 #step-details,
 #step-starters,
 #step-custom,
-#step-export {
+#step-export,
+#prefix {
   scroll-margin-top: 96px;
 }
 

@@ -296,7 +296,8 @@ h3,
 #step-details,
 #step-starters,
 #step-custom,
-#step-export {
+#step-export,
+#prefix {
   scroll-margin-top: 96px;
 }
 
@@ -1020,8 +1021,9 @@ tbody tr.duplicate-row {
             <span>Saved locally</span>
           </div>
           <p class="privacy-note">
-            Your details stay in your browser and are not sent to us. The import step
-            only works on Mac, not on iPhone or iPad.
+            Your details stay in your browser and are not sent to us. Import the plist
+            on a Mac, then let Apple sync the replacements to your other devices with iCloud.
+            The plist import step itself does not work on iPhone or iPad.
           </p>
         </div>
 
@@ -1510,8 +1512,8 @@ tbody tr.duplicate-row {
                 <li>Drag in <code>Text Substitutions.plist</code>.</li>
               </ol>
               <p class="instruction-note">
-                This import flow only works on Mac. Apple does not let you add the plist
-                from iPhone or iPad.
+                This import flow only works on Mac. After you import it there, Apple can
+                sync the text replacements to your iPhone and iPad through iCloud Drive.
               </p>
             </div>
 
@@ -2008,6 +2010,7 @@ const shortcutData = globalThis.AI_SHORTCUTS_DATA;
 const emptyProfile = shortcutData.emptyProfile;
 const starterPack = shortcutData.starterPack;
 const DRAFT_STORAGE_KEY = "shortcut-pack-draft-v1";
+let shouldPersistDraft = true;
 
 function buildDefaultStarters(profile = emptyProfile) {
   return starterPack.map((definition) => ({
@@ -2169,6 +2172,10 @@ function loadDraft() {
 }
 
 function saveDraft() {
+  if (!shouldPersistDraft) {
+    return;
+  }
+
   if (!storageAvailable()) {
     updateDraftStatus("Local draft unavailable in this browser.");
     return;
@@ -2898,7 +2905,9 @@ function clearDraft() {
   resetStateToDefaults();
   refreshGeneratedStarters(true);
   syncProfileFormValues();
+  shouldPersistDraft = false;
   render();
+  shouldPersistDraft = true;
   updateDraftStatus("Local draft cleared from this browser.");
   setStatus("Local draft cleared. You can start fresh now.", "success");
 }

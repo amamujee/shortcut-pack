@@ -2,6 +2,7 @@ const shortcutData = globalThis.AI_SHORTCUTS_DATA;
 const emptyProfile = shortcutData.emptyProfile;
 const starterPack = shortcutData.starterPack;
 const DRAFT_STORAGE_KEY = "shortcut-pack-draft-v1";
+let shouldPersistDraft = true;
 
 function buildDefaultStarters(profile = emptyProfile) {
   return starterPack.map((definition) => ({
@@ -163,6 +164,10 @@ function loadDraft() {
 }
 
 function saveDraft() {
+  if (!shouldPersistDraft) {
+    return;
+  }
+
   if (!storageAvailable()) {
     updateDraftStatus("Local draft unavailable in this browser.");
     return;
@@ -892,7 +897,9 @@ function clearDraft() {
   resetStateToDefaults();
   refreshGeneratedStarters(true);
   syncProfileFormValues();
+  shouldPersistDraft = false;
   render();
+  shouldPersistDraft = true;
   updateDraftStatus("Local draft cleared from this browser.");
   setStatus("Local draft cleared. You can start fresh now.", "success");
 }
