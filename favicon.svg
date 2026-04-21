@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Shortcut Pack">
+  <rect width="64" height="64" rx="18" fill="#181612" />
+  <text
+    x="50%"
+    y="54%"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    font-family="Avenir Next, Arial Black, sans-serif"
+    font-size="27"
+    font-weight="800"
+    fill="#fbf8f1"
+  >
+    SP
+  </text>
+</svg>

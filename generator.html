@@ -551,7 +551,7 @@ textarea {
 .starter-list,
 .custom-list {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .starter-card,
@@ -571,7 +571,7 @@ textarea {
 .summary-card,
 .instructions > div,
 .status-banner {
-  padding: 16px;
+  padding: 14px;
 }
 
 .starter-table {
@@ -582,13 +582,13 @@ textarea {
 .starter-table-head,
 .starter-main {
   display: grid;
-  grid-template-columns: 64px minmax(240px, 0.92fr) 190px minmax(0, 1.65fr);
-  gap: 14px;
-  align-items: center;
+  grid-template-columns: 56px minmax(220px, 0.9fr) 170px minmax(0, 1.75fr);
+  gap: 12px;
+  align-items: start;
 }
 
 .starter-table-head {
-  padding: 10px 14px;
+  padding: 9px 12px;
   color: var(--ink-soft);
   font-size: 0.76rem;
   font-weight: 700;
@@ -599,7 +599,7 @@ textarea {
 
 .starter-card {
   border-radius: 22px;
-  padding: 12px 14px;
+  padding: 10px 12px;
 }
 
 .starter-card.is-disabled {
@@ -608,19 +608,19 @@ textarea {
 
 .starter-meta {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .starter-meta-topline,
 .starter-title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .starter-title {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
 }
 
@@ -635,7 +635,7 @@ textarea {
 
 .starter-trigger-preview {
   color: var(--ink-soft);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 
 .starter-status {
@@ -668,13 +668,13 @@ textarea {
 .starter-description {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.82rem;
-  line-height: 1.45;
+  font-size: 0.8rem;
+  line-height: 1.35;
 }
 
 .starter-note {
-  margin: 10px 0 0 78px;
-  padding: 8px 10px;
+  margin: 8px 0 0 68px;
+  padding: 7px 10px;
   border-radius: 12px;
   background: rgba(156, 92, 33, 0.08);
   color: #7a4719;
@@ -706,27 +706,27 @@ textarea {
 .starter-field {
   display: grid;
   align-content: start;
-  gap: 6px;
+  gap: 5px;
 }
 
 .field-label {
   margin-bottom: 0;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
 }
 
 .shortcut-input-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .prefix-chip {
-  min-width: 44px;
+  min-width: 40px;
   justify-content: center;
   text-align: center;
   color: var(--accent);
   font-weight: 700;
-  padding: 7px 10px;
+  padding: 6px 9px;
 }
 
 .panel-subsection {
@@ -735,14 +735,26 @@ textarea {
 
 .custom-main {
   display: grid;
-  grid-template-columns: 64px minmax(240px, 0.92fr) 190px minmax(0, 1.65fr);
-  gap: 14px;
-  align-items: center;
+  grid-template-columns: 56px minmax(220px, 0.9fr) 170px minmax(0, 1.75fr);
+  gap: 12px;
+  align-items: start;
 }
 
 .custom-trigger-preview {
   color: var(--ink-soft);
   font-size: 0.8rem;
+}
+
+.starter-field .shortcut-input-wrap input,
+.starter-field textarea {
+  min-height: 42px;
+  padding: 9px 12px;
+}
+
+.starter-field textarea,
+.custom-phrase,
+.starter-phrase {
+  min-height: 82px;
 }
 
 .primary-button,
