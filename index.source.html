@@ -286,13 +286,17 @@ p {
 }
 
 .section {
-  padding-top: 86px;
+  padding-top: 108px;
+}
+
+.section-tight {
+  padding-top: 54px;
 }
 
 .section-head {
   display: grid;
-  gap: 12px;
-  max-width: 58ch;
+  gap: 14px;
+  max-width: 52ch;
 }
 
 .section-label {
@@ -319,8 +323,8 @@ p {
 .split-grid,
 .faq-grid {
   display: grid;
-  gap: 18px;
-  margin-top: 28px;
+  gap: 22px;
+  margin-top: 32px;
 }
 
 .benefit-grid {
@@ -332,10 +336,10 @@ p {
 .text-card,
 .faq-card,
 .privacy-card {
-  padding: 20px;
+  padding: 26px;
   border: 1px solid var(--line);
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.46);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.58);
   box-shadow: var(--shadow);
 }
 
@@ -343,8 +347,8 @@ p {
 .use-card h3,
 .text-card h3,
 .faq-card h3 {
-  margin: 0 0 8px;
-  font-size: 1.2rem;
+  margin: 0 0 10px;
+  font-size: 1.32rem;
 }
 
 .benefit-card p,
@@ -357,22 +361,34 @@ p {
 }
 
 .use-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.use-card,
+.text-card,
+.faq-card {
+  display: grid;
+  align-content: start;
+}
+
+.use-card {
+  min-height: 220px;
 }
 
 .use-card p + p {
-  margin-top: 10px;
-  font-size: 0.92rem;
+  margin-top: 16px;
+  font-size: 0.95rem;
 }
 
 .paired-heads {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: start;
+  gap: 28px;
 }
 
 .paired-head {
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .paired-head h2 {
@@ -381,19 +397,41 @@ p {
 }
 
 .paired-head p {
-  max-width: 28ch;
+  max-width: 30ch;
   color: var(--ink-soft);
-  font-size: 1.02rem;
+  font-size: 1.05rem;
 }
 
 .split-grid {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
+.text-card,
+.faq-card {
+  min-height: 190px;
+}
+
+.privacy-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.privacy-points {
+  display: grid;
+  gap: 18px;
+  padding-top: 6px;
+}
+
+.privacy-points p {
+  max-width: 34ch;
+}
+
 .privacy-card ul {
   display: grid;
   gap: 10px;
-  margin: 16px 0 0;
+  margin: 0;
   padding-left: 20px;
 }
 
@@ -453,6 +491,7 @@ p {
   .paired-heads,
   .use-grid,
   .split-grid,
+  .privacy-layout,
   .faq-grid,
   .footer-card {
     grid-template-columns: 1fr;
@@ -492,6 +531,10 @@ p {
   .section,
   .footer-cta {
     padding-top: 60px;
+  }
+
+  .section-tight {
+    padding-top: 38px;
   }
 
   .benefit-card,
@@ -603,7 +646,7 @@ p {
         </aside>
       </section>
 
-      <section class="section">
+      <section class="section section-tight">
         <div class="benefit-grid">
           <article class="benefit-card">
             <h3>Less typing</h3>
@@ -625,37 +668,37 @@ p {
       <section id="uses" class="section">
         <div class="section-head">
           <span class="section-label">Use Cases</span>
-          <h2>Use it for what repeats.</h2>
-          <p>Start here. Add your own.</p>
+          <h2>Use it where it helps.</h2>
+          <p>Start with the obvious. Keep the rest for yourself.</p>
         </div>
 
         <div class="use-grid">
           <article class="use-card">
             <span class="trigger">&gt;home</span>
             <h3>Home address</h3>
-            <p>Your full home address without retyping it.</p>
-            <p>Good for forms, shipping, invoices, and travel.</p>
+            <p>Your full address, ready in a few characters.</p>
+            <p>For forms, shipping, invoices, and travel.</p>
           </article>
 
           <article class="use-card">
             <span class="trigger">&gt;pp</span>
             <h3>Passport details</h3>
-            <p>Passport, ID, or any awkward number you never want to memorize.</p>
-            <p>Good for travel, admin, and anything annoying to retrieve.</p>
+            <p>Passport, ID, or any number you do not want to fetch twice.</p>
+            <p>For travel, admin, and all the tedious parts.</p>
           </article>
 
           <article class="use-card">
             <span class="trigger">&gt;intro</span>
             <h3>Replies</h3>
             <p>Saved replies for intros, thanks, follow-ups, and scheduling.</p>
-            <p>Good for moving faster when on the go.</p>
+            <p>For faster answers from your Mac or phone.</p>
           </article>
 
           <article class="use-card">
             <span class="trigger">&gt;custom</span>
             <h3>Your own system</h3>
-            <p>Add whatever you use often.</p>
-            <p>Good for everything else.</p>
+            <p>Add whatever you reach for often.</p>
+            <p>For everything the starter pack does not know yet.</p>
           </article>
         </div>
       </section>
@@ -666,73 +709,80 @@ p {
             <span class="section-label">Why It Works</span>
             <h2>Native speed.</h2>
             <p>
-              It works with Apple’s built-in text replacements, so you do not need another app
-              or system.
+              It rides on Apple’s own text replacements, so the shortcuts live where you
+              already type.
             </p>
           </div>
 
           <div class="paired-head">
             <span class="section-label">Flexibility</span>
             <h2>Make it yours.</h2>
-            <p>Start with the pack. Then make it your own.</p>
+            <p>Start with the pack. Keep the parts that earn their place.</p>
           </div>
         </div>
 
         <div class="split-grid">
           <article class="text-card">
             <h3>What you get</h3>
-            <p>Type faster, reply faster, and clear some mental clutter.</p>
-            <p>Start with identity, links, bios, and replies.</p>
+            <p>One lightweight system for details, replies, and everyday admin.</p>
+            <p>No extra app to manage. No new workflow to learn.</p>
           </article>
 
           <article class="text-card">
-            <h3>Why people stick with it</h3>
-            <p>Simple enough to keep using. Flexible enough to grow with you.</p>
-            <p>Keep adding shortcuts as your workflow grows.</p>
+            <h3>Why it lasts</h3>
+            <p>Simple enough to become habit. Flexible enough to keep growing.</p>
+            <p>Add new shortcuts as life gets busier.</p>
           </article>
         </div>
       </section>
 
       <section id="free" class="section">
         <div class="privacy-card">
-          <div class="section-head">
-            <span class="section-label">Free And Private</span>
-            <h2>Free. Private.</h2>
-            <p>
-              Shortcut Pack is a free community project. We do not charge for it or save your
-              personal info.
-            </p>
-          </div>
+          <div class="privacy-layout">
+            <div class="section-head">
+              <span class="section-label">Free And Private</span>
+              <h2>Free. Private.</h2>
+              <p>
+                Shortcut Pack is a free community project. We do not charge for it or save
+                your personal info.
+              </p>
+            </div>
 
-          <ul>
-            <li>No signup</li>
-            <li>No account</li>
-            <li>No saved personal data</li>
-            <li>No paywall</li>
-          </ul>
+            <div class="privacy-points">
+              <p>The core tool stays simple: no account layer, no paywall, no extra service
+              between you and your shortcuts.</p>
+
+              <ul>
+                <li>No signup</li>
+                <li>No account</li>
+                <li>No saved personal data</li>
+                <li>No paywall</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
       <section id="faq" class="section">
         <div class="section-head">
           <span class="section-label">FAQ</span>
-          <h2>Short answers.</h2>
+          <h2>Questions, answered.</h2>
         </div>
 
         <div class="faq-grid">
           <article class="faq-card">
             <h3>Is it free?</h3>
-            <p>Yes. Free to use.</p>
+            <p>Yes. The builder and starter pack are free to use.</p>
           </article>
 
           <article class="faq-card">
             <h3>Do you save my data?</h3>
-            <p>No. We do not collect your personal text.</p>
+            <p>No. Your personal text is not collected or stored by us.</p>
           </article>
 
           <article class="faq-card">
             <h3>Can I customize it?</h3>
-            <p>Yes. It is built to be customized.</p>
+            <p>Yes. The starter pack is only the starting point.</p>
           </article>
         </div>
       </section>
