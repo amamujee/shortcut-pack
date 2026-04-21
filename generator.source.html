@@ -16,8 +16,22 @@
         function () {
           (window.vaq = window.vaq || []).push(arguments);
         };
+
+      (function () {
+        const analyticsHosts = new Set(["shortcutpack.com", "www.shortcutpack.com"]);
+        const isPreview = /\.vercel\.app$/i.test(window.location.hostname);
+        const isSupportedHost = analyticsHosts.has(window.location.hostname) || isPreview;
+
+        if (!isSupportedHost) {
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = "/_vercel/insights/script.js";
+        document.head.appendChild(script);
+      })();
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>

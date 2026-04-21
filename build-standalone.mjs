@@ -9,14 +9,21 @@ const generatorOutputPath = path.join(root, "generator.html");
 const generatorStylesPath = path.join(root, "styles.css");
 const starterDataPath = path.join(root, "starter-pack.cjs");
 const appJsPath = path.join(root, "app.js");
+const faviconPath = path.join(root, "favicon.svg");
 
 const landingSource = fs.readFileSync(landingSourcePath, "utf8");
 const generatorSource = fs.readFileSync(generatorSourcePath, "utf8");
 const generatorStyles = fs.readFileSync(generatorStylesPath, "utf8");
 const starterData = fs.readFileSync(starterDataPath, "utf8");
 const appJs = fs.readFileSync(appJsPath, "utf8");
+const faviconSvg = fs.readFileSync(faviconPath, "utf8");
+const faviconDataUri = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 
 const generatorHtml = generatorSource
+  .replace(
+    '<link rel="icon" href="./favicon.svg" type="image/svg+xml" />',
+    `<link rel="icon" href="${faviconDataUri}" type="image/svg+xml" />`,
+  )
   .replace(
     '<link rel="stylesheet" href="./styles.css" />',
     `<style>\n${generatorStyles}\n</style>`,
@@ -26,10 +33,15 @@ const generatorHtml = generatorSource
     `    <script>\n${starterData}\n</script>\n    <script>\n${appJs}\n</script>`,
   );
 
-const landingHtml = landingSource.replace(
-  "__OFFLINE_BUILDER_BASE64__",
-  JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
-);
+const landingHtml = landingSource
+  .replace(
+    '<link rel="icon" href="./favicon.svg" type="image/svg+xml" />',
+    `<link rel="icon" href="${faviconDataUri}" type="image/svg+xml" />`,
+  )
+  .replace(
+    "__OFFLINE_BUILDER_BASE64__",
+    JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
+  );
 
 fs.writeFileSync(landingOutputPath, landingHtml);
 fs.writeFileSync(generatorOutputPath, generatorHtml);
