@@ -312,7 +312,6 @@ p {
 
 .demo-field,
 .demo-output {
-  min-height: 60px;
   padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -320,6 +319,8 @@ p {
 }
 
 .demo-field {
+  min-height: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   gap: 2px;
@@ -330,6 +331,9 @@ p {
 }
 
 .demo-output {
+  min-height: 100px;
+  height: 100px;
+  overflow: auto;
   color: var(--ink);
   font-size: 1rem;
   line-height: 1.45;
@@ -743,6 +747,11 @@ p {
 
   .example-list {
     grid-template-columns: 1fr;
+  }
+
+  .demo-output {
+    min-height: 118px;
+    height: 118px;
   }
 }
 

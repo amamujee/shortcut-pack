@@ -27,6 +27,7 @@ const profileShortcutPreviewMap = [
   { field: "phone", starterId: "phone" },
   { field: "dob", starterId: "dob" },
   { field: "passportNumber", starterId: "passport" },
+  { field: "passportExpiryDate", starterId: "passportExpiryDate" },
   { field: "idNumber", starterId: "idNumber" },
   { field: "airlineLoyaltyNumber", starterId: "airlineLoyalty" },
   { field: "knownTravelerNumber", starterId: "knownTravelerNumber" },
@@ -254,6 +255,7 @@ function validateProfileValue(key, value) {
       return digits.length >= 8 ? "" : "Enter a valid WhatsApp number with country code.";
     }
     case "dob":
+    case "passportExpiryDate":
       return isLikelyValidDate(trimmed)
         ? ""
         : "Use a real date like 14 March 1990 or 1990-03-14.";
@@ -394,6 +396,7 @@ function formatMissingFields(definition) {
     phone: "phone",
     dob: "date of birth",
     passportNumber: "passport number",
+    passportExpiryDate: "passport expiry date",
     idNumber: "ID number",
     airlineLoyaltyNumber: "airline loyalty number",
     knownTravelerNumber: "Known Traveler Number",

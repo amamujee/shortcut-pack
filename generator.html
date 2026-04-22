@@ -1238,6 +1238,25 @@ tbody tr.duplicate-row {
 
             <label
               class="profile-field"
+              data-preview-field="passportExpiryDate"
+              data-preview-starter="passportExpiryDate"
+            >
+              <span class="field-head">
+                <span class="field-title">Passport expiry date</span>
+                <span class="field-shortcut-preview" hidden></span>
+              </span>
+              <input
+                id="passportExpiryDate"
+                name="passportExpiryDate"
+                type="text"
+                maxlength="40"
+                data-validate="passportExpiryDate"
+                placeholder="14 March 2030"
+              />
+            </label>
+
+            <label
+              class="profile-field"
               data-preview-field="idNumber"
               data-preview-starter="idNumber"
             >
@@ -1659,6 +1678,7 @@ tbody tr.duplicate-row {
     phone: "",
     dob: "",
     passportNumber: "",
+    passportExpiryDate: "",
     idNumber: "",
     airlineLoyaltyNumber: "",
     knownTravelerNumber: "",
@@ -1755,6 +1775,16 @@ tbody tr.duplicate-row {
       requiredProfileFields: ["passportNumber"],
       placeholder: "A1234567",
       build: (profile) => profile.passportNumber || "A1234567",
+    },
+    {
+      id: "passportExpiryDate",
+      category: "Identity",
+      title: "Passport expiry date",
+      description: "Useful when forms ask for both your passport number and expiry date.",
+      suffix: "ppexp",
+      requiredProfileFields: ["passportExpiryDate"],
+      placeholder: "14 March 2030",
+      build: (profile) => profile.passportExpiryDate || "14 March 2030",
     },
     {
       id: "idNumber",
@@ -2069,6 +2099,7 @@ const profileShortcutPreviewMap = [
   { field: "phone", starterId: "phone" },
   { field: "dob", starterId: "dob" },
   { field: "passportNumber", starterId: "passport" },
+  { field: "passportExpiryDate", starterId: "passportExpiryDate" },
   { field: "idNumber", starterId: "idNumber" },
   { field: "airlineLoyaltyNumber", starterId: "airlineLoyalty" },
   { field: "knownTravelerNumber", starterId: "knownTravelerNumber" },
@@ -2296,6 +2327,7 @@ function validateProfileValue(key, value) {
       return digits.length >= 8 ? "" : "Enter a valid WhatsApp number with country code.";
     }
     case "dob":
+    case "passportExpiryDate":
       return isLikelyValidDate(trimmed)
         ? ""
         : "Use a real date like 14 March 1990 or 1990-03-14.";
@@ -2436,6 +2468,7 @@ function formatMissingFields(definition) {
     phone: "phone",
     dob: "date of birth",
     passportNumber: "passport number",
+    passportExpiryDate: "passport expiry date",
     idNumber: "ID number",
     airlineLoyaltyNumber: "airline loyalty number",
     knownTravelerNumber: "Known Traveler Number",
