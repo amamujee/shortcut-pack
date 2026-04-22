@@ -40,7 +40,7 @@ const landingHtml = landingSource
     `<link rel="icon" href="${faviconDataUri}" type="image/svg+xml" />`,
   )
   .replace(
-    "__OFFLINE_BUILDER_BASE64__",
+    '"__OFFLINE_BUILDER_BASE64__"',
     JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
   );
 

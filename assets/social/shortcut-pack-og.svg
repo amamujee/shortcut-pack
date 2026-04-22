@@ -1,0 +1,61 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F5EE"/>
+      <stop offset="1" stop-color="#F1EBDD"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(152 86) rotate(22.8) scale(238 184)">
+      <stop stop-color="#9C5C21" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#9C5C21" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1028 118) rotate(148.4) scale(236 176)">
+      <stop stop-color="#9C5C21" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#9C5C21" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="648" y="93" width="416" height="458" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="24"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.184314 0 0 0 0 0.133333 0 0 0 0 0.0666667 0 0 0 0.12 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glowA)"/>
+  <rect width="1200" height="630" fill="url(#glowB)"/>
+
+  <g opacity="0.94">
+    <rect x="82" y="86" width="66" height="66" rx="19" fill="#181612"/>
+    <path d="M104.6 127V106.3H113.8C118.28 106.3 120.9 108.5 120.9 112.16C120.9 114.88 119.2 116.66 116.45 117.2V117.47C119.86 117.8 121.95 119.76 121.95 122.81C121.95 127.04 118.91 129.7 113.95 129.7H104.6V127ZM109.36 115.72H112.85C115.03 115.72 116.14 114.82 116.14 113.1C116.14 111.47 114.97 110.6 112.79 110.6H109.36V115.72ZM109.36 125.39H113.32C115.86 125.39 117.16 124.43 117.16 122.48C117.16 120.47 115.74 119.49 112.97 119.49H109.36V125.39Z" fill="#FBF8F1"/>
+  </g>
+
+  <text x="174" y="132" fill="#181612" font-size="28" font-weight="700" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, serif" letter-spacing="-0.04em">Shortcut Pack</text>
+  <text x="82" y="245" fill="#181612" font-size="96" font-weight="700" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, serif" letter-spacing="-0.05em">Type less.</text>
+  <text x="82" y="330" fill="#181612" font-size="96" font-weight="700" font-family="Iowan Old Style, Palatino Linotype, Book Antiqua, serif" letter-spacing="-0.05em">Remember less.</text>
+  <text x="82" y="392" fill="#5B554C" font-size="31" font-family="Avenir Next, Segoe UI, sans-serif">Build a pack of Apple text replacements for addresses,</text>
+  <text x="82" y="432" fill="#5B554C" font-size="31" font-family="Avenir Next, Segoe UI, sans-serif">IDs, links, and canned replies.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="696" y="123" width="320" height="362" rx="34" fill="rgba(255,255,255,0.72)"/>
+    <rect x="696" y="123" width="320" height="362" rx="34" fill="#FBF8F1" fill-opacity="0.82"/>
+    <rect x="724" y="157" width="264" height="132" rx="24" fill="#FBF8F1"/>
+    <rect x="724" y="157" width="264" height="132" rx="24" stroke="rgba(24,22,18,0.08)"/>
+    <text x="752" y="200" fill="#9C5C21" font-size="28" font-weight="700" font-family="SF Mono, Menlo, Consolas, monospace">&gt;home</text>
+    <text x="752" y="244" fill="#5B554C" font-size="24" font-family="Avenir Next, Segoe UI, sans-serif">Home address</text>
+
+    <rect x="724" y="307" width="124" height="72" rx="20" fill="#FBF8F1"/>
+    <rect x="724" y="307" width="124" height="72" rx="20" stroke="rgba(24,22,18,0.08)"/>
+    <text x="748" y="352" fill="#9C5C21" font-size="26" font-weight="700" font-family="SF Mono, Menlo, Consolas, monospace">&gt;pp</text>
+
+    <rect x="864" y="307" width="124" height="72" rx="20" fill="#FBF8F1"/>
+    <rect x="864" y="307" width="124" height="72" rx="20" stroke="rgba(24,22,18,0.08)"/>
+    <text x="884" y="352" fill="#9C5C21" font-size="26" font-weight="700" font-family="SF Mono, Menlo, Consolas, monospace">&gt;intro</text>
+
+    <rect x="724" y="395" width="264" height="62" rx="18" fill="rgba(156,92,33,0.08)"/>
+    <rect x="724" y="395" width="264" height="62" rx="18" stroke="rgba(156,92,33,0.14)"/>
+    <text x="752" y="434" fill="#5B554C" font-size="22" font-family="Avenir Next, Segoe UI, sans-serif">Apple-native shortcuts that sync</text>
+  </g>
+</svg>

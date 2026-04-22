@@ -4,6 +4,16 @@ Shortcut Pack helps you turn repeated personal details, links, replies, and snip
 
 Start here: [shortcutpack.com](https://shortcutpack.com)
 
+## Screenshots
+
+Landing page:
+
+![Shortcut Pack landing page](./assets/screenshots/landing-page.png)
+
+Builder:
+
+![Shortcut Pack builder](./assets/screenshots/builder-page.png)
+
 ## What It Is
 
 Shortcut Pack is a simple builder for Apple text replacements.

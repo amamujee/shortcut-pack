@@ -15,7 +15,17 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://shortcutpack.com/" />
+    <meta
+      property="og:image"
+      content="https://shortcutpack.com/assets/social/shortcut-pack-og.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://shortcutpack.com/assets/social/shortcut-pack-og.png"
+    />
     <meta name="theme-color" content="#181612" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <script>
@@ -978,7 +988,7 @@ p {
 
     <script>
       const offlineBuilderFilename = "Shortcut Pack Builder.html";
-      const offlineBuilderBase64 = __OFFLINE_BUILDER_BASE64__;
+      const offlineBuilderBase64 = "__OFFLINE_BUILDER_BASE64__";
       const liveDemoSteps = [
         { shortcut: ">em", phrase: "you@example.com" },
         { shortcut: ">home", phrase: "123 Main Street, Apt 4B, Brooklyn, NY 11201" },
@@ -993,6 +1003,10 @@ p {
 
       document.querySelectorAll("[data-download-offline-builder]").forEach((link) => {
         link.addEventListener("click", (event) => {
+          if (offlineBuilderBase64 === "__OFFLINE_BUILDER_BASE64__") {
+            return;
+          }
+
           event.preventDefault();
           const offlineBuilderHtml = decodeBase64Utf8(offlineBuilderBase64);
           const blob = new Blob([offlineBuilderHtml], {
