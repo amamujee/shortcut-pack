@@ -11,6 +11,12 @@ const generatorStylesPath = path.join(root, "styles.css");
 const starterDataPath = path.join(root, "starter-pack.cjs");
 const appJsPath = path.join(root, "app.js");
 const faviconPath = path.join(root, "favicon.svg");
+const importGuideImagePath = path.join(
+  root,
+  "assets",
+  "screenshots",
+  "import-text-replacements.png",
+);
 
 const landingSource = fs.readFileSync(landingSourcePath, "utf8");
 const generatorSource = fs.readFileSync(generatorSourcePath, "utf8");
@@ -18,7 +24,9 @@ const generatorStyles = fs.readFileSync(generatorStylesPath, "utf8");
 const starterData = fs.readFileSync(starterDataPath, "utf8");
 const appJs = fs.readFileSync(appJsPath, "utf8");
 const faviconSvg = fs.readFileSync(faviconPath, "utf8");
+const importGuideImage = fs.readFileSync(importGuideImagePath);
 const faviconDataUri = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
+const importGuideImageDataUri = `data:image/png;base64,${importGuideImage.toString("base64")}`;
 
 const generatorHtml = generatorSource
   .replace(
@@ -32,6 +40,10 @@ const generatorHtml = generatorSource
   .replace(
     '    <script src="./starter-pack.cjs"></script>\n    <script src="./app.js"></script>',
     `    <script>\n${starterData}\n</script>\n    <script>\n${appJs}\n</script>`,
+  )
+  .replace(
+    './assets/screenshots/import-text-replacements.png',
+    importGuideImageDataUri,
   );
 
 const landingHtml = landingSource

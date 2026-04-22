@@ -275,6 +275,27 @@ h3,
   line-height: 1.55;
 }
 
+.instruction-visual {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.instruction-visual img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.instruction-visual figcaption {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
 .quick-setup-list {
   display: grid;
   gap: 8px;
