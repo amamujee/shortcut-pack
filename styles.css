@@ -220,27 +220,33 @@ h3,
   line-height: 1.65;
 }
 
-.privacy-note {
-  max-width: 62ch;
-  margin: 16px 0 0;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  line-height: 1.6;
+.hero-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
 }
 
-.hero-notes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.hero-notes span,
+.hero-value,
 .prefix-chip,
 .status-pill {
   border: 1px solid var(--line);
-  border-radius: 999px;
   background: rgba(255, 255, 255, 0.5);
+}
+
+.hero-value {
+  min-height: 100%;
+  border-radius: 20px;
+  padding: 14px 16px;
+  color: var(--ink);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.prefix-chip,
+.status-pill {
+  border-radius: 999px;
   padding: 8px 12px;
 }
 
@@ -887,7 +893,8 @@ tbody tr.duplicate-row {
   .topbar,
   .hero,
   .instructions,
-  .summary-grid {
+  .summary-grid,
+  .hero-values {
     grid-template-columns: 1fr;
   }
 

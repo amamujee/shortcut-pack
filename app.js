@@ -946,10 +946,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#addCustomShortcut").addEventListener("click", addCustomRow);
   document.querySelector("#downloadPlist").addEventListener("click", exportPlist);
   document.querySelector("#clearSavedDraft").addEventListener("click", clearDraft);
-  document.querySelector("#resetGenerated").addEventListener("click", () => {
-    refreshGeneratedStarters(true);
-    render();
-  });
 
   render();
 
