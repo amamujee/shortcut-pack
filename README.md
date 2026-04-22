@@ -2,6 +2,7 @@
 
 Shortcut Pack helps you turn repeated personal details, links, replies, and snippets into Apple text shortcuts you can actually use.
 
+Blog post: [https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/] (https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/)
 Start here: [shortcutpack.com](https://shortcutpack.com)
 
 ## Screenshots
