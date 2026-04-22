@@ -271,12 +271,22 @@ h3,
 
 .hero-value {
   min-height: 100%;
-  border-radius: 20px;
-  padding: 14px 16px;
-  color: var(--ink);
-  font-size: 0.98rem;
-  font-weight: 600;
-  line-height: 1.45;
+  border-radius: 22px;
+  padding: 18px 18px 16px;
+}
+
+.hero-value h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  line-height: 1.05;
+}
+
+.hero-value p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.55;
 }
 
 .prefix-chip,
@@ -300,9 +310,21 @@ h3,
   line-height: 1.55;
 }
 
+.quick-setup-list {
+  display: grid;
+  gap: 8px;
+}
+
+.quick-setup-list li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .quick-setup-list a {
+  display: inline-block;
   color: inherit;
   text-decoration: none;
+  line-height: 1.5;
 }
 
 .quick-setup-list a:hover,
@@ -342,7 +364,7 @@ h3,
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 8px;
 }
 
 .panel-action-buttons {
@@ -355,7 +377,7 @@ h3,
 .panel-meta {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.5;
   text-align: right;
 }
@@ -1038,9 +1060,18 @@ tbody tr.duplicate-row {
             you want, and export a <code>Text Substitutions.plist</code> for import on your Mac.
           </p>
           <div class="hero-values" aria-label="Shortcut Pack benefits">
-            <div class="hero-value">Syncs across all Apple devices</div>
-            <div class="hero-value">Your data, never saved by us</div>
-            <div class="hero-value">Tool requires a Mac</div>
+            <article class="hero-value">
+              <h3>Apple-native</h3>
+              <p>The same shortcuts can work on Mac, iPhone, and iPad.</p>
+            </article>
+            <article class="hero-value">
+              <h3>Private by default</h3>
+              <p>We do not save what you type.</p>
+            </article>
+            <article class="hero-value">
+              <h3>Build on your Mac</h3>
+              <p>Import it there once, then use it across your Apple devices.</p>
+            </article>
           </div>
         </div>
 
@@ -1048,19 +1079,19 @@ tbody tr.duplicate-row {
           <p class="card-label">Quick setup</p>
           <ol class="quick-setup-list">
             <li>
-              <a href="#prefix">Step 1. Configure your trigger prefix.</a>
+              <a href="#prefix">Configure your trigger prefix</a>
             </li>
             <li>
-              <a href="#step-details">Step 2. Add your details.</a>
+              <a href="#step-details">Add your details</a>
             </li>
             <li>
-              <a href="#step-starters">Step 3. Select your shortcuts.</a>
+              <a href="#step-starters">Select your shortcuts</a>
             </li>
             <li>
-              <a href="#step-export">Step 4. Download plist file.</a>
+              <a href="#step-export">Download the plist file</a>
             </li>
             <li>
-              <a href="#step-export">Step 5. Add custom text replacements to your Mac.</a>
+              <a href="#step-export">Import it on your Mac</a>
             </li>
           </ol>
         </aside>
@@ -1084,8 +1115,8 @@ tbody tr.duplicate-row {
           </div>
 
           <p class="panel-intro">
-            Start with the shared prefix every shortcut will use. Then add only the
-            details you actually reuse so matching starter shortcuts can fill themselves in.
+            Start with the shared prefix every shortcut will use, then add only the
+            details you actually reuse.
           </p>
 
           <form id="profileForm" class="form-grid">
@@ -1443,9 +1474,8 @@ tbody tr.duplicate-row {
           </div>
 
           <p class="panel-intro">
-            Shortcut Pack starts with practical defaults for identity, links,
-            addresses, and replies. You can switch any row on or off, change the
-            trigger, or rewrite the expanded text.
+            Start with the defaults, then switch off anything you do not want,
+            rename the trigger, or rewrite the expanded text.
           </p>
 
           <div class="starter-table" role="presentation">
@@ -1477,7 +1507,7 @@ tbody tr.duplicate-row {
           <div class="panel-header">
             <div>
               <p class="section-kicker">Step 4</p>
-              <h2>Download plist file</h2>
+              <h2>Download the plist file</h2>
             </div>
             <div class="export-actions">
               <button id="downloadPlist" class="primary-button" type="button">

@@ -251,21 +251,12 @@ p {
   margin-top: 26px;
 }
 
-.trust-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-top: 22px;
-  color: var(--ink-soft);
-  font-size: 0.92rem;
-}
-
-.hero-privacy-note {
+.hero-support {
   max-width: 58ch;
-  margin-top: 14px;
+  margin-top: 18px;
   color: var(--ink-soft);
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 0.96rem;
+  line-height: 1.55;
 }
 
 .example-panel {
@@ -277,21 +268,93 @@ p {
 }
 
 .example-panel-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  gap: 4px;
   margin-bottom: 14px;
   color: var(--ink-soft);
   font-size: 0.9rem;
 }
 
+.example-panel-header span {
+  font-weight: 700;
+}
+
+.example-panel-header p {
+  font-size: 0.92rem;
+}
+
+.demo-card {
+  padding: 18px;
+  border: 1px solid var(--line-soft);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.demo-stage {
+  display: grid;
+  gap: 14px;
+}
+
+.demo-row {
+  display: grid;
+  gap: 8px;
+}
+
+.demo-row-label {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-field,
+.demo-output {
+  min-height: 60px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.demo-field {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--accent);
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.demo-output {
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.demo-caret {
+  width: 0.6ch;
+  height: 1.15em;
+  border-radius: 2px;
+  background: currentColor;
+  animation: blink 1s steps(1, end) infinite;
+}
+
+.demo-note {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
 .example-list {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .example-item {
-  padding: 16px;
+  padding: 14px;
   border: 1px solid var(--line-soft);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.46);
@@ -299,7 +362,7 @@ p {
 
 .trigger {
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: var(--accent);
   font-size: 1.1rem;
   font-weight: 700;
@@ -307,6 +370,19 @@ p {
 
 .example-item p {
   color: var(--ink-soft);
+  font-size: 0.94rem;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 .section {
@@ -339,6 +415,53 @@ p {
 .section-head p {
   color: var(--ink-soft);
   font-size: 1.02rem;
+}
+
+.hero-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(246, 239, 228, 0.88));
+  box-shadow: var(--shadow);
+}
+
+.hero-strip-item {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 236px;
+  padding: 32px 34px 34px;
+}
+
+.hero-strip-item + .hero-strip-item {
+  border-left: 1px solid var(--line);
+}
+
+.hero-strip-item::before {
+  content: "";
+  width: 42px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(156, 92, 33, 0.42);
+}
+
+.hero-strip-item h3 {
+  margin: 0;
+  max-width: 14ch;
+  font-size: clamp(1.85rem, 2.6vw, 2.45rem);
+  line-height: 0.96;
+}
+
+.hero-strip-item p {
+  max-width: 18ch;
+  color: var(--ink-soft);
+  font-size: 1.04rem;
+  line-height: 1.46;
 }
 
 .benefit-grid,
@@ -511,6 +634,7 @@ p {
 
 @media (max-width: 1080px) {
   .hero,
+  .hero-strip,
   .benefit-grid,
   .paired-heads,
   .use-grid,
@@ -527,6 +651,11 @@ p {
 
   .hero h1 {
     max-width: none;
+  }
+
+  .hero-strip-item + .hero-strip-item {
+    border-left: 0;
+    border-top: 1px solid var(--line);
   }
 }
 
@@ -567,8 +696,14 @@ p {
   .faq-card,
   .privacy-card,
   .footer-card,
-  .example-panel {
+  .example-panel,
+  .demo-card {
     padding: 18px;
+  }
+
+  .hero-strip-item {
+    min-height: auto;
+    padding: 22px 18px 20px;
   }
 
   .button {
@@ -578,6 +713,10 @@ p {
   .hero-actions,
   .footer-actions {
     width: 100%;
+  }
+
+  .example-list {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -600,8 +739,7 @@ p {
       </a>
 
       <nav class="topnav" aria-label="Primary">
-        <a href="#uses">Use cases</a>
-        <a href="#native">Why it works</a>
+        <a href="#sync">How it works</a>
         <a href="#free">Free and private</a>
         <a href="#faq">FAQ</a>
       </nav>
@@ -623,140 +761,115 @@ p {
           </p>
 
           <div class="hero-actions">
-            <a class="button button-primary" href="./generator.html">Open the builder</a>
+            <a class="button button-primary" href="./generator.html">Open builder</a>
             <a
               class="button button-secondary"
               href="./generator.html"
               data-download-offline-builder
               download="Shortcut Pack Builder.html"
-              >Download builder file</a
+              >Download offline builder</a
             >
           </div>
 
-          <div class="trust-line" aria-label="Trust signals">
-            <span>Totally free</span>
-            <span>No signup</span>
-            <span>No saved personal data</span>
-          </div>
-
-          <p class="hero-privacy-note">
-            Nothing is sent to us. Build it anywhere, then import it on your Mac. That
-            import step does not work from iPhone or iPad, but Apple can sync the finished
-            text replacements across your devices with iCloud.
+          <p class="hero-support">
+            Build it in the browser or download the offline builder. We do not save
+            what you type. Import happens on a Mac, then Apple can sync the finished
+            shortcuts across your devices with iCloud.
           </p>
         </div>
 
         <aside class="example-panel" aria-label="Shortcut examples">
           <div class="example-panel-header">
-            <span>Examples</span>
-            <span>Works with Apple text replacements</span>
+            <div>
+              <span>See it work</span>
+              <p>Type a shortcut. Apple expands it.</p>
+            </div>
+          </div>
+
+          <div class="demo-card" aria-live="polite">
+            <div class="demo-stage">
+              <div class="demo-row">
+                <span class="demo-row-label">Typing</span>
+                <div class="demo-field">
+                  <span id="demoShortcut"></span>
+                  <span class="demo-caret" aria-hidden="true"></span>
+                </div>
+              </div>
+
+              <div class="demo-row">
+                <span class="demo-row-label">Expands to</span>
+                <div class="demo-output" id="demoPhrase"></div>
+              </div>
+            </div>
           </div>
 
           <div class="example-list">
             <div class="example-item">
               <span class="trigger">&gt;home</span>
-              <p>Your home address in a few characters.</p>
+              <p>Home address</p>
             </div>
 
             <div class="example-item">
               <span class="trigger">&gt;pp</span>
-              <p>Passport or ID details without having to remember them.</p>
+              <p>Passport or ID</p>
             </div>
 
             <div class="example-item">
               <span class="trigger">&gt;intro</span>
-              <p>A ready-to-send reply once your shortcuts are set up on your Mac.</p>
+              <p>Saved replies</p>
+            </div>
+
+            <div class="example-item">
+              <span class="trigger">&gt;custom</span>
+              <p>Your own shortcuts</p>
             </div>
           </div>
         </aside>
       </section>
 
       <section class="section section-tight">
-        <div class="benefit-grid">
-          <article class="benefit-card">
+        <div class="hero-strip">
+          <article class="hero-strip-item">
             <h3>Less typing</h3>
             <p>Turn repeated text into short triggers.</p>
           </article>
 
-          <article class="benefit-card">
+          <article class="hero-strip-item">
             <h3>Less remembering</h3>
             <p>Stop keeping low-value details in your head.</p>
           </article>
 
-          <article class="benefit-card">
+          <article class="hero-strip-item">
             <h3>More speed</h3>
             <p>Move faster with shortcuts built into Apple’s system.</p>
           </article>
         </div>
       </section>
 
-      <section id="uses" class="section">
+      <section id="sync" class="section">
         <div class="section-head">
-          <span class="section-label">Use Cases</span>
-          <h2>Use it where it helps.</h2>
-          <p>Start with the obvious. Keep the rest for yourself.</p>
+          <span class="section-label">Apple Sync</span>
+          <h2>Set it up once on your Mac.</h2>
+          <p>
+            Shortcut Pack uses Apple’s own text replacements, so the same shortcuts can
+            work on your Mac, iPhone, and iPad.
+          </p>
         </div>
 
-        <div class="use-grid">
-          <article class="use-card">
-            <span class="trigger">&gt;home</span>
-            <h3>Home address</h3>
-            <p>Your full address, ready in a few characters.</p>
-            <p>For forms, shipping, invoices, and travel.</p>
+        <div class="benefit-grid">
+          <article class="benefit-card">
+            <h3>Apple-native</h3>
+            <p>Built into Apple’s text replacements. No extra app to manage.</p>
           </article>
 
-          <article class="use-card">
-            <span class="trigger">&gt;pp</span>
-            <h3>Passport details</h3>
-            <p>Passport, ID, or any number you do not want to fetch twice.</p>
-            <p>For travel, admin, and all the tedious parts.</p>
+          <article class="benefit-card">
+            <h3>One Mac setup</h3>
+            <p>Import the plist on your Mac once. That setup step is Mac-only.</p>
           </article>
 
-          <article class="use-card">
-            <span class="trigger">&gt;intro</span>
-            <h3>Replies</h3>
-            <p>Saved replies for intros, thanks, follow-ups, and scheduling.</p>
-            <p>For faster answers after you import the pack on your Mac.</p>
-          </article>
-
-          <article class="use-card">
-            <span class="trigger">&gt;custom</span>
-            <h3>Your own system</h3>
-            <p>Add whatever you reach for often.</p>
-            <p>For everything the starter pack does not know yet.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="native" class="section">
-        <div class="paired-heads">
-          <div class="paired-head">
-            <span class="section-label">Why It Works</span>
-            <h2>Native speed.</h2>
-            <p>
-              It rides on Apple’s own text replacements, so the shortcuts live where you
-              already type.
-            </p>
-          </div>
-
-          <div class="paired-head">
-            <span class="section-label">Flexibility</span>
-            <h2>Make it yours.</h2>
-            <p>Start with the pack. Keep the parts that earn their place.</p>
-          </div>
-        </div>
-
-        <div class="split-grid">
-          <article class="text-card">
-            <h3>What you get</h3>
-            <p>One lightweight system for details, replies, and everyday admin.</p>
-            <p>No extra app to manage. No new workflow to learn.</p>
-          </article>
-
-          <article class="text-card">
-            <h3>Why it lasts</h3>
-            <p>Simple enough to become habit. Flexible enough to keep growing.</p>
-            <p>Add new shortcuts as life gets busier.</p>
+          <article class="benefit-card">
+            <h3>Same shortcuts everywhere</h3>
+            <p>Use the same shortcuts on Mac, iPhone, and iPad with iCloud sync.</p>
           </article>
         </div>
       </section>
@@ -842,13 +955,13 @@ p {
         </div>
 
         <div class="footer-actions">
-          <a class="button button-primary" href="./generator.html">Open the builder</a>
+          <a class="button button-primary" href="./generator.html">Open builder</a>
           <a
             class="button button-secondary"
             href="./generator.html"
             data-download-offline-builder
             download="Shortcut Pack Builder.html"
-            >Download builder file</a
+            >Download offline builder</a
           >
         </div>
       </div>
@@ -857,6 +970,11 @@ p {
     <script>
       const offlineBuilderFilename = "Shortcut Pack Builder.html";
       const offlineBuilderBase64 = __OFFLINE_BUILDER_BASE64__;
+      const liveDemoSteps = [
+        { shortcut: ">em", phrase: "you@example.com" },
+        { shortcut: ">home", phrase: "123 Main Street, Apt 4B, Brooklyn, NY 11201" },
+        { shortcut: ">intro", phrase: "Great to meet you. Here is my Calendly: calendly.com/your-name" },
+      ];
 
       function decodeBase64Utf8(base64) {
         const binary = window.atob(base64);
@@ -881,6 +999,49 @@ p {
           window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
         });
       });
+
+      (function () {
+        const shortcutNode = document.querySelector("#demoShortcut");
+        const phraseNode = document.querySelector("#demoPhrase");
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!shortcutNode || !phraseNode) {
+          return;
+        }
+
+        if (prefersReducedMotion) {
+          shortcutNode.textContent = liveDemoSteps[0].shortcut;
+          phraseNode.textContent = liveDemoSteps[0].phrase;
+          return;
+        }
+
+        let stepIndex = 0;
+
+        function wait(ms) {
+          return new Promise((resolve) => window.setTimeout(resolve, ms));
+        }
+
+        async function runDemo() {
+          while (true) {
+            const step = liveDemoSteps[stepIndex];
+            shortcutNode.textContent = "";
+            phraseNode.textContent = "";
+
+            for (const char of step.shortcut) {
+              shortcutNode.textContent += char;
+              await wait(85);
+            }
+
+            await wait(420);
+            phraseNode.textContent = step.phrase;
+            await wait(2100);
+
+            stepIndex = (stepIndex + 1) % liveDemoSteps.length;
+          }
+        }
+
+        runDemo();
+      })();
     </script>
   </body>
 </html>
