@@ -49,7 +49,7 @@ const generatorHtml = generatorSource
 const landingHtml = landingSource
   .replace(
     '<link rel="icon" href="./favicon.svg" type="image/svg+xml" />',
-    `<link rel="icon" href="${faviconDataUri}" type="image/svg+xml" />`,
+    '<link rel="icon" href="/favicon.svg" type="image/svg+xml" />',
   )
   .replace(
     '"__OFFLINE_BUILDER_BASE64__"',

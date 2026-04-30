@@ -1,0 +1,16 @@
+# Shortcut Pack
+
+Shortcut Pack is a free, private builder for Apple text replacements. It helps people turn repeated personal details, links, canned replies, and IDs into shortcuts that macOS can import as a `Text Substitutions.plist` file.
+
+Website: https://shortcutpack.com/
+Builder: https://shortcutpack.com/generator.html
+Repository: https://github.com/amamujee/shortcut-pack
+Blog post: https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/
+
+## Key Points
+
+- No signup or backend is required.
+- Personal details stay in the browser.
+- The generated plist imports into macOS Text Replacements.
+- Imported text replacements can sync to iPhone and iPad through iCloud.
+- The project is open source under the MIT license.
