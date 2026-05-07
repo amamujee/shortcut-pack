@@ -72,10 +72,14 @@
   --line: rgba(24, 22, 18, 0.14);
   --line-soft: rgba(24, 22, 18, 0.08);
   --accent: #9c5c21;
+  --accent-strong: #7a4818;
   --accent-soft: rgba(156, 92, 33, 0.1);
+  --ok: #2f7d4a;
+  --err: #b3261e;
+  --err-bg: rgba(179, 38, 30, 0.08);
   --panel: rgba(255, 255, 255, 0.52);
   --shadow: 0 24px 60px rgba(47, 34, 17, 0.08);
-  --container: min(1120px, calc(100vw - 40px));
+  --container: min(1360px, calc(100vw - 64px));
 }
 
 * {
@@ -122,29 +126,32 @@ h3,
 }
 
 .page-shell {
-  width: var(--container);
-  margin: 0 auto;
-  padding: 32px 0 56px;
+  width: 100%;
+  margin: 0;
+  padding: 24px 32px 48px;
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: var(--container);
-  margin: 0 auto;
-  padding: 28px 0 18px;
-  backdrop-filter: blur(14px);
+  gap: 14px;
+  width: 100%;
+  margin: 0;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--line-soft);
+  background: rgba(248, 245, 238, 0.92);
+  backdrop-filter: blur(12px);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  min-width: max-content;
 }
 
 .brand-mark {
@@ -160,13 +167,124 @@ h3,
 }
 
 .brand-word {
-  font-size: 1.35rem;
+  font-size: 1.18rem;
+  white-space: nowrap;
+}
+
+.builder-tag {
+  color: var(--accent);
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.active-pack-stack,
+.section-nav,
+.device-tabs,
+.pack-chip {
+  display: inline-flex;
+  align-items: center;
+}
+
+.active-pack-stack {
+  flex-wrap: nowrap;
+  gap: 6px;
+  width: max-content;
+  min-width: max-content;
+}
+
+.pack-chip,
+.add-pack-chip {
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.pack-chip {
+  gap: 7px;
+}
+
+.pack-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.pack-chip button,
+.add-pack-chip {
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: inherit;
+}
+
+.add-pack-chip {
+  border: 1px dashed rgba(156, 92, 33, 0.35);
+  color: var(--accent);
+}
+
+.section-nav {
+  margin-left: 0;
+  justify-self: start;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.section-nav a {
+  padding: 8px 13px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.section-nav a.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.topbar-save-status {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.topbar-save-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: var(--ok);
+}
+
+.topbar-download {
+  min-height: 40px;
+  padding: 10px 16px;
 }
 
 .topbar-actions {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  justify-self: end;
 }
 
 .topbar-link {
@@ -226,18 +344,22 @@ h3,
   margin-bottom: 8px;
 }
 
+.page-shell > .hero {
+  display: none;
+}
+
 .panel,
 .hero-card {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 28px;
-  box-shadow: var(--shadow);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(47, 34, 17, 0.06);
 }
 
 .hero-copy,
 .hero-card,
 .panel {
-  padding: 28px;
+  padding: 24px;
 }
 
 .section-kicker,
@@ -246,7 +368,7 @@ h3,
 .field-label {
   margin: 0 0 10px;
   color: var(--accent);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -280,10 +402,11 @@ h3,
 }
 
 .panel-intro {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   max-width: 72ch;
   color: var(--ink-soft);
-  line-height: 1.65;
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .hero-values {
@@ -391,13 +514,165 @@ h3,
 #step-starters,
 #step-custom,
 #step-export,
+#step-import,
 #prefix {
   scroll-margin-top: 96px;
 }
 
 .layout {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1.6fr) minmax(380px, 1fr);
   align-items: start;
+  gap: 28px;
+}
+
+.builder-form {
+  display: grid;
+  gap: 20px;
+}
+
+.builder-preview {
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.builder-preview.is-collapsed {
+  display: none;
+}
+
+.builder-preview-card {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 18px 40px rgba(47, 34, 17, 0.06);
+}
+
+.builder-preview-card h2 {
+  display: none;
+}
+
+.builder-preview-card .section-kicker {
+  margin-bottom: 0;
+}
+
+.builder-preview-copy {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.builder-preview-copy::before {
+  content: "Same shortcut, every Apple device. ";
+  color: var(--ink-soft);
+}
+
+.builder-preview-card h2 + .builder-preview-copy {
+  margin-top: -4px;
+}
+
+.builder-preview-card h2 {
+  font-size: 1.65rem;
+  line-height: 0.98;
+}
+
+.device-tabs {
+  width: max-content;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.device-tabs button {
+  min-height: 34px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.device-tabs button.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.builder-device-preview {
+  height: 286px;
+  overflow: hidden;
+  display: grid;
+  place-items: start center;
+  padding: 8px 0;
+}
+
+.builder-device-preview.is-iphone {
+  height: 286px;
+}
+
+.builder-device-preview.is-iphone .sp-phone {
+  margin-top: -4px;
+}
+
+.builder-device-preview.is-ipad {
+  height: 286px;
+  padding-top: 18px;
+}
+
+.builder-device-preview.is-ipad .sp-ipad {
+  margin-top: 0;
+}
+
+.preview-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.preview-summary-grid .summary-card {
+  min-height: 96px;
+}
+
+.shortcut-cheatsheet {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.shortcut-cheatsheet summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.shortcut-cheatsheet-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  margin-right: 4px;
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--ink);
+  font: 700 0.74rem "SF Mono", Menlo, Consolas, monospace;
 }
 
 .panel-header,
@@ -409,7 +684,7 @@ h3,
 
 .panel-header {
   align-items: center;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .panel-actions {
@@ -417,6 +692,15 @@ h3,
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
+}
+
+.starter-search-row {
+  margin-bottom: 2px;
+}
+
+.starter-search-field {
+  display: grid;
+  gap: 6px;
 }
 
 .panel-action-buttons {
@@ -447,7 +731,7 @@ h3,
 }
 
 .form-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .summary-grid {
@@ -461,7 +745,14 @@ h3,
 }
 
 .instruction-card {
-  max-width: 760px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.instruction-card-priority {
+  border-color: rgba(156, 92, 33, 0.28);
+  background: rgba(156, 92, 33, 0.08);
 }
 
 .span-2 {
@@ -487,9 +778,82 @@ label {
 }
 
 .prefix-field {
-  gap: 10px;
+  gap: 12px;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.34);
+  border-radius: 14px;
+  background: transparent;
+}
+
+.prefix-field > input#prefix {
+  display: none;
+}
+
+.prefix-segmented {
+  display: inline-flex;
+  width: max-content;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(24, 22, 18, 0.06);
+}
+
+.prefix-segmented button {
+  min-width: 46px;
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font: 800 0.9rem "SF Mono", Menlo, Consolas, monospace;
+}
+
+.prefix-custom-input {
+  display: block;
+  width: 124px;
+  min-height: 36px;
+  border: 0;
+  border-left: 1px solid rgba(24, 22, 18, 0.08);
+  border-radius: 0 10px 10px 0;
+  background: transparent;
+  color: var(--ink);
+  padding: 8px 12px;
+  font: 800 0.9rem "SF Mono", Menlo, Consolas, monospace;
+}
+
+.prefix-custom-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.prefix-custom-input:focus {
+  background: rgba(255, 255, 255, 0.78);
+  outline: 2px solid rgba(122, 72, 24, 0.24);
+  outline-offset: -2px;
+}
+
+.prefix-segmented button.is-active {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(47, 34, 17, 0.08);
+}
+
+.prefix-live-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prefix-live-preview code {
+  color: var(--accent);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .field-head {
@@ -534,7 +898,7 @@ label {
 }
 
 .live-shortcut-preview {
-  display: grid;
+  display: none;
   gap: 12px;
   padding: 14px;
   border: 1px solid var(--line-soft);
@@ -543,9 +907,12 @@ label {
 }
 
 .step-divider {
-  display: grid;
-  gap: 4px;
-  margin-top: 2px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  margin-top: 4px;
+  padding-top: 4px;
 }
 
 .step-divider h3,
@@ -558,6 +925,85 @@ label {
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.55;
+}
+
+.hide-empty-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.hide-empty-toggle input {
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  accent-color: var(--accent);
+}
+
+.detail-group {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--line-soft);
+  padding-top: 18px;
+}
+
+.detail-group:not(.is-relevant) summary {
+  opacity: 0.62;
+}
+
+.detail-group:not(.is-relevant) .detail-group-title::after {
+  content: "Not in selected packs";
+  margin-left: 10px;
+  color: var(--ink-soft);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.detail-group summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+  margin-bottom: 14px;
+}
+
+.detail-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.detail-group summary::before {
+  content: "›";
+  color: var(--accent);
+  font-size: 1.15rem;
+  transform: rotate(90deg);
+}
+
+.detail-group:not([open]) summary::before {
+  transform: rotate(0deg);
+}
+
+.detail-group-title {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.detail-group-count {
+  margin-left: auto;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.detail-group-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .live-shortcut-preview-head {
@@ -698,6 +1144,35 @@ textarea {
   padding: 14px;
 }
 
+.instruction-copy,
+.instruction-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.58;
+}
+
+.backup-confirm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  margin-top: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(156, 92, 33, 0.24);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.46);
+  color: var(--ink);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.backup-confirm input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--accent);
+}
+
 .starter-table {
   display: grid;
   gap: 10px;
@@ -728,6 +1203,39 @@ textarea {
 
 .starter-card.is-disabled {
   opacity: 0.8;
+}
+
+.starter-card.is-previewed {
+  border-color: rgba(156, 92, 33, 0.34);
+  background: rgba(156, 92, 33, 0.06);
+}
+
+.starter-card--duplicate {
+  border-color: rgba(179, 38, 30, 0.4);
+  background: var(--err-bg);
+}
+
+.starter-card--duplicate .starter-suffix {
+  border-color: rgba(179, 38, 30, 0.62);
+}
+
+.duplicate-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid rgba(179, 38, 30, 0.28);
+  border-radius: 999px;
+  background: rgba(179, 38, 30, 0.08);
+  color: var(--err);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.duplicate-chip[hidden],
+.starter-reset[hidden] {
+  display: none;
 }
 
 .starter-meta {
@@ -942,6 +1450,104 @@ textarea {
   color: #7a4719;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(24, 22, 18, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.pack-modal {
+  width: min(820px, 100%);
+  max-height: min(760px, calc(100vh - 48px));
+  overflow: auto;
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--paper);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.24);
+}
+
+.pack-modal-head {
+  display: grid;
+  gap: 8px;
+}
+
+.pack-modal h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 0.98;
+}
+
+.pack-modal p,
+.pack-modal-footer {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.pack-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pack-modal-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.46);
+  cursor: pointer;
+  text-align: left;
+}
+
+.pack-modal-card.is-active {
+  border-color: var(--accent);
+  background: rgba(156, 92, 33, 0.1);
+}
+
+.pack-modal-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.pack-modal-card p {
+  font-size: 0.92rem;
+}
+
+.pack-modal-triggers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.pack-modal-trigger {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: rgba(156, 92, 33, 0.08);
+  color: var(--accent);
+  font: 800 0.76rem "SF Mono", Menlo, Consolas, monospace;
+}
+
+.pack-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
 .status-banner.success {
   border-color: rgba(37, 112, 73, 0.28);
   background: rgba(37, 112, 73, 0.1);
@@ -1001,6 +1607,7 @@ tbody tr.duplicate-row {
 @media (max-width: 980px) {
   .topbar,
   .hero,
+  .layout,
   .instructions,
   .summary-grid,
   .hero-values {
@@ -1010,6 +1617,17 @@ tbody tr.duplicate-row {
   .topbar {
     position: static;
     padding-bottom: 0;
+    flex-wrap: wrap;
+  }
+
+  .section-nav,
+  .active-pack-stack {
+    justify-self: start;
+  }
+
+  .builder-preview {
+    position: static;
+    max-height: none;
   }
 
   .topbar-actions {
@@ -1060,6 +1678,17 @@ tbody tr.duplicate-row {
   }
 }
 
+@media (max-width: 640px) {
+  .pack-modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pack-modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .hero,
   .panel {
@@ -1094,11 +1723,23 @@ tbody tr.duplicate-row {
       <a class="brand" href="./index.html" aria-label="Shortcut Pack home">
         <span class="brand-mark">SP</span>
         <span class="brand-word">Shortcut Pack</span>
+        <span class="builder-tag">Builder</span>
       </a>
 
+      <div id="activePackStack" class="active-pack-stack" aria-label="Active starter packs"></div>
+
+      <nav class="section-nav" aria-label="Builder sections">
+        <a href="#prefix" data-section-nav="prefix">Prefix</a>
+        <a href="#step-details" data-section-nav="step-details">Details</a>
+        <a href="#step-starters" data-section-nav="step-starters">Shortcuts</a>
+        <a href="#step-custom" data-section-nav="step-custom">Custom</a>
+        <a href="#step-export" data-section-nav="step-export">Export</a>
+      </nav>
+
       <div class="topbar-actions" aria-label="Builder navigation">
+        <p id="draftStatus" class="panel-meta topbar-save-status">Saved locally.</p>
         <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="builder-badge" href="#step-export">Jump to download</a>
+        <button id="topDownloadPlist" class="primary-button topbar-download" type="button">Download .plist</button>
       </div>
     </header>
 
@@ -1142,13 +1783,14 @@ tbody tr.duplicate-row {
               <a href="#step-export">Download the plist file</a>
             </li>
             <li>
-              <a href="#step-export">Import it on your Mac</a>
+              <a href="#step-import">Import it on your Mac</a>
             </li>
           </ol>
         </aside>
       </header>
 
       <main id="top" class="layout">
+        <div class="builder-form">
         <section id="step-details" class="panel">
           <div class="panel-header">
             <div>
@@ -1156,7 +1798,6 @@ tbody tr.duplicate-row {
               <h2>Configure your trigger prefix</h2>
             </div>
             <div class="panel-actions">
-              <p id="draftStatus" class="panel-meta">Saved locally in this browser.</p>
               <div class="panel-action-buttons">
                 <button id="clearSavedDraft" class="secondary-button" type="button">
                   Clear local draft
@@ -1188,14 +1829,40 @@ tbody tr.duplicate-row {
               />
               <span class="field-note">
                 Every shortcut uses this prefix. Default to <code>&gt;</code>. If you want
-                fewer accidental triggers, try <code>@@</code> or <code>&gt;&gt;</code>.
+                fewer accidental triggers, try <code>-</code>, <code>@@</code>, or <code>&gt;&gt;</code>.
+              </span>
+              <span class="prefix-segmented" aria-label="Common trigger prefixes">
+                <button class="is-active" type="button" data-prefix-choice="&gt;">&gt;</button>
+                <button type="button" data-prefix-choice="-">-</button>
+                <button type="button" data-prefix-choice="@@">@@</button>
+                <button type="button" data-prefix-choice="&gt;&gt;">&gt;&gt;</button>
+                <input
+                  id="customPrefixInput"
+                  class="prefix-custom-input"
+                  type="text"
+                  maxlength="12"
+                  placeholder="Custom..."
+                  aria-label="Custom trigger prefix"
+                />
+              </span>
+              <span class="prefix-live-preview">
+                <span>Live preview</span>
+                <code data-prefix-live>&gt;email</code>
+                <code data-prefix-live>&gt;phone</code>
+                <code data-prefix-live>&gt;home</code>
               </span>
             </label>
 
             <div class="step-divider span-3">
-              <p class="section-kicker">Step 2</p>
-              <h3>Add your details</h3>
-              <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
+              <div>
+                <p class="section-kicker">Step 2</p>
+                <h3>Your details</h3>
+                <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
+              </div>
+              <label class="hide-empty-toggle">
+                <input id="hideEmptyFields" type="checkbox" />
+                <span>Hide empty fields</span>
+              </label>
             </div>
 
             <div class="live-shortcut-preview span-3">
@@ -1549,6 +2216,12 @@ tbody tr.duplicate-row {
           </p>
 
           <div class="starter-table" role="presentation">
+            <div class="starter-search-row">
+              <label class="starter-search-field">
+                <span class="field-label">Filter rows</span>
+                <input id="starterSearch" type="search" placeholder="Search by title, trigger, or expanded text" />
+              </label>
+            </div>
             <div class="starter-table-head" aria-hidden="true">
               <span>Use</span>
               <span>Starter row</span>
@@ -1566,6 +2239,9 @@ tbody tr.duplicate-row {
               </div>
               <button id="addCustomShortcut" class="secondary-button" type="button">
                 Add custom shortcut
+              </button>
+              <button id="addFiveCustomShortcuts" class="secondary-button" type="button">
+                Add 5 rows
               </button>
             </div>
 
@@ -1588,21 +2264,6 @@ tbody tr.duplicate-row {
 
           <div id="statusBanner" class="status-banner" aria-live="polite"></div>
 
-          <div class="summary-grid">
-            <div class="summary-card">
-              <p class="summary-label">Included shortcuts</p>
-              <p id="shortcutCount" class="summary-value">0</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Shared prefix</p>
-              <p id="prefixPreview" class="summary-value">&gt;</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Duplicate triggers</p>
-              <p id="duplicateCount" class="summary-value">0</p>
-            </div>
-          </div>
-
           <div class="table-wrap">
             <table>
               <thead>
@@ -1616,18 +2277,19 @@ tbody tr.duplicate-row {
             </table>
           </div>
 
-          <div class="instructions">
+          <div id="step-import" class="instructions">
             <div class="instruction-card">
               <p class="section-kicker">Step 5</p>
-              <h3>Import it on your Mac</h3>
+              <h3>Import the new plist</h3>
               <ol>
-                <li>Open System Settings, then go to Keyboard.</li>
-                <li>Open Text Replacements.</li>
-                <li>Drag in <code>Text Substitutions.plist</code>.</li>
+                <li>Keep Text Replacements open.</li>
+                <li>Find your downloaded <code>Text Substitutions.plist</code>.</li>
+                <li>Drag it into the Text Replacements window, then click Done if prompted.</li>
               </ol>
               <p class="instruction-note">
-                You need a Mac for this import step. After you add it there, Apple can
-                sync the text replacements to your iPhone and iPad with iCloud Drive.
+                Imports add the shortcuts from this file to your Mac. After you add them
+                there, Apple can sync the text replacements to your iPhone and iPad with
+                iCloud Drive.
               </p>
               <figure class="instruction-visual">
                 <img
@@ -1642,7 +2304,65 @@ tbody tr.duplicate-row {
             </div>
           </div>
         </section>
+        </div>
+
+        <aside class="builder-preview" aria-label="Live Apple device preview">
+          <div class="summary-grid preview-summary-grid">
+            <div class="summary-card">
+              <p class="summary-label">Enabled</p>
+              <p id="shortcutCount" class="summary-value">0</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Prefix</p>
+              <p id="prefixPreview" class="summary-value">&gt;</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Duplicates</p>
+              <p id="duplicateCount" class="summary-value">0</p>
+            </div>
+          </div>
+
+          <div class="builder-preview-card">
+            <p class="section-kicker">What it will look like</p>
+            <h2>Same shortcut, every Apple device.</h2>
+            <p class="builder-preview-copy">
+              Focus or hover any shortcut row to preview it here. Mac is the default because this builder is meant for a desk setup.
+            </p>
+
+            <div id="builderDevicePreview" class="builder-device-preview"></div>
+
+            <div class="device-tabs" role="tablist" aria-label="Preview device">
+              <button class="is-active" type="button" data-preview-device="mac">Mac</button>
+              <button type="button" data-preview-device="iphone">iPhone</button>
+              <button type="button" data-preview-device="ipad">iPad</button>
+            </div>
+
+            <details class="shortcut-cheatsheet">
+              <summary>Keyboard shortcuts</summary>
+              <div class="shortcut-cheatsheet-list">
+                <span><kbd>Cmd</kbd><kbd>D</kbd> Download plist</span>
+                <span><kbd>Cmd</kbd><kbd>/</kbd> Collapse preview</span>
+                <span><kbd>Cmd</kbd><kbd>Shift</kbd><kbd>N</kbd> Add row</span>
+              </div>
+            </details>
+          </div>
+        </aside>
       </main>
+    </div>
+
+    <div id="packModal" class="modal-backdrop" hidden>
+      <section class="pack-modal" role="dialog" aria-modal="true" aria-labelledby="packModalTitle">
+        <div class="pack-modal-head">
+          <p class="section-kicker">Manage packs</p>
+          <h2 id="packModalTitle">Add or remove packs</h2>
+          <p>Packs are additive. Toggle as many as you want; your details and custom rows stay either way.</p>
+        </div>
+        <div id="packModalGrid" class="pack-modal-grid"></div>
+        <div class="pack-modal-footer">
+          <span id="packModalSummary">0 packs active</span>
+          <button id="closePackModal" class="primary-button" type="button">Done</button>
+        </div>
+      </section>
     </div>
 
     <template id="starterTemplate">
@@ -1656,10 +2376,12 @@ tbody tr.duplicate-row {
             <div class="starter-meta-topline">
               <p class="starter-category"></p>
               <span class="starter-status"></span>
+              <span class="duplicate-chip" hidden>Duplicate trigger</span>
             </div>
             <div class="starter-title-row">
               <span class="starter-title"></span>
               <code class="starter-trigger-preview"></code>
+              <button class="link-button starter-reset" type="button" hidden>Reset</button>
             </div>
             <p class="starter-description"></p>
           </div>
@@ -2036,21 +2758,6 @@ tbody tr.duplicate-row {
       },
     },
     {
-      id: "intro2",
-      category: "Work",
-      title: "Intro nice-to-meet-you",
-      description: "A shorter first-reply snippet for new connections.",
-      suffix: "intro2",
-      autoEnable: false,
-      requiredProfileFields: ["fullName"],
-      placeholder:
-        "Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\nYour first name",
-      build: (profile) => {
-        const sender = firstTruthy(firstNameFromFullName(profile.fullName), "Your first name");
-        return `Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\n${sender}`;
-      },
-    },
-    {
       id: "calendar",
       category: "Work",
       title: "Scheduling link",
@@ -2059,24 +2766,6 @@ tbody tr.duplicate-row {
       requiredProfileFields: ["calendly"],
       placeholder: "https://calendly.com/your-name",
       build: (profile) => profile.calendly || "https://calendly.com/your-name",
-    },
-    {
-      id: "thanks",
-      category: "Work",
-      title: "Thanks",
-      description: "A short thank-you line you can drop into emails.",
-      suffix: "thanks",
-      placeholder: "Thanks so much for sending this over.",
-      build: () => "Thanks so much for sending this over.",
-    },
-    {
-      id: "followup",
-      category: "Work",
-      title: "Follow-up",
-      description: "A polite nudge when something has gone quiet.",
-      suffix: "followup",
-      placeholder: "Circling back on this in case it slipped through.",
-      build: () => "Circling back on this in case it slipped through.",
     },
     {
       id: "shipping",
@@ -2132,6 +2821,266 @@ tbody tr.duplicate-row {
 
 </script>
     <script>
+(function () {
+  const styleId = "shortcut-device-preview-styles";
+
+  function injectStyles() {
+    if (document.getElementById(styleId)) return;
+
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent = `
+      @keyframes spBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+      @keyframes spLift { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+      .sp-device { color: var(--ink, #181612); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Avenir Next", sans-serif; }
+      .sp-phone { position: relative; width: min(100%, var(--sp-phone-width, 320px)); aspect-ratio: var(--sp-phone-aspect, .49); margin: 0 auto; padding: 8px; border-radius: 48px; background: #181612; box-shadow: 0 30px 60px -22px rgba(47,34,17,.34), inset 0 0 0 4px #2a2620; }
+      .sp-phone-screen { position: relative; height: 100%; overflow: hidden; border-radius: 40px; background: #fbf8f1; padding-top: 44px; }
+      .sp-phone-notch { position: absolute; z-index: 5; top: 12px; left: 50%; width: 96px; height: 25px; border-radius: 999px; background: #0e0c09; transform: translateX(-50%); }
+      .sp-phone-status { position: absolute; z-index: 6; top: 16px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 28px; font-size: 12px; font-weight: 700; }
+      .sp-phone-bars { display: inline-flex; gap: 2px; align-items: end; }
+      .sp-phone-bars span { display: block; width: 3px; border-radius: 2px; background: currentColor; }
+      .sp-phone-bars span:nth-child(1) { height: 5px; } .sp-phone-bars span:nth-child(2) { height: 7px; } .sp-phone-bars span:nth-child(3) { height: 9px; }
+      .sp-phone-head { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid rgba(24,22,18,.08); }
+      .sp-avatar { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent, #9c5c21); color: var(--paper, #fbf8f1); font-size: 11px; font-weight: 800; }
+      .sp-phone-name { flex: 1; font-size: 14px; font-weight: 700; }
+      .sp-phone-now { color: #8b8578; font-size: 11px; }
+      .sp-chat { display: flex; flex-direction: column; gap: 10px; min-height: 128px; padding: 14px 16px; }
+      .sp-bubble { max-width: 82%; padding: 9px 14px; border-radius: 18px; font-size: 14px; line-height: 1.35; }
+      .sp-bubble-in { align-self: flex-start; background: #ece7da; }
+      .sp-bubble-out { align-self: flex-end; background: var(--accent, #9c5c21); color: var(--paper, #fbf8f1); white-space: pre-line; animation: spLift 260ms ease-out; }
+      .sp-composer { display: flex; align-items: center; gap: 8px; margin: auto 12px 6px; padding: 6px; }
+      .sp-composer-field { flex: 1; min-height: 32px; display: flex; align-items: center; padding: 0 14px; border: 1px solid rgba(24,22,18,.18); border-radius: 999px; background: #fff; color: var(--accent, #9c5c21); font: 700 13px "SF Mono", Menlo, Consolas, monospace; }
+      .sp-caret { display: inline-block; width: 2px; height: 16px; margin-left: 1px; background: currentColor; animation: spBlink 1s steps(1,end) infinite; }
+      .sp-send { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent, #9c5c21); color: #fff; font-weight: 800; }
+      .sp-suggestions { display: grid; grid-template-columns: .8fr 1.5fr .8fr; gap: 6px; padding: 6px 8px; background: #ebe5d8; opacity: 0; transform: translateY(8px); transition: opacity 180ms ease, transform 180ms ease; }
+      .sp-suggestions.is-visible { opacity: 1; transform: none; }
+      .sp-chip { overflow: hidden; padding: 8px 7px; border-radius: 9px; background: rgba(255,255,255,.68); color: #6f695e; font-size: 11px; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+      .sp-chip-active { color: var(--ink, #181612); font-weight: 700; }
+      .sp-keyboard { display: grid; gap: 6px; padding: 8px 8px 13px; background: #d8d2c6; }
+      .sp-kb-row { display: flex; justify-content: center; gap: 4px; }
+      .sp-key, .sp-key-wide, .sp-key-space { display: grid; place-items: center; min-width: 0; height: 28px; border-radius: 6px; background: #fbf8f1; color: #3d3a35; font-size: 11px; box-shadow: 0 1px 0 rgba(0,0,0,.18); }
+      .sp-key { flex: 1; } .sp-key-wide { width: 34px; } .sp-key-space { flex: 1.8; }
+      .sp-homebar { position: absolute; bottom: 5px; left: 50%; width: 90px; height: 4px; border-radius: 999px; background: rgba(24,22,18,.36); transform: translateX(-50%); }
+      .sp-ipad { position: relative; width: min(100%, var(--sp-ipad-width, 480px)); aspect-ratio: 1.35; margin: 0 auto; padding: 10px; border-radius: 34px; background: #181612; box-shadow: 0 30px 60px -22px rgba(47,34,17,.34), inset 0 0 0 3px #2a2620; }
+      .sp-ipad-camera { position: absolute; z-index: 4; top: 50%; right: 4px; width: 5px; height: 5px; border-radius: 999px; background: #0e0c09; transform: translateY(-50%); }
+      .sp-ipad-screen { position: relative; height: 100%; overflow: hidden; border-radius: 24px; background: #fbf8f1; }
+      .sp-ipad-status { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px 8px; color: #181612; font-size: 12px; font-weight: 700; }
+      .sp-ipad-app { display: grid; grid-template-columns: 150px 1fr; height: calc(100% - 34px); border-top: 1px solid rgba(24,22,18,.08); }
+      .sp-ipad-sidebar { border-right: 1px solid rgba(24,22,18,.08); background: #f1ebdf; padding: 12px; }
+      .sp-ipad-sidebar-title { margin-bottom: 12px; font-size: 13px; font-weight: 800; }
+      .sp-ipad-thread { display: grid; gap: 8px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,.7); }
+      .sp-ipad-thread span:first-child { font-size: 12px; font-weight: 800; }
+      .sp-ipad-thread span:last-child { overflow: hidden; color: #6f695e; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+      .sp-ipad-chat { display: flex; flex-direction: column; min-width: 0; }
+      .sp-ipad-head { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 8px 14px; border-bottom: 1px solid rgba(24,22,18,.08); }
+      .sp-ipad-name { flex: 1; font-size: 14px; font-weight: 800; }
+      .sp-ipad-body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 14px 16px 0; }
+      .sp-ipad-composer { display: flex; align-items: center; gap: 8px; margin-top: auto; padding: 8px 0 10px; }
+      .sp-ipad-field { flex: 1; min-height: 30px; display: flex; align-items: center; padding: 0 12px; border: 1px solid rgba(24,22,18,.18); border-radius: 999px; background: #fff; color: var(--accent, #9c5c21); font: 700 12px "SF Mono", Menlo, Consolas, monospace; }
+      .sp-ipad-keyboard { display: grid; gap: 5px; padding: 7px 10px 10px; background: #d8d2c6; }
+      .sp-ipad-key { display: grid; place-items: center; height: 24px; border-radius: 6px; background: #fbf8f1; color: #3d3a35; font-size: 10px; box-shadow: 0 1px 0 rgba(0,0,0,.18); flex: 1; }
+      .sp-ipad-key-wide { flex: 1.35; }
+      .sp-ipad-key-space { flex: 4; }
+      .sp-mac { width: min(100%, 500px); margin: 0 auto; overflow: hidden; border: 1px solid rgba(24,22,18,.18); border-radius: 14px; background: #fbf8f1; box-shadow: 0 30px 60px -22px rgba(47,34,17,.28); }
+      .sp-mac-titlebar { display: flex; align-items: center; gap: 7px; padding: 10px 12px; border-bottom: 1px solid rgba(24,22,18,.1); background: linear-gradient(180deg,#efe9dc,#e6dfce); }
+      .sp-mac-dot { width: 11px; height: 11px; border-radius: 999px; }
+      .sp-mac-title { margin-left: 10px; color: #3d3a35; font-size: 12px; font-weight: 700; }
+      .sp-mac-toolbar { display: flex; gap: 10px; align-items: center; padding: 8px 14px; border-bottom: 1px solid rgba(24,22,18,.06); color: #5b554c; font-size: 13px; }
+      .sp-mac-send { margin-left: auto; padding: 4px 12px; border-radius: 7px; background: #3a82f6; color: #fff; font-size: 11px; font-weight: 700; }
+      .sp-mac-headers { padding: 12px 16px 8px; border-bottom: 1px solid rgba(24,22,18,.06); font-size: 13px; }
+      .sp-mac-row { display: flex; gap: 10px; padding: 3px 0; }
+      .sp-mac-label { width: 60px; color: #8b8578; }
+      .sp-mac-body { position: relative; min-height: 150px; padding: 16px 18px 34px; font-size: 14.5px; line-height: 1.6; }
+      .sp-trigger-inline { padding: 1px 5px; border-radius: 4px; background: rgba(156,92,33,.1); color: var(--accent, #9c5c21); font: 700 13px "SF Mono", Menlo, Consolas, monospace; }
+      .sp-popover { position: absolute; top: 44px; left: 18px; max-width: calc(100% - 36px); min-width: min(320px, calc(100% - 36px)); padding: 8px 10px; border: 1px solid rgba(24,22,18,.18); border-radius: 8px; background: #fbf8f1; box-shadow: 0 12px 30px rgba(47,34,17,.18); animation: spLift 180ms ease-out; }
+      .sp-popover-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; }
+      .sp-return { padding: 1px 6px; border: 1px solid rgba(24,22,18,.18); border-radius: 4px; color: #8b8578; font: 11px "SF Mono", Menlo, monospace; }
+      .sp-popover-hint { margin-top: 4px; color: #8b8578; font-size: 11px; }
+      @media (prefers-reduced-motion: reduce) { .sp-caret, .sp-bubble-out, .sp-popover { animation: none; } .sp-suggestions { transition: none; } }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  }
+
+  function truncate(value, max) {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    return text.length > max ? `${text.slice(0, max - 1).trimEnd()}...` : text;
+  }
+
+  function startLoop(el, render) {
+    if (el._spPreviewTimer) {
+      window.clearInterval(el._spPreviewTimer);
+    }
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const phases = reduced ? ["expanded"] : ["typing", "suggest", "expanded", "hold"];
+    let index = 0;
+
+    function tick() {
+      render(phases[index]);
+      index = (index + 1) % phases.length;
+    }
+
+    tick();
+    if (!reduced) {
+      el._spPreviewTimer = window.setInterval(tick, 1200);
+    }
+  }
+
+  function renderIphonePreview(el, options = {}) {
+    if (!el) return;
+    injectStyles();
+    if (Number.isFinite(Number(options.width))) {
+      el.style.setProperty("--sp-phone-width", `${Number(options.width)}px`);
+    }
+    const trigger = options.trigger || ">home";
+    const expansion = options.expansion || "123 Main Street, Apt 4B, Brooklyn, NY 11201";
+    const initials = options.initials || "JL";
+    const name = options.name || "Jordan";
+    const inbound = options.inbound || "What's the address again?";
+    const typed = escapeHtml(trigger);
+    const escapedExpansion = escapeHtml(expansion);
+
+    startLoop(el, (phase) => {
+      const showSuggest = phase === "suggest";
+      const showExpanded = phase === "expanded" || phase === "hold";
+      el.innerHTML = `
+        <div class="sp-device sp-phone">
+          <div class="sp-phone-notch"></div>
+          <div class="sp-phone-status"><span>9:41</span><span class="sp-phone-bars"><span></span><span></span><span></span></span></div>
+          <div class="sp-phone-screen">
+            <div class="sp-phone-head"><div class="sp-avatar">${escapeHtml(initials)}</div><div class="sp-phone-name">${escapeHtml(name)}</div><div class="sp-phone-now">now</div></div>
+            <div class="sp-chat">
+              <div class="sp-bubble sp-bubble-in">${escapeHtml(inbound)}</div>
+              ${showExpanded ? `<div class="sp-bubble sp-bubble-out">${escapedExpansion.replaceAll("\n", "<br>")}</div>` : ""}
+            </div>
+            <div class="sp-composer"><div class="sp-composer-field">${showExpanded ? "" : typed}<span class="sp-caret"></span></div><div class="sp-send">↑</div></div>
+            <div class="sp-suggestions ${showSuggest ? "is-visible" : ""}">
+              <div class="sp-chip">"${typed}"</div>
+              <div class="sp-chip sp-chip-active">${escapeHtml(truncate(expansion, 30))}</div>
+              <div class="sp-chip">${escapeHtml(trigger.replace(/^./, ""))}</div>
+            </div>
+            <div class="sp-keyboard">
+              <div class="sp-kb-row">${"qwertyuiop".split("").map((k) => `<span class="sp-key">${k}</span>`).join("")}</div>
+              <div class="sp-kb-row">${"asdfghjkl".split("").map((k) => `<span class="sp-key">${k}</span>`).join("")}</div>
+              <div class="sp-kb-row"><span class="sp-key-wide">shift</span>${"zxcvbnm".split("").map((k) => `<span class="sp-key">${k}</span>`).join("")}<span class="sp-key-wide">del</span></div>
+              <div class="sp-kb-row"><span class="sp-key-wide">123</span><span class="sp-key-space">space</span><span class="sp-key-wide">return</span></div>
+            </div>
+            <div class="sp-homebar"></div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function renderMacPreview(el, options = {}) {
+    if (!el) return;
+    injectStyles();
+    const trigger = options.trigger || ">home";
+    const expansion = options.expansion || "123 Main Street, Apt 4B, Brooklyn, NY 11201";
+    const prefix = "Sure, send it to ";
+
+    startLoop(el, (phase) => {
+      const showSuggest = phase === "suggest";
+      const showExpanded = phase === "expanded" || phase === "hold";
+      el.innerHTML = `
+        <div class="sp-device sp-mac">
+          <div class="sp-mac-titlebar">
+            <span class="sp-mac-dot" style="background:#e06c5f"></span>
+            <span class="sp-mac-dot" style="background:#e8c25b"></span>
+            <span class="sp-mac-dot" style="background:#7fb877"></span>
+            <span class="sp-mac-title">New Message</span>
+          </div>
+          <div class="sp-mac-toolbar"><span>Reply</span><span>Attach</span><span>A</span><span class="sp-mac-send">Send</span></div>
+          <div class="sp-mac-headers">
+            <div class="sp-mac-row"><span class="sp-mac-label">To:</span><span>you@example.com</span></div>
+            <div class="sp-mac-row"><span class="sp-mac-label">Subject:</span><span>Shortcut Pack</span></div>
+          </div>
+          <div class="sp-mac-body">
+            ${showExpanded
+              ? `${escapeHtml(prefix)}<span>${escapeHtml(expansion)}</span>.`
+              : `${escapeHtml(prefix)}<span class="sp-trigger-inline">${escapeHtml(trigger)}</span><span class="sp-caret"></span>`}
+            ${showSuggest ? `
+              <div class="sp-popover">
+                <div class="sp-popover-row"><span>${escapeHtml(truncate(expansion, 58))}</span><span class="sp-return">return</span></div>
+                <div class="sp-popover-hint">Press space or return to accept</div>
+              </div>
+            ` : ""}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function renderIpadPreview(el, options = {}) {
+    if (!el) return;
+    injectStyles();
+    if (Number.isFinite(Number(options.width))) {
+      el.style.setProperty("--sp-ipad-width", `${Number(options.width)}px`);
+    }
+    const trigger = options.trigger || ">home";
+    const expansion = options.expansion || "123 Main Street, Apt 4B, Brooklyn, NY 11201";
+    const initials = options.initials || "JL";
+    const name = options.name || "Jordan";
+    const inbound = options.inbound || "What's the address again?";
+    const typed = escapeHtml(trigger);
+    const escapedExpansion = escapeHtml(expansion);
+
+    startLoop(el, (phase) => {
+      const showSuggest = phase === "suggest";
+      const showExpanded = phase === "expanded" || phase === "hold";
+      el.innerHTML = `
+        <div class="sp-device sp-ipad">
+          <div class="sp-ipad-camera"></div>
+          <div class="sp-ipad-screen">
+            <div class="sp-ipad-status"><span>9:41</span><span class="sp-phone-bars"><span></span><span></span><span></span></span></div>
+            <div class="sp-ipad-app">
+              <aside class="sp-ipad-sidebar">
+                <div class="sp-ipad-sidebar-title">Messages</div>
+                <div class="sp-ipad-thread"><span>${escapeHtml(name)}</span><span>${escapeHtml(inbound)}</span></div>
+              </aside>
+              <section class="sp-ipad-chat">
+                <div class="sp-ipad-head"><div class="sp-avatar">${escapeHtml(initials)}</div><div class="sp-ipad-name">${escapeHtml(name)}</div><div class="sp-phone-now">now</div></div>
+                <div class="sp-ipad-body">
+                  <div class="sp-bubble sp-bubble-in">${escapeHtml(inbound)}</div>
+                  ${showExpanded ? `<div class="sp-bubble sp-bubble-out">${escapedExpansion.replaceAll("\n", "<br>")}</div>` : ""}
+                  <div class="sp-ipad-composer"><div class="sp-ipad-field">${showExpanded ? "" : typed}<span class="sp-caret"></span></div><div class="sp-send">↑</div></div>
+                  <div class="sp-suggestions ${showSuggest ? "is-visible" : ""}">
+                    <div class="sp-chip">"${typed}"</div>
+                    <div class="sp-chip sp-chip-active">${escapeHtml(truncate(expansion, 30))}</div>
+                    <div class="sp-chip">${escapeHtml(trigger.replace(/^./, ""))}</div>
+                  </div>
+                  <div class="sp-ipad-keyboard">
+                    <div class="sp-kb-row">${"qwertyuiop".split("").map((k) => `<span class="sp-ipad-key">${k}</span>`).join("")}</div>
+                    <div class="sp-kb-row">${"asdfghjkl".split("").map((k) => `<span class="sp-ipad-key">${k}</span>`).join("")}</div>
+                    <div class="sp-kb-row"><span class="sp-ipad-key sp-ipad-key-wide">shift</span>${"zxcvbnm".split("").map((k) => `<span class="sp-ipad-key">${k}</span>`).join("")}<span class="sp-ipad-key sp-ipad-key-wide">del</span></div>
+                    <div class="sp-kb-row"><span class="sp-ipad-key sp-ipad-key-wide">123</span><span class="sp-ipad-key sp-ipad-key-space">space</span><span class="sp-ipad-key sp-ipad-key-wide">return</span></div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  window.ShortcutDevicePreviews = {
+    renderIpadPreview,
+    renderIphonePreview,
+    renderMacPreview,
+  };
+})();
+
+</script>
+    <script>
 const shortcutData = globalThis.AI_SHORTCUTS_DATA;
 const emptyProfile = shortcutData.emptyProfile;
 const starterPack = shortcutData.starterPack;
@@ -2153,6 +3102,33 @@ const state = {
   profile: { ...emptyProfile },
   starters: buildDefaultStarters(),
   custom: [],
+  activePacks: [],
+  previewDevice: "mac",
+  previewEntry: null,
+  starterFilter: "",
+};
+
+const SHORTCUT_PACKS = {
+  personal: {
+    name: "Personal",
+    description: "Address, email, phone, the basics.",
+    starterIds: ["name", "email", "phone", "homeAddress"],
+  },
+  work: {
+    name: "Work",
+    description: "Intro reply, signature, scheduling.",
+    starterIds: ["intro", "signature", "calendar"],
+  },
+  travel: {
+    name: "Travel",
+    description: "Passport, KTN, airline loyalty.",
+    starterIds: ["passport", "passportExpiryDate", "knownTravelerNumber", "airlineLoyalty", "homeAddress"],
+  },
+  founder: {
+    name: "Founder",
+    description: "Bio, links, calendar.",
+    starterIds: ["bio", "linkedin", "x", "calendar", "website"],
+  },
 };
 
 const profileShortcutPreviewMap = [
@@ -2175,6 +3151,33 @@ const profileShortcutPreviewMap = [
   { field: "calendly", starterId: "calendar" },
   { field: "bankInfo", starterId: "bankInfo" },
   { field: "bio", starterId: "bio" },
+];
+
+const detailGroups = [
+  {
+    title: "Identity",
+    fields: ["fullName", "email", "phone", "dob", "bio"],
+  },
+  {
+    title: "Documents",
+    fields: ["passportNumber", "passportExpiryDate", "idNumber"],
+  },
+  {
+    title: "Travel",
+    fields: ["airlineLoyaltyNumber", "knownTravelerNumber"],
+  },
+  {
+    title: "Addresses",
+    fields: ["homeAddress", "workAddress"],
+  },
+  {
+    title: "Links & social",
+    fields: ["website", "calendly", "whatsappNumber", "telegramUsername", "xUsername", "linkedinUsername"],
+  },
+  {
+    title: "Other",
+    fields: ["bankInfo"],
+  },
 ];
 
 function escapeXml(value) {
@@ -2201,6 +3204,10 @@ function resetStateToDefaults() {
   state.profile = { ...emptyProfile };
   state.starters = buildDefaultStarters();
   state.custom = [];
+  state.activePacks = [];
+  state.previewDevice = "mac";
+  state.previewEntry = null;
+  state.starterFilter = "";
 }
 
 function serializeState() {
@@ -2220,6 +3227,7 @@ function serializeState() {
       suffix: row.suffix,
       phrase: row.phrase,
     })),
+    activePacks: state.activePacks.filter((slug) => SHORTCUT_PACKS[slug]),
   };
 }
 
@@ -2271,12 +3279,18 @@ function applySavedState(saved) {
         phrase: String(row.phrase || ""),
       }));
   }
+
+  if (Array.isArray(saved?.activePacks)) {
+    state.activePacks = saved.activePacks
+      .map((slug) => String(slug || ""))
+      .filter((slug) => SHORTCUT_PACKS[slug]);
+  }
 }
 
 function updateDraftStatus(message) {
   const node = document.querySelector("#draftStatus");
   if (node) {
-    node.textContent = message;
+    node.textContent = message || "Saved locally";
   }
 }
 
@@ -2310,7 +3324,7 @@ function saveDraft() {
 
   try {
     window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(serializeState()));
-    updateDraftStatus("Saved locally in this browser.");
+    updateDraftStatus("Saved locally");
   } catch {
     updateDraftStatus("Could not save a local draft in this browser.");
   }
@@ -2576,6 +3590,11 @@ function renderProfileShortcutPreviews() {
     prefixExample.textContent = `${prefix}email`;
   }
 
+  document.querySelectorAll("[data-prefix-live]").forEach((node, index) => {
+    const suffixes = ["email", "phone", "home"];
+    node.textContent = `${prefix}${suffixes[index] || "email"}`;
+  });
+
   document
     .querySelectorAll("[data-preview-field][data-preview-starter]")
     .forEach((field) => {
@@ -2726,6 +3745,350 @@ function findDuplicates(entries) {
   );
 }
 
+function starterShortcut(starter) {
+  return `${state.profile.prefix || ""}${starter?.suffix || ""}`.trim();
+}
+
+function packTriggerSamples(pack) {
+  return pack.starterIds
+    .map((id) => definitionById(id))
+    .filter(Boolean)
+    .slice(0, 4)
+    .map((definition) => `${state.profile.prefix || ""}${definition.suffix}`);
+}
+
+function applyActivePacks() {
+  const starterIds = new Set(
+    state.activePacks.flatMap((slug) => SHORTCUT_PACKS[slug]?.starterIds || []),
+  );
+
+  state.starters = state.starters.map((starter) => {
+    if (starterIds.has(starter.id)) {
+      return {
+        ...starter,
+        enabled: true,
+        manuallySetEnabled: true,
+      };
+    }
+
+    if (starter.customized) {
+      return starter;
+    }
+
+    return {
+      ...starter,
+      enabled: false,
+      manuallySetEnabled: false,
+    };
+  });
+}
+
+function applyPackDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("packs") || params.get("pack");
+  if (!raw) {
+    return false;
+  }
+
+  const slugs = raw
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter((slug) => SHORTCUT_PACKS[slug]);
+
+  if (!slugs.length) {
+    return false;
+  }
+
+  state.activePacks = [...new Set(slugs)];
+  applyActivePacks();
+  window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+  return true;
+}
+
+function setActivePacks(slugs) {
+  state.activePacks = [...new Set(slugs.filter((slug) => SHORTCUT_PACKS[slug]))];
+  applyActivePacks();
+  resetDetailGroupToggles();
+  render();
+}
+
+function previewFromStarter(starter) {
+  if (!starter) return null;
+  const definition = definitionById(starter.id);
+  return {
+    trigger: starterShortcut(starter),
+    expansion: starter.phrase || definition?.placeholder || "",
+    label: definition?.title || "Shortcut",
+  };
+}
+
+function firstPreviewEntry() {
+  const starter = state.starters.find((item) => item.enabled);
+  if (starter) {
+    return previewFromStarter(starter);
+  }
+
+  const custom = state.custom.find((item) => item.enabled && item.suffix && item.phrase);
+  if (custom) {
+    return {
+      trigger: `${state.profile.prefix || ""}${custom.suffix || ""}`.trim(),
+      expansion: custom.phrase,
+      label: "Custom shortcut",
+    };
+  }
+
+  return {
+    trigger: `${state.profile.prefix || ""}home`,
+    expansion: "123 Main Street, Apt 4B, Brooklyn, NY 11201",
+    label: "Home address",
+  };
+}
+
+function renderDevicePreview() {
+  const root = document.querySelector("#builderDevicePreview");
+  if (!root || !window.ShortcutDevicePreviews) {
+    return;
+  }
+
+  const entry = state.previewEntry || firstPreviewEntry();
+  root.classList.toggle("is-iphone", state.previewDevice === "iphone");
+  root.classList.toggle("is-ipad", state.previewDevice === "ipad");
+
+  if (state.previewDevice === "iphone") {
+    window.ShortcutDevicePreviews.renderIphonePreview(root, { ...entry, width: 230 });
+    return;
+  }
+
+  if (state.previewDevice === "ipad") {
+    window.ShortcutDevicePreviews.renderIpadPreview(root, { ...entry, width: 470 });
+    return;
+  }
+
+  window.ShortcutDevicePreviews.renderMacPreview(root, entry);
+}
+
+function renderActivePackStack() {
+  const root = document.querySelector("#activePackStack");
+  if (!root) {
+    return;
+  }
+
+  root.innerHTML = "";
+
+  state.activePacks.forEach((slug) => {
+    const pack = SHORTCUT_PACKS[slug];
+    if (!pack) return;
+
+    const chip = document.createElement("span");
+    chip.className = "pack-chip";
+    chip.innerHTML = `
+      <span class="pack-chip-dot"></span>
+      <span>${escapeXml(pack.name)}</span>
+      <button type="button" aria-label="Remove ${escapeXml(pack.name)} pack">×</button>
+    `;
+    chip.querySelector("button").addEventListener("click", () => {
+      setActivePacks(state.activePacks.filter((activeSlug) => activeSlug !== slug));
+    });
+    root.appendChild(chip);
+  });
+
+  const addButton = document.createElement("button");
+  addButton.type = "button";
+  addButton.className = "add-pack-chip";
+  addButton.textContent = "+ Add pack";
+  addButton.addEventListener("click", openPackModal);
+  root.appendChild(addButton);
+}
+
+function renderPackModal() {
+  const root = document.querySelector("#packModalGrid");
+  const summary = document.querySelector("#packModalSummary");
+  if (!root || !summary) {
+    return;
+  }
+
+  root.innerHTML = "";
+
+  Object.entries(SHORTCUT_PACKS).forEach(([slug, pack]) => {
+    const active = state.activePacks.includes(slug);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `pack-modal-card${active ? " is-active" : ""}`;
+    button.setAttribute("aria-pressed", String(active));
+    button.innerHTML = `
+      <h3>${escapeXml(pack.name)}</h3>
+      <p>${escapeXml(pack.description)}</p>
+      <span class="pack-modal-triggers">
+        ${packTriggerSamples(pack).map((trigger) => `<code class="pack-modal-trigger">${escapeXml(trigger)}</code>`).join("")}
+      </span>
+    `;
+    button.addEventListener("click", () => {
+      const next = active
+        ? state.activePacks.filter((activeSlug) => activeSlug !== slug)
+        : [...state.activePacks, slug];
+      setActivePacks(next);
+      openPackModal();
+    });
+    root.appendChild(button);
+  });
+
+  const enabledCount = state.starters.filter((starter) => starter.enabled).length;
+  summary.textContent = `${state.activePacks.length} pack${state.activePacks.length === 1 ? "" : "s"} active · ${enabledCount} shortcuts on`;
+}
+
+function openPackModal() {
+  const modal = document.querySelector("#packModal");
+  if (!modal) {
+    return;
+  }
+
+  renderPackModal();
+  modal.hidden = false;
+  modal.querySelector("button")?.focus();
+}
+
+function closePackModal() {
+  const modal = document.querySelector("#packModal");
+  if (modal) {
+    modal.hidden = true;
+  }
+}
+
+function filledDetailCount(fields) {
+  return fields.filter((field) => profileValuePresent(field)).length;
+}
+
+function selectedPackStarterIds() {
+  return new Set(
+    state.activePacks.flatMap((slug) => SHORTCUT_PACKS[slug]?.starterIds || []),
+  );
+}
+
+function relevantProfileFields() {
+  const packStarterIds = selectedPackStarterIds();
+  const sourceStarters = packStarterIds.size
+    ? starterPack.filter((definition) => packStarterIds.has(definition.id))
+    : state.starters
+        .filter((starter) => starter.enabled)
+        .map((starter) => definitionById(starter.id))
+        .filter(Boolean);
+
+  const fields = new Set(
+    sourceStarters.flatMap((definition) => definition.requiredProfileFields || []),
+  );
+
+  return fields.size
+    ? fields
+    : new Set(detailGroups.flatMap((group) => group.fields));
+}
+
+function resetDetailGroupToggles() {
+  document.querySelectorAll(".detail-group").forEach((group) => {
+    delete group.dataset.userToggled;
+  });
+}
+
+function refreshDetailGroupCounts() {
+  const relevantFields = relevantProfileFields();
+  document.querySelectorAll(".detail-group").forEach((group) => {
+    const fields = (group.dataset.fields || "").split(",").filter(Boolean);
+    const relevant = fields.some((field) => relevantFields.has(field));
+    const count = group.querySelector(".detail-group-count");
+
+    group.classList.toggle("is-relevant", relevant);
+    if (group.dataset.userToggled !== "true") {
+      group.dataset.autoSyncing = "true";
+      group.open = relevant;
+      window.setTimeout(() => {
+        delete group.dataset.autoSyncing;
+      }, 0);
+    }
+
+    if (count) {
+      count.textContent = `${filledDetailCount(fields)}/${fields.length} filled`;
+    }
+
+    const hideEmpty = document.querySelector("#hideEmptyFields")?.checked;
+    group.querySelectorAll("[data-preview-field]").forEach((fieldNode) => {
+      const field = fieldNode.dataset.previewField;
+      fieldNode.hidden = Boolean(hideEmpty && !profileValuePresent(field));
+    });
+  });
+}
+
+function groupProfileFields() {
+  const form = document.querySelector("#profileForm");
+  const livePreview = document.querySelector(".live-shortcut-preview");
+  if (!form || !livePreview || form.dataset.grouped === "true") {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  detailGroups.forEach((group) => {
+    const details = document.createElement("details");
+    details.className = "detail-group";
+    details.open = true;
+    details.dataset.fields = group.fields.join(",");
+    details.addEventListener("toggle", () => {
+      if (details.dataset.autoSyncing !== "true") {
+        details.dataset.userToggled = "true";
+      }
+    });
+
+    const summary = document.createElement("summary");
+    summary.innerHTML = `
+      <span class="detail-group-title">${escapeXml(group.title)}</span>
+      <span class="detail-group-count">${filledDetailCount(group.fields)}/${group.fields.length} filled</span>
+    `;
+
+    const body = document.createElement("div");
+    body.className = "detail-group-body";
+
+    group.fields.forEach((field) => {
+      const node = form.querySelector(`[data-preview-field="${field}"]`);
+      if (node) {
+        node.classList.remove("span-2", "span-3");
+        body.appendChild(node);
+      }
+    });
+
+    details.append(summary, body);
+    fragment.appendChild(details);
+  });
+
+  livePreview.after(fragment);
+  form.dataset.grouped = "true";
+}
+
+function refreshPrefixPicker() {
+  const prefix = state.profile.prefix || "";
+  const buttons = document.querySelectorAll("[data-prefix-choice]");
+  const customInput = document.querySelector("#customPrefixInput");
+  const common = [">", "-", "@@", ">>"];
+  const isCommon = common.includes(prefix);
+
+  buttons.forEach((button) => {
+    const choice = button.dataset.prefixChoice;
+    button.classList.toggle("is-active", choice === prefix);
+  });
+
+  if (customInput && document.activeElement !== customInput) {
+    customInput.value = isCommon ? "" : prefix;
+  }
+}
+
+function setPrefix(value) {
+  const input = document.querySelector("#prefix");
+  state.profile.prefix = value;
+  if (input) {
+    input.value = value;
+    validateFieldElement(input);
+  }
+  refreshGeneratedStarters();
+  render();
+}
+
 function buildPlist(entries) {
   const body = entries
     .map(
@@ -2778,21 +4141,37 @@ function renderStarters() {
   const root = document.querySelector("#starterList");
   const template = document.querySelector("#starterTemplate");
   root.innerHTML = "";
+  const entries = buildEntries();
+  const duplicates = findDuplicates(entries);
+  const filter = state.starterFilter.trim().toLowerCase();
+  let renderedCount = 0;
 
   state.starters.forEach((starter) => {
     const definition = definitionById(starter.id);
+    const matchesFilter =
+      !filter ||
+      definition.title.toLowerCase().includes(filter) ||
+      definition.category.toLowerCase().includes(filter) ||
+      definition.suffix.toLowerCase().includes(filter) ||
+      starter.suffix.toLowerCase().includes(filter) ||
+      starter.phrase.toLowerCase().includes(filter);
+
+    if (!matchesFilter) {
+      return;
+    }
+
     const node = template.content.cloneNode(true);
     const autoEnabled = starterShouldAutoEnable(definition);
     const exportable = starterIsExportable(starter);
     const missingFields = formatMissingFields(definition);
+    const shortcut = starterShortcut(starter);
+    const isDuplicate = duplicates.has(shortcut) && starter.enabled && exportable;
 
     node.querySelector(".starter-enabled").checked = starter.enabled;
     node.querySelector(".starter-category").textContent = definition.category;
     node.querySelector(".starter-title").textContent = definition.title;
     node.querySelector(".starter-description").textContent = definition.description;
-    node.querySelector(".starter-trigger-preview").textContent = `${
-      state.profile.prefix || ""
-    }${starter.suffix || ""}`;
+    node.querySelector(".starter-trigger-preview").textContent = shortcut;
     node.querySelector(".starter-suffix").value = starter.suffix;
     node.querySelector(".starter-phrase").value = starter.phrase;
     node.querySelector(".prefix-chip").textContent = state.profile.prefix || " ";
@@ -2801,8 +4180,14 @@ function renderStarters() {
     const card = node.querySelector(".starter-card");
     const note = node.querySelector(".starter-note");
     const status = node.querySelector(".starter-status");
+    const duplicateChip = node.querySelector(".duplicate-chip");
+    const resetButton = node.querySelector(".starter-reset");
 
     card.classList.toggle("is-disabled", !starter.enabled);
+    card.classList.toggle("starter-card--duplicate", isDuplicate);
+    card.dataset.starterId = starter.id;
+    duplicateChip.hidden = !isDuplicate;
+    resetButton.hidden = !starter.customized && starter.suffix === definition.suffix;
 
     if (starter.enabled && exportable) {
       status.textContent = starter.customized ? "Manual" : "On";
@@ -2843,9 +4228,8 @@ function renderStarters() {
       card.querySelector(".starter-enabled").checked = true;
       status.textContent = "Manual";
       status.className = "starter-status is-on";
-      card.querySelector(".starter-trigger-preview").textContent = `${
-        state.profile.prefix || ""
-      }${starter.suffix || ""}`;
+      card.querySelector(".starter-trigger-preview").textContent = starterShortcut(starter);
+      state.previewEntry = previewFromStarter(starter);
       renderPreview();
     });
 
@@ -2858,12 +4242,38 @@ function renderStarters() {
       card.querySelector(".starter-enabled").checked = true;
       status.textContent = "Manual";
       status.className = "starter-status is-on";
+      state.previewEntry = previewFromStarter(starter);
       renderPreview();
+    });
+
+    resetButton.addEventListener("click", () => {
+      starter.suffix = definition.suffix;
+      starter.phrase = definition.build(state.profile);
+      starter.customized = false;
+      render();
+    });
+
+    card.addEventListener("mouseenter", () => {
+      state.previewEntry = previewFromStarter(starter);
+      renderDevicePreview();
+    });
+
+    card.addEventListener("focusin", () => {
+      state.previewEntry = previewFromStarter(starter);
+      renderDevicePreview();
     });
 
     root.appendChild(node);
     validateFieldElement(card.querySelector(".starter-suffix"));
+    renderedCount += 1;
   });
+
+  if (!renderedCount) {
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent = "No starter shortcuts match that search.";
+    root.appendChild(empty);
+  }
 }
 
 function renderCustomRows() {
@@ -2929,10 +4339,11 @@ function renderPreview() {
 
   const entries = buildEntries();
   const duplicates = findDuplicates(entries);
+  const enabledCount = state.starters.filter((starter) => starter.enabled).length + state.custom.filter((row) => row.enabled).length;
 
   previewBody.innerHTML = "";
   prefixPreview.textContent = state.profile.prefix || "(none)";
-  count.textContent = String(entries.length);
+  count.textContent = String(enabledCount);
   duplicateCount.textContent = String(duplicates.size);
 
   if (!entries.length) {
@@ -2955,6 +4366,8 @@ function renderPreview() {
       previewBody.appendChild(row);
     });
   }
+
+  renderDevicePreview();
 
   if (!entries.length) {
     setStatus(
@@ -2979,6 +4392,10 @@ function renderPreview() {
 
 function render() {
   renderProfileShortcutPreviews();
+  refreshDetailGroupCounts();
+  refreshPrefixPicker();
+  renderActivePackStack();
+  renderPackModal();
   renderStarters();
   renderCustomRows();
   renderPreview();
@@ -2992,6 +4409,18 @@ function addCustomRow() {
     suffix: "",
     phrase: "",
   });
+  render();
+}
+
+function addCustomRows(count) {
+  for (let index = 0; index < count; index += 1) {
+    state.custom.push({
+      id: makeId(),
+      enabled: true,
+      suffix: "",
+      phrase: "",
+    });
+  }
   render();
 }
 
@@ -3037,7 +4466,7 @@ function clearDraft() {
   shouldPersistDraft = false;
   render();
   shouldPersistDraft = true;
-  updateDraftStatus("Local draft cleared from this browser.");
+  updateDraftStatus("Saved locally");
   setStatus("Local draft cleared. You can start fresh now.", "success");
 }
 
@@ -3064,7 +4493,7 @@ function exportPlist() {
 
   downloadTextFile("Text Substitutions.plist", buildPlist(entries));
   setStatus(
-    "Downloaded Text Substitutions.plist. Open System Settings > Keyboard > Text Replacements and drag it in.",
+    "Downloaded Text Substitutions.plist. Import it from System Settings on your Mac.",
     "success",
   );
 }
@@ -3079,17 +4508,106 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const loadedDraft = loadDraft();
+  const loadedPacks = applyPackDeepLink();
+  groupProfileFields();
   wireProfileForm();
-  document.querySelector("#addCustomShortcut").addEventListener("click", addCustomRow);
-  document.querySelector("#downloadPlist").addEventListener("click", exportPlist);
-  document.querySelector("#clearSavedDraft").addEventListener("click", clearDraft);
+  document.querySelector("#addCustomShortcut")?.addEventListener("click", addCustomRow);
+  document.querySelector("#addFiveCustomShortcuts")?.addEventListener("click", () => addCustomRows(5));
+  document.querySelector("#downloadPlist")?.addEventListener("click", exportPlist);
+  document.querySelector("#topDownloadPlist")?.addEventListener("click", exportPlist);
+  document.querySelector("#clearSavedDraft")?.addEventListener("click", clearDraft);
+  document.querySelector("#closePackModal")?.addEventListener("click", closePackModal);
+  document.querySelector("#packModal")?.addEventListener("click", (event) => {
+    if (event.target.id === "packModal") {
+      closePackModal();
+    }
+  });
+  document.querySelector("#starterSearch")?.addEventListener("input", (event) => {
+    state.starterFilter = event.target.value;
+    renderStarters();
+  });
+  document.querySelector("#hideEmptyFields")?.addEventListener("change", refreshDetailGroupCounts);
+  document.querySelectorAll("[data-prefix-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const choice = button.dataset.prefixChoice;
+      setPrefix(choice);
+    });
+  });
+  document.querySelector("#customPrefixInput")?.addEventListener("input", (event) => {
+    const value = event.target.value.trim();
+    if (value) {
+      setPrefix(value);
+    }
+  });
+
+  document.querySelectorAll("[data-preview-device]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.previewDevice = button.dataset.previewDevice;
+      document
+        .querySelectorAll("[data-preview-device]")
+        .forEach((tab) => tab.classList.toggle("is-active", tab === button));
+      renderDevicePreview();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const inTextField =
+      target instanceof HTMLElement &&
+      ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+    const command = event.metaKey || event.ctrlKey;
+
+    if (command && event.key.toLowerCase() === "d" && !inTextField) {
+      event.preventDefault();
+      exportPlist();
+    }
+
+    if (command && event.key === "/" && !inTextField) {
+      event.preventDefault();
+      document.querySelector(".builder-preview")?.classList.toggle("is-collapsed");
+    }
+
+    if (command && event.shiftKey && event.key.toLowerCase() === "n" && !inTextField) {
+      event.preventDefault();
+      addCustomRow();
+    }
+
+    if (event.key === "Escape") {
+      closePackModal();
+    }
+  });
+
+  const navLinks = Array.from(document.querySelectorAll("[data-section-nav]"));
+  const sections = navLinks
+    .map((link) => document.getElementById(link.dataset.sectionNav))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const active = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!active) return;
+
+        navLinks.forEach((link) => {
+          link.classList.toggle("is-active", link.dataset.sectionNav === active.target.id);
+        });
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
 
   render();
 
-  if (loadedDraft) {
-    updateDraftStatus("Loaded your local draft from this browser.");
+  if (loadedPacks) {
+    updateDraftStatus("Saved locally");
+  } else if (loadedDraft) {
+    updateDraftStatus("Saved locally");
   } else {
-    updateDraftStatus("Saved locally in this browser.");
+    updateDraftStatus("Saved locally");
   }
 });
 

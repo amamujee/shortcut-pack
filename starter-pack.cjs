@@ -312,21 +312,6 @@
       },
     },
     {
-      id: "intro2",
-      category: "Work",
-      title: "Intro nice-to-meet-you",
-      description: "A shorter first-reply snippet for new connections.",
-      suffix: "intro2",
-      autoEnable: false,
-      requiredProfileFields: ["fullName"],
-      placeholder:
-        "Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\nYour first name",
-      build: (profile) => {
-        const sender = firstTruthy(firstNameFromFullName(profile.fullName), "Your first name");
-        return `Great to meet you, and thanks again for the introduction. Looking forward to connecting.\n\nBest,\n${sender}`;
-      },
-    },
-    {
       id: "calendar",
       category: "Work",
       title: "Scheduling link",
@@ -335,24 +320,6 @@
       requiredProfileFields: ["calendly"],
       placeholder: "https://calendly.com/your-name",
       build: (profile) => profile.calendly || "https://calendly.com/your-name",
-    },
-    {
-      id: "thanks",
-      category: "Work",
-      title: "Thanks",
-      description: "A short thank-you line you can drop into emails.",
-      suffix: "thanks",
-      placeholder: "Thanks so much for sending this over.",
-      build: () => "Thanks so much for sending this over.",
-    },
-    {
-      id: "followup",
-      category: "Work",
-      title: "Follow-up",
-      description: "A polite nudge when something has gone quiet.",
-      suffix: "followup",
-      placeholder: "Circling back on this in case it slipped through.",
-      build: () => "Circling back on this in case it slipped through.",
     },
     {
       id: "shipping",

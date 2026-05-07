@@ -19,6 +19,33 @@ const state = {
   profile: { ...emptyProfile },
   starters: buildDefaultStarters(),
   custom: [],
+  activePacks: [],
+  previewDevice: "mac",
+  previewEntry: null,
+  starterFilter: "",
+};
+
+const SHORTCUT_PACKS = {
+  personal: {
+    name: "Personal",
+    description: "Address, email, phone, the basics.",
+    starterIds: ["name", "email", "phone", "homeAddress"],
+  },
+  work: {
+    name: "Work",
+    description: "Intro reply, signature, scheduling.",
+    starterIds: ["intro", "signature", "calendar"],
+  },
+  travel: {
+    name: "Travel",
+    description: "Passport, KTN, airline loyalty.",
+    starterIds: ["passport", "passportExpiryDate", "knownTravelerNumber", "airlineLoyalty", "homeAddress"],
+  },
+  founder: {
+    name: "Founder",
+    description: "Bio, links, calendar.",
+    starterIds: ["bio", "linkedin", "x", "calendar", "website"],
+  },
 };
 
 const profileShortcutPreviewMap = [
@@ -41,6 +68,33 @@ const profileShortcutPreviewMap = [
   { field: "calendly", starterId: "calendar" },
   { field: "bankInfo", starterId: "bankInfo" },
   { field: "bio", starterId: "bio" },
+];
+
+const detailGroups = [
+  {
+    title: "Identity",
+    fields: ["fullName", "email", "phone", "dob", "bio"],
+  },
+  {
+    title: "Documents",
+    fields: ["passportNumber", "passportExpiryDate", "idNumber"],
+  },
+  {
+    title: "Travel",
+    fields: ["airlineLoyaltyNumber", "knownTravelerNumber"],
+  },
+  {
+    title: "Addresses",
+    fields: ["homeAddress", "workAddress"],
+  },
+  {
+    title: "Links & social",
+    fields: ["website", "calendly", "whatsappNumber", "telegramUsername", "xUsername", "linkedinUsername"],
+  },
+  {
+    title: "Other",
+    fields: ["bankInfo"],
+  },
 ];
 
 function escapeXml(value) {
@@ -67,6 +121,10 @@ function resetStateToDefaults() {
   state.profile = { ...emptyProfile };
   state.starters = buildDefaultStarters();
   state.custom = [];
+  state.activePacks = [];
+  state.previewDevice = "mac";
+  state.previewEntry = null;
+  state.starterFilter = "";
 }
 
 function serializeState() {
@@ -86,6 +144,7 @@ function serializeState() {
       suffix: row.suffix,
       phrase: row.phrase,
     })),
+    activePacks: state.activePacks.filter((slug) => SHORTCUT_PACKS[slug]),
   };
 }
 
@@ -137,12 +196,18 @@ function applySavedState(saved) {
         phrase: String(row.phrase || ""),
       }));
   }
+
+  if (Array.isArray(saved?.activePacks)) {
+    state.activePacks = saved.activePacks
+      .map((slug) => String(slug || ""))
+      .filter((slug) => SHORTCUT_PACKS[slug]);
+  }
 }
 
 function updateDraftStatus(message) {
   const node = document.querySelector("#draftStatus");
   if (node) {
-    node.textContent = message;
+    node.textContent = message || "Saved locally";
   }
 }
 
@@ -176,7 +241,7 @@ function saveDraft() {
 
   try {
     window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(serializeState()));
-    updateDraftStatus("Saved locally in this browser.");
+    updateDraftStatus("Saved locally");
   } catch {
     updateDraftStatus("Could not save a local draft in this browser.");
   }
@@ -442,6 +507,11 @@ function renderProfileShortcutPreviews() {
     prefixExample.textContent = `${prefix}email`;
   }
 
+  document.querySelectorAll("[data-prefix-live]").forEach((node, index) => {
+    const suffixes = ["email", "phone", "home"];
+    node.textContent = `${prefix}${suffixes[index] || "email"}`;
+  });
+
   document
     .querySelectorAll("[data-preview-field][data-preview-starter]")
     .forEach((field) => {
@@ -592,6 +662,350 @@ function findDuplicates(entries) {
   );
 }
 
+function starterShortcut(starter) {
+  return `${state.profile.prefix || ""}${starter?.suffix || ""}`.trim();
+}
+
+function packTriggerSamples(pack) {
+  return pack.starterIds
+    .map((id) => definitionById(id))
+    .filter(Boolean)
+    .slice(0, 4)
+    .map((definition) => `${state.profile.prefix || ""}${definition.suffix}`);
+}
+
+function applyActivePacks() {
+  const starterIds = new Set(
+    state.activePacks.flatMap((slug) => SHORTCUT_PACKS[slug]?.starterIds || []),
+  );
+
+  state.starters = state.starters.map((starter) => {
+    if (starterIds.has(starter.id)) {
+      return {
+        ...starter,
+        enabled: true,
+        manuallySetEnabled: true,
+      };
+    }
+
+    if (starter.customized) {
+      return starter;
+    }
+
+    return {
+      ...starter,
+      enabled: false,
+      manuallySetEnabled: false,
+    };
+  });
+}
+
+function applyPackDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("packs") || params.get("pack");
+  if (!raw) {
+    return false;
+  }
+
+  const slugs = raw
+    .split(",")
+    .map((slug) => slug.trim())
+    .filter((slug) => SHORTCUT_PACKS[slug]);
+
+  if (!slugs.length) {
+    return false;
+  }
+
+  state.activePacks = [...new Set(slugs)];
+  applyActivePacks();
+  window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+  return true;
+}
+
+function setActivePacks(slugs) {
+  state.activePacks = [...new Set(slugs.filter((slug) => SHORTCUT_PACKS[slug]))];
+  applyActivePacks();
+  resetDetailGroupToggles();
+  render();
+}
+
+function previewFromStarter(starter) {
+  if (!starter) return null;
+  const definition = definitionById(starter.id);
+  return {
+    trigger: starterShortcut(starter),
+    expansion: starter.phrase || definition?.placeholder || "",
+    label: definition?.title || "Shortcut",
+  };
+}
+
+function firstPreviewEntry() {
+  const starter = state.starters.find((item) => item.enabled);
+  if (starter) {
+    return previewFromStarter(starter);
+  }
+
+  const custom = state.custom.find((item) => item.enabled && item.suffix && item.phrase);
+  if (custom) {
+    return {
+      trigger: `${state.profile.prefix || ""}${custom.suffix || ""}`.trim(),
+      expansion: custom.phrase,
+      label: "Custom shortcut",
+    };
+  }
+
+  return {
+    trigger: `${state.profile.prefix || ""}home`,
+    expansion: "123 Main Street, Apt 4B, Brooklyn, NY 11201",
+    label: "Home address",
+  };
+}
+
+function renderDevicePreview() {
+  const root = document.querySelector("#builderDevicePreview");
+  if (!root || !window.ShortcutDevicePreviews) {
+    return;
+  }
+
+  const entry = state.previewEntry || firstPreviewEntry();
+  root.classList.toggle("is-iphone", state.previewDevice === "iphone");
+  root.classList.toggle("is-ipad", state.previewDevice === "ipad");
+
+  if (state.previewDevice === "iphone") {
+    window.ShortcutDevicePreviews.renderIphonePreview(root, { ...entry, width: 230 });
+    return;
+  }
+
+  if (state.previewDevice === "ipad") {
+    window.ShortcutDevicePreviews.renderIpadPreview(root, { ...entry, width: 470 });
+    return;
+  }
+
+  window.ShortcutDevicePreviews.renderMacPreview(root, entry);
+}
+
+function renderActivePackStack() {
+  const root = document.querySelector("#activePackStack");
+  if (!root) {
+    return;
+  }
+
+  root.innerHTML = "";
+
+  state.activePacks.forEach((slug) => {
+    const pack = SHORTCUT_PACKS[slug];
+    if (!pack) return;
+
+    const chip = document.createElement("span");
+    chip.className = "pack-chip";
+    chip.innerHTML = `
+      <span class="pack-chip-dot"></span>
+      <span>${escapeXml(pack.name)}</span>
+      <button type="button" aria-label="Remove ${escapeXml(pack.name)} pack">×</button>
+    `;
+    chip.querySelector("button").addEventListener("click", () => {
+      setActivePacks(state.activePacks.filter((activeSlug) => activeSlug !== slug));
+    });
+    root.appendChild(chip);
+  });
+
+  const addButton = document.createElement("button");
+  addButton.type = "button";
+  addButton.className = "add-pack-chip";
+  addButton.textContent = "+ Add pack";
+  addButton.addEventListener("click", openPackModal);
+  root.appendChild(addButton);
+}
+
+function renderPackModal() {
+  const root = document.querySelector("#packModalGrid");
+  const summary = document.querySelector("#packModalSummary");
+  if (!root || !summary) {
+    return;
+  }
+
+  root.innerHTML = "";
+
+  Object.entries(SHORTCUT_PACKS).forEach(([slug, pack]) => {
+    const active = state.activePacks.includes(slug);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `pack-modal-card${active ? " is-active" : ""}`;
+    button.setAttribute("aria-pressed", String(active));
+    button.innerHTML = `
+      <h3>${escapeXml(pack.name)}</h3>
+      <p>${escapeXml(pack.description)}</p>
+      <span class="pack-modal-triggers">
+        ${packTriggerSamples(pack).map((trigger) => `<code class="pack-modal-trigger">${escapeXml(trigger)}</code>`).join("")}
+      </span>
+    `;
+    button.addEventListener("click", () => {
+      const next = active
+        ? state.activePacks.filter((activeSlug) => activeSlug !== slug)
+        : [...state.activePacks, slug];
+      setActivePacks(next);
+      openPackModal();
+    });
+    root.appendChild(button);
+  });
+
+  const enabledCount = state.starters.filter((starter) => starter.enabled).length;
+  summary.textContent = `${state.activePacks.length} pack${state.activePacks.length === 1 ? "" : "s"} active · ${enabledCount} shortcuts on`;
+}
+
+function openPackModal() {
+  const modal = document.querySelector("#packModal");
+  if (!modal) {
+    return;
+  }
+
+  renderPackModal();
+  modal.hidden = false;
+  modal.querySelector("button")?.focus();
+}
+
+function closePackModal() {
+  const modal = document.querySelector("#packModal");
+  if (modal) {
+    modal.hidden = true;
+  }
+}
+
+function filledDetailCount(fields) {
+  return fields.filter((field) => profileValuePresent(field)).length;
+}
+
+function selectedPackStarterIds() {
+  return new Set(
+    state.activePacks.flatMap((slug) => SHORTCUT_PACKS[slug]?.starterIds || []),
+  );
+}
+
+function relevantProfileFields() {
+  const packStarterIds = selectedPackStarterIds();
+  const sourceStarters = packStarterIds.size
+    ? starterPack.filter((definition) => packStarterIds.has(definition.id))
+    : state.starters
+        .filter((starter) => starter.enabled)
+        .map((starter) => definitionById(starter.id))
+        .filter(Boolean);
+
+  const fields = new Set(
+    sourceStarters.flatMap((definition) => definition.requiredProfileFields || []),
+  );
+
+  return fields.size
+    ? fields
+    : new Set(detailGroups.flatMap((group) => group.fields));
+}
+
+function resetDetailGroupToggles() {
+  document.querySelectorAll(".detail-group").forEach((group) => {
+    delete group.dataset.userToggled;
+  });
+}
+
+function refreshDetailGroupCounts() {
+  const relevantFields = relevantProfileFields();
+  document.querySelectorAll(".detail-group").forEach((group) => {
+    const fields = (group.dataset.fields || "").split(",").filter(Boolean);
+    const relevant = fields.some((field) => relevantFields.has(field));
+    const count = group.querySelector(".detail-group-count");
+
+    group.classList.toggle("is-relevant", relevant);
+    if (group.dataset.userToggled !== "true") {
+      group.dataset.autoSyncing = "true";
+      group.open = relevant;
+      window.setTimeout(() => {
+        delete group.dataset.autoSyncing;
+      }, 0);
+    }
+
+    if (count) {
+      count.textContent = `${filledDetailCount(fields)}/${fields.length} filled`;
+    }
+
+    const hideEmpty = document.querySelector("#hideEmptyFields")?.checked;
+    group.querySelectorAll("[data-preview-field]").forEach((fieldNode) => {
+      const field = fieldNode.dataset.previewField;
+      fieldNode.hidden = Boolean(hideEmpty && !profileValuePresent(field));
+    });
+  });
+}
+
+function groupProfileFields() {
+  const form = document.querySelector("#profileForm");
+  const livePreview = document.querySelector(".live-shortcut-preview");
+  if (!form || !livePreview || form.dataset.grouped === "true") {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  detailGroups.forEach((group) => {
+    const details = document.createElement("details");
+    details.className = "detail-group";
+    details.open = true;
+    details.dataset.fields = group.fields.join(",");
+    details.addEventListener("toggle", () => {
+      if (details.dataset.autoSyncing !== "true") {
+        details.dataset.userToggled = "true";
+      }
+    });
+
+    const summary = document.createElement("summary");
+    summary.innerHTML = `
+      <span class="detail-group-title">${escapeXml(group.title)}</span>
+      <span class="detail-group-count">${filledDetailCount(group.fields)}/${group.fields.length} filled</span>
+    `;
+
+    const body = document.createElement("div");
+    body.className = "detail-group-body";
+
+    group.fields.forEach((field) => {
+      const node = form.querySelector(`[data-preview-field="${field}"]`);
+      if (node) {
+        node.classList.remove("span-2", "span-3");
+        body.appendChild(node);
+      }
+    });
+
+    details.append(summary, body);
+    fragment.appendChild(details);
+  });
+
+  livePreview.after(fragment);
+  form.dataset.grouped = "true";
+}
+
+function refreshPrefixPicker() {
+  const prefix = state.profile.prefix || "";
+  const buttons = document.querySelectorAll("[data-prefix-choice]");
+  const customInput = document.querySelector("#customPrefixInput");
+  const common = [">", "-", "@@", ">>"];
+  const isCommon = common.includes(prefix);
+
+  buttons.forEach((button) => {
+    const choice = button.dataset.prefixChoice;
+    button.classList.toggle("is-active", choice === prefix);
+  });
+
+  if (customInput && document.activeElement !== customInput) {
+    customInput.value = isCommon ? "" : prefix;
+  }
+}
+
+function setPrefix(value) {
+  const input = document.querySelector("#prefix");
+  state.profile.prefix = value;
+  if (input) {
+    input.value = value;
+    validateFieldElement(input);
+  }
+  refreshGeneratedStarters();
+  render();
+}
+
 function buildPlist(entries) {
   const body = entries
     .map(
@@ -644,21 +1058,37 @@ function renderStarters() {
   const root = document.querySelector("#starterList");
   const template = document.querySelector("#starterTemplate");
   root.innerHTML = "";
+  const entries = buildEntries();
+  const duplicates = findDuplicates(entries);
+  const filter = state.starterFilter.trim().toLowerCase();
+  let renderedCount = 0;
 
   state.starters.forEach((starter) => {
     const definition = definitionById(starter.id);
+    const matchesFilter =
+      !filter ||
+      definition.title.toLowerCase().includes(filter) ||
+      definition.category.toLowerCase().includes(filter) ||
+      definition.suffix.toLowerCase().includes(filter) ||
+      starter.suffix.toLowerCase().includes(filter) ||
+      starter.phrase.toLowerCase().includes(filter);
+
+    if (!matchesFilter) {
+      return;
+    }
+
     const node = template.content.cloneNode(true);
     const autoEnabled = starterShouldAutoEnable(definition);
     const exportable = starterIsExportable(starter);
     const missingFields = formatMissingFields(definition);
+    const shortcut = starterShortcut(starter);
+    const isDuplicate = duplicates.has(shortcut) && starter.enabled && exportable;
 
     node.querySelector(".starter-enabled").checked = starter.enabled;
     node.querySelector(".starter-category").textContent = definition.category;
     node.querySelector(".starter-title").textContent = definition.title;
     node.querySelector(".starter-description").textContent = definition.description;
-    node.querySelector(".starter-trigger-preview").textContent = `${
-      state.profile.prefix || ""
-    }${starter.suffix || ""}`;
+    node.querySelector(".starter-trigger-preview").textContent = shortcut;
     node.querySelector(".starter-suffix").value = starter.suffix;
     node.querySelector(".starter-phrase").value = starter.phrase;
     node.querySelector(".prefix-chip").textContent = state.profile.prefix || " ";
@@ -667,8 +1097,14 @@ function renderStarters() {
     const card = node.querySelector(".starter-card");
     const note = node.querySelector(".starter-note");
     const status = node.querySelector(".starter-status");
+    const duplicateChip = node.querySelector(".duplicate-chip");
+    const resetButton = node.querySelector(".starter-reset");
 
     card.classList.toggle("is-disabled", !starter.enabled);
+    card.classList.toggle("starter-card--duplicate", isDuplicate);
+    card.dataset.starterId = starter.id;
+    duplicateChip.hidden = !isDuplicate;
+    resetButton.hidden = !starter.customized && starter.suffix === definition.suffix;
 
     if (starter.enabled && exportable) {
       status.textContent = starter.customized ? "Manual" : "On";
@@ -709,9 +1145,8 @@ function renderStarters() {
       card.querySelector(".starter-enabled").checked = true;
       status.textContent = "Manual";
       status.className = "starter-status is-on";
-      card.querySelector(".starter-trigger-preview").textContent = `${
-        state.profile.prefix || ""
-      }${starter.suffix || ""}`;
+      card.querySelector(".starter-trigger-preview").textContent = starterShortcut(starter);
+      state.previewEntry = previewFromStarter(starter);
       renderPreview();
     });
 
@@ -724,12 +1159,38 @@ function renderStarters() {
       card.querySelector(".starter-enabled").checked = true;
       status.textContent = "Manual";
       status.className = "starter-status is-on";
+      state.previewEntry = previewFromStarter(starter);
       renderPreview();
+    });
+
+    resetButton.addEventListener("click", () => {
+      starter.suffix = definition.suffix;
+      starter.phrase = definition.build(state.profile);
+      starter.customized = false;
+      render();
+    });
+
+    card.addEventListener("mouseenter", () => {
+      state.previewEntry = previewFromStarter(starter);
+      renderDevicePreview();
+    });
+
+    card.addEventListener("focusin", () => {
+      state.previewEntry = previewFromStarter(starter);
+      renderDevicePreview();
     });
 
     root.appendChild(node);
     validateFieldElement(card.querySelector(".starter-suffix"));
+    renderedCount += 1;
   });
+
+  if (!renderedCount) {
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.textContent = "No starter shortcuts match that search.";
+    root.appendChild(empty);
+  }
 }
 
 function renderCustomRows() {
@@ -795,10 +1256,11 @@ function renderPreview() {
 
   const entries = buildEntries();
   const duplicates = findDuplicates(entries);
+  const enabledCount = state.starters.filter((starter) => starter.enabled).length + state.custom.filter((row) => row.enabled).length;
 
   previewBody.innerHTML = "";
   prefixPreview.textContent = state.profile.prefix || "(none)";
-  count.textContent = String(entries.length);
+  count.textContent = String(enabledCount);
   duplicateCount.textContent = String(duplicates.size);
 
   if (!entries.length) {
@@ -821,6 +1283,8 @@ function renderPreview() {
       previewBody.appendChild(row);
     });
   }
+
+  renderDevicePreview();
 
   if (!entries.length) {
     setStatus(
@@ -845,6 +1309,10 @@ function renderPreview() {
 
 function render() {
   renderProfileShortcutPreviews();
+  refreshDetailGroupCounts();
+  refreshPrefixPicker();
+  renderActivePackStack();
+  renderPackModal();
   renderStarters();
   renderCustomRows();
   renderPreview();
@@ -858,6 +1326,18 @@ function addCustomRow() {
     suffix: "",
     phrase: "",
   });
+  render();
+}
+
+function addCustomRows(count) {
+  for (let index = 0; index < count; index += 1) {
+    state.custom.push({
+      id: makeId(),
+      enabled: true,
+      suffix: "",
+      phrase: "",
+    });
+  }
   render();
 }
 
@@ -903,7 +1383,7 @@ function clearDraft() {
   shouldPersistDraft = false;
   render();
   shouldPersistDraft = true;
-  updateDraftStatus("Local draft cleared from this browser.");
+  updateDraftStatus("Saved locally");
   setStatus("Local draft cleared. You can start fresh now.", "success");
 }
 
@@ -930,7 +1410,7 @@ function exportPlist() {
 
   downloadTextFile("Text Substitutions.plist", buildPlist(entries));
   setStatus(
-    "Downloaded Text Substitutions.plist. Open System Settings > Keyboard > Text Replacements and drag it in.",
+    "Downloaded Text Substitutions.plist. Import it from System Settings on your Mac.",
     "success",
   );
 }
@@ -945,16 +1425,105 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const loadedDraft = loadDraft();
+  const loadedPacks = applyPackDeepLink();
+  groupProfileFields();
   wireProfileForm();
-  document.querySelector("#addCustomShortcut").addEventListener("click", addCustomRow);
-  document.querySelector("#downloadPlist").addEventListener("click", exportPlist);
-  document.querySelector("#clearSavedDraft").addEventListener("click", clearDraft);
+  document.querySelector("#addCustomShortcut")?.addEventListener("click", addCustomRow);
+  document.querySelector("#addFiveCustomShortcuts")?.addEventListener("click", () => addCustomRows(5));
+  document.querySelector("#downloadPlist")?.addEventListener("click", exportPlist);
+  document.querySelector("#topDownloadPlist")?.addEventListener("click", exportPlist);
+  document.querySelector("#clearSavedDraft")?.addEventListener("click", clearDraft);
+  document.querySelector("#closePackModal")?.addEventListener("click", closePackModal);
+  document.querySelector("#packModal")?.addEventListener("click", (event) => {
+    if (event.target.id === "packModal") {
+      closePackModal();
+    }
+  });
+  document.querySelector("#starterSearch")?.addEventListener("input", (event) => {
+    state.starterFilter = event.target.value;
+    renderStarters();
+  });
+  document.querySelector("#hideEmptyFields")?.addEventListener("change", refreshDetailGroupCounts);
+  document.querySelectorAll("[data-prefix-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const choice = button.dataset.prefixChoice;
+      setPrefix(choice);
+    });
+  });
+  document.querySelector("#customPrefixInput")?.addEventListener("input", (event) => {
+    const value = event.target.value.trim();
+    if (value) {
+      setPrefix(value);
+    }
+  });
+
+  document.querySelectorAll("[data-preview-device]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.previewDevice = button.dataset.previewDevice;
+      document
+        .querySelectorAll("[data-preview-device]")
+        .forEach((tab) => tab.classList.toggle("is-active", tab === button));
+      renderDevicePreview();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const inTextField =
+      target instanceof HTMLElement &&
+      ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+    const command = event.metaKey || event.ctrlKey;
+
+    if (command && event.key.toLowerCase() === "d" && !inTextField) {
+      event.preventDefault();
+      exportPlist();
+    }
+
+    if (command && event.key === "/" && !inTextField) {
+      event.preventDefault();
+      document.querySelector(".builder-preview")?.classList.toggle("is-collapsed");
+    }
+
+    if (command && event.shiftKey && event.key.toLowerCase() === "n" && !inTextField) {
+      event.preventDefault();
+      addCustomRow();
+    }
+
+    if (event.key === "Escape") {
+      closePackModal();
+    }
+  });
+
+  const navLinks = Array.from(document.querySelectorAll("[data-section-nav]"));
+  const sections = navLinks
+    .map((link) => document.getElementById(link.dataset.sectionNav))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const active = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!active) return;
+
+        navLinks.forEach((link) => {
+          link.classList.toggle("is-active", link.dataset.sectionNav === active.target.id);
+        });
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
 
   render();
 
-  if (loadedDraft) {
-    updateDraftStatus("Loaded your local draft from this browser.");
+  if (loadedPacks) {
+    updateDraftStatus("Saved locally");
+  } else if (loadedDraft) {
+    updateDraftStatus("Saved locally");
   } else {
-    updateDraftStatus("Saved locally in this browser.");
+    updateDraftStatus("Saved locally");
   }
 });

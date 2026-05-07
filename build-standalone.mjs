@@ -10,6 +10,7 @@ const generatorOutputPath = path.join(root, "generator.html");
 const generatorStylesPath = path.join(root, "styles.css");
 const starterDataPath = path.join(root, "starter-pack.cjs");
 const appJsPath = path.join(root, "app.js");
+const devicePreviewsPath = path.join(root, "assets", "js", "device-previews.js");
 const faviconPath = path.join(root, "favicon.svg");
 const importGuideImagePath = path.join(
   root,
@@ -23,6 +24,7 @@ const generatorSource = fs.readFileSync(generatorSourcePath, "utf8");
 const generatorStyles = fs.readFileSync(generatorStylesPath, "utf8");
 const starterData = fs.readFileSync(starterDataPath, "utf8");
 const appJs = fs.readFileSync(appJsPath, "utf8");
+const devicePreviewsJs = fs.readFileSync(devicePreviewsPath, "utf8");
 const faviconSvg = fs.readFileSync(faviconPath, "utf8");
 const importGuideImage = fs.readFileSync(importGuideImagePath);
 const faviconDataUri = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
@@ -38,8 +40,8 @@ const generatorHtml = generatorSource
     `<style>\n${generatorStyles}\n</style>`,
   )
   .replace(
-    '    <script src="./starter-pack.cjs"></script>\n    <script src="./app.js"></script>',
-    `    <script>\n${starterData}\n</script>\n    <script>\n${appJs}\n</script>`,
+    '    <script src="./starter-pack.cjs"></script>\n    <script src="./assets/js/device-previews.js"></script>\n    <script src="./app.js"></script>',
+    `    <script>\n${starterData}\n</script>\n    <script>\n${devicePreviewsJs}\n</script>\n    <script>\n${appJs}\n</script>`,
   )
   .replace(
     './assets/screenshots/import-text-replacements.png',
@@ -54,6 +56,10 @@ const landingHtml = landingSource
   .replace(
     '"__OFFLINE_BUILDER_BASE64__"',
     JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
+  )
+  .replace(
+    '    <script src="./assets/js/device-previews.js"></script>',
+    `    <script>\n${devicePreviewsJs}\n</script>`,
   );
 
 fs.writeFileSync(landingOutputPath, landingHtml);

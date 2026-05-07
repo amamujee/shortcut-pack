@@ -70,11 +70,23 @@
       <a class="brand" href="./index.html" aria-label="Shortcut Pack home">
         <span class="brand-mark">SP</span>
         <span class="brand-word">Shortcut Pack</span>
+        <span class="builder-tag">Builder</span>
       </a>
 
+      <div id="activePackStack" class="active-pack-stack" aria-label="Active starter packs"></div>
+
+      <nav class="section-nav" aria-label="Builder sections">
+        <a href="#prefix" data-section-nav="prefix">Prefix</a>
+        <a href="#step-details" data-section-nav="step-details">Details</a>
+        <a href="#step-starters" data-section-nav="step-starters">Shortcuts</a>
+        <a href="#step-custom" data-section-nav="step-custom">Custom</a>
+        <a href="#step-export" data-section-nav="step-export">Export</a>
+      </nav>
+
       <div class="topbar-actions" aria-label="Builder navigation">
+        <p id="draftStatus" class="panel-meta topbar-save-status">Saved locally.</p>
         <a class="topbar-link" href="https://github.com/amamujee/shortcut-pack" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="builder-badge" href="#step-export">Jump to download</a>
+        <button id="topDownloadPlist" class="primary-button topbar-download" type="button">Download .plist</button>
       </div>
     </header>
 
@@ -118,13 +130,14 @@
               <a href="#step-export">Download the plist file</a>
             </li>
             <li>
-              <a href="#step-export">Import it on your Mac</a>
+              <a href="#step-import">Import it on your Mac</a>
             </li>
           </ol>
         </aside>
       </header>
 
       <main id="top" class="layout">
+        <div class="builder-form">
         <section id="step-details" class="panel">
           <div class="panel-header">
             <div>
@@ -132,7 +145,6 @@
               <h2>Configure your trigger prefix</h2>
             </div>
             <div class="panel-actions">
-              <p id="draftStatus" class="panel-meta">Saved locally in this browser.</p>
               <div class="panel-action-buttons">
                 <button id="clearSavedDraft" class="secondary-button" type="button">
                   Clear local draft
@@ -164,14 +176,40 @@
               />
               <span class="field-note">
                 Every shortcut uses this prefix. Default to <code>&gt;</code>. If you want
-                fewer accidental triggers, try <code>@@</code> or <code>&gt;&gt;</code>.
+                fewer accidental triggers, try <code>-</code>, <code>@@</code>, or <code>&gt;&gt;</code>.
+              </span>
+              <span class="prefix-segmented" aria-label="Common trigger prefixes">
+                <button class="is-active" type="button" data-prefix-choice="&gt;">&gt;</button>
+                <button type="button" data-prefix-choice="-">-</button>
+                <button type="button" data-prefix-choice="@@">@@</button>
+                <button type="button" data-prefix-choice="&gt;&gt;">&gt;&gt;</button>
+                <input
+                  id="customPrefixInput"
+                  class="prefix-custom-input"
+                  type="text"
+                  maxlength="12"
+                  placeholder="Custom..."
+                  aria-label="Custom trigger prefix"
+                />
+              </span>
+              <span class="prefix-live-preview">
+                <span>Live preview</span>
+                <code data-prefix-live>&gt;email</code>
+                <code data-prefix-live>&gt;phone</code>
+                <code data-prefix-live>&gt;home</code>
               </span>
             </label>
 
             <div class="step-divider span-3">
-              <p class="section-kicker">Step 2</p>
-              <h3>Add your details</h3>
-              <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
+              <div>
+                <p class="section-kicker">Step 2</p>
+                <h3>Your details</h3>
+                <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
+              </div>
+              <label class="hide-empty-toggle">
+                <input id="hideEmptyFields" type="checkbox" />
+                <span>Hide empty fields</span>
+              </label>
             </div>
 
             <div class="live-shortcut-preview span-3">
@@ -525,6 +563,12 @@
           </p>
 
           <div class="starter-table" role="presentation">
+            <div class="starter-search-row">
+              <label class="starter-search-field">
+                <span class="field-label">Filter rows</span>
+                <input id="starterSearch" type="search" placeholder="Search by title, trigger, or expanded text" />
+              </label>
+            </div>
             <div class="starter-table-head" aria-hidden="true">
               <span>Use</span>
               <span>Starter row</span>
@@ -542,6 +586,9 @@
               </div>
               <button id="addCustomShortcut" class="secondary-button" type="button">
                 Add custom shortcut
+              </button>
+              <button id="addFiveCustomShortcuts" class="secondary-button" type="button">
+                Add 5 rows
               </button>
             </div>
 
@@ -564,21 +611,6 @@
 
           <div id="statusBanner" class="status-banner" aria-live="polite"></div>
 
-          <div class="summary-grid">
-            <div class="summary-card">
-              <p class="summary-label">Included shortcuts</p>
-              <p id="shortcutCount" class="summary-value">0</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Shared prefix</p>
-              <p id="prefixPreview" class="summary-value">&gt;</p>
-            </div>
-            <div class="summary-card">
-              <p class="summary-label">Duplicate triggers</p>
-              <p id="duplicateCount" class="summary-value">0</p>
-            </div>
-          </div>
-
           <div class="table-wrap">
             <table>
               <thead>
@@ -592,18 +624,19 @@
             </table>
           </div>
 
-          <div class="instructions">
+          <div id="step-import" class="instructions">
             <div class="instruction-card">
               <p class="section-kicker">Step 5</p>
-              <h3>Import it on your Mac</h3>
+              <h3>Import the new plist</h3>
               <ol>
-                <li>Open System Settings, then go to Keyboard.</li>
-                <li>Open Text Replacements.</li>
-                <li>Drag in <code>Text Substitutions.plist</code>.</li>
+                <li>Keep Text Replacements open.</li>
+                <li>Find your downloaded <code>Text Substitutions.plist</code>.</li>
+                <li>Drag it into the Text Replacements window, then click Done if prompted.</li>
               </ol>
               <p class="instruction-note">
-                You need a Mac for this import step. After you add it there, Apple can
-                sync the text replacements to your iPhone and iPad with iCloud Drive.
+                Imports add the shortcuts from this file to your Mac. After you add them
+                there, Apple can sync the text replacements to your iPhone and iPad with
+                iCloud Drive.
               </p>
               <figure class="instruction-visual">
                 <img
@@ -618,7 +651,65 @@
             </div>
           </div>
         </section>
+        </div>
+
+        <aside class="builder-preview" aria-label="Live Apple device preview">
+          <div class="summary-grid preview-summary-grid">
+            <div class="summary-card">
+              <p class="summary-label">Enabled</p>
+              <p id="shortcutCount" class="summary-value">0</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Prefix</p>
+              <p id="prefixPreview" class="summary-value">&gt;</p>
+            </div>
+            <div class="summary-card">
+              <p class="summary-label">Duplicates</p>
+              <p id="duplicateCount" class="summary-value">0</p>
+            </div>
+          </div>
+
+          <div class="builder-preview-card">
+            <p class="section-kicker">What it will look like</p>
+            <h2>Same shortcut, every Apple device.</h2>
+            <p class="builder-preview-copy">
+              Focus or hover any shortcut row to preview it here. Mac is the default because this builder is meant for a desk setup.
+            </p>
+
+            <div id="builderDevicePreview" class="builder-device-preview"></div>
+
+            <div class="device-tabs" role="tablist" aria-label="Preview device">
+              <button class="is-active" type="button" data-preview-device="mac">Mac</button>
+              <button type="button" data-preview-device="iphone">iPhone</button>
+              <button type="button" data-preview-device="ipad">iPad</button>
+            </div>
+
+            <details class="shortcut-cheatsheet">
+              <summary>Keyboard shortcuts</summary>
+              <div class="shortcut-cheatsheet-list">
+                <span><kbd>Cmd</kbd><kbd>D</kbd> Download plist</span>
+                <span><kbd>Cmd</kbd><kbd>/</kbd> Collapse preview</span>
+                <span><kbd>Cmd</kbd><kbd>Shift</kbd><kbd>N</kbd> Add row</span>
+              </div>
+            </details>
+          </div>
+        </aside>
       </main>
+    </div>
+
+    <div id="packModal" class="modal-backdrop" hidden>
+      <section class="pack-modal" role="dialog" aria-modal="true" aria-labelledby="packModalTitle">
+        <div class="pack-modal-head">
+          <p class="section-kicker">Manage packs</p>
+          <h2 id="packModalTitle">Add or remove packs</h2>
+          <p>Packs are additive. Toggle as many as you want; your details and custom rows stay either way.</p>
+        </div>
+        <div id="packModalGrid" class="pack-modal-grid"></div>
+        <div class="pack-modal-footer">
+          <span id="packModalSummary">0 packs active</span>
+          <button id="closePackModal" class="primary-button" type="button">Done</button>
+        </div>
+      </section>
     </div>
 
     <template id="starterTemplate">
@@ -632,10 +723,12 @@
             <div class="starter-meta-topline">
               <p class="starter-category"></p>
               <span class="starter-status"></span>
+              <span class="duplicate-chip" hidden>Duplicate trigger</span>
             </div>
             <div class="starter-title-row">
               <span class="starter-title"></span>
               <code class="starter-trigger-preview"></code>
+              <button class="link-button starter-reset" type="button" hidden>Reset</button>
             </div>
             <p class="starter-description"></p>
           </div>
@@ -698,6 +791,7 @@
     </template>
 
     <script src="./starter-pack.cjs"></script>
+    <script src="./assets/js/device-previews.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

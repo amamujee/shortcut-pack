@@ -94,6 +94,7 @@
         ]
       }
     </script>
+    <script src="./assets/js/device-previews.js"></script>
     <script>
       window.va =
         window.va ||
@@ -125,6 +126,7 @@
   --line: rgba(24, 22, 18, 0.14);
   --line-soft: rgba(24, 22, 18, 0.08);
   --accent: #9c5c21;
+  --accent-strong: #7a4818;
   --accent-soft: rgba(156, 92, 33, 0.1);
   --shadow: 0 24px 60px rgba(47, 34, 17, 0.08);
   --container: min(1120px, calc(100vw - 40px));
@@ -284,10 +286,10 @@ p {
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 380px);
-  gap: 42px;
-  align-items: start;
-  padding: 48px 0 22px;
+  grid-template-columns: minmax(0, 1.1fr) 360px;
+  gap: 56px;
+  align-items: center;
+  padding: 56px 0 32px;
 }
 
 .hero-copy {
@@ -307,9 +309,9 @@ p {
 }
 
 .hero h1 {
-  max-width: 8ch;
-  font-size: clamp(4rem, 8vw, 6.4rem);
-  line-height: 0.92;
+  max-width: 11ch;
+  font-size: clamp(4.8rem, 8vw, 7rem);
+  line-height: 0.9;
 }
 
 .hero-copy > p {
@@ -328,11 +330,11 @@ p {
 }
 
 .example-panel {
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: var(--shadow);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .example-panel-header {
@@ -423,6 +425,292 @@ p {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   margin-top: 14px;
+}
+
+.hero-phone-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-phone-wrap .example-panel-header {
+  display: none;
+}
+
+#heroIphonePreview {
+  width: 300px;
+  max-width: 100%;
+  height: 560px;
+  overflow: hidden;
+  --sp-phone-width: 300px;
+}
+
+.hero-phone-wrap .sp-phone {
+  width: min(100%, var(--sp-phone-width, 300px));
+}
+
+.hero .trust-line {
+  margin-top: 24px;
+  color: rgba(91, 85, 76, 0.8);
+  font-size: 0.94rem;
+}
+
+.hero-phone-caption,
+.starter-pack-footer,
+.mini-proof-row {
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.code-chip,
+.pack-trigger {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(156, 92, 33, 0.2);
+  border-radius: 999px;
+  background: rgba(156, 92, 33, 0.08);
+  color: var(--accent);
+  font-family: "SF Mono", "Menlo", "Consolas", monospace;
+  font-weight: 800;
+}
+
+.code-chip {
+  padding: 3px 8px;
+}
+
+.starter-pack-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.starter-pack-card {
+  display: grid;
+  gap: 18px;
+  min-height: 226px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.52);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.starter-pack-card:hover,
+.starter-pack-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(156, 92, 33, 0.32);
+}
+
+.starter-pack-card.is-selected {
+  border-color: var(--accent);
+  background: rgba(156, 92, 33, 0.1);
+}
+
+.starter-pack-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.starter-pack-card h3 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.starter-pack-check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.starter-pack-card.is-selected .starter-pack-check {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.starter-pack-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.pack-trigger-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-self: end;
+}
+
+.pack-trigger {
+  padding: 5px 8px;
+  font-size: 0.78rem;
+}
+
+.starter-pack-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 16px 0 0;
+}
+
+.starter-pack-footer .button[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 36px;
+}
+
+.how-step {
+  display: grid;
+  gap: 16px;
+  min-height: 100%;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: var(--shadow);
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 900;
+}
+
+.how-step h3 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.how-step p {
+  color: var(--ink-soft);
+}
+
+#howIphonePreview {
+  height: 280px;
+  margin-top: 6px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f4ede0, #ebe2cf);
+  --sp-phone-width: 220px;
+}
+
+#howIphonePreview .sp-phone {
+  margin-top: -20px;
+}
+
+.builder-mini,
+.settings-mini {
+  display: grid;
+  gap: 8px;
+  min-height: 214px;
+  padding: 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  background: rgba(251, 248, 241, 0.8);
+}
+
+.builder-mini-row,
+.settings-mini-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.settings-mini img {
+  width: 100%;
+  max-height: 162px;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+}
+
+.faq-details {
+  display: grid;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.faq-details details {
+  border-top: 1px solid var(--line);
+}
+
+.faq-details details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-details summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 0;
+  cursor: pointer;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  list-style: none;
+}
+
+.faq-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-details summary::after {
+  content: ">";
+  color: var(--accent);
+  transform: rotate(0deg);
+  transition: transform 180ms ease;
+}
+
+.faq-details details[open] summary::after {
+  transform: rotate(90deg);
+}
+
+.faq-details p {
+  max-width: 72ch;
+  padding: 0 0 18px;
+  color: var(--ink-soft);
 }
 
 .example-item {
@@ -712,6 +1000,8 @@ p {
   .hero,
   .hero-strip,
   .benefit-grid,
+  .starter-pack-grid,
+  .how-steps,
   .paired-heads,
   .use-grid,
   .split-grid,
@@ -815,6 +1105,11 @@ p {
     grid-template-columns: 1fr;
   }
 
+  .starter-pack-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .demo-output {
     min-height: 118px;
     height: 118px;
@@ -841,7 +1136,7 @@ p {
 
       <nav class="topnav" aria-label="Primary">
         <a href="#sync">How it works</a>
-        <a href="#free">Free and private</a>
+        <a href="#starter-packs">Starter packs</a>
         <a href="#faq">FAQ</a>
       </nav>
 
@@ -854,10 +1149,11 @@ p {
     <main id="top">
       <section class="hero">
         <div class="hero-copy">
+          <span class="eyebrow">Apple text shortcuts · macOS · iOS · iPadOS</span>
           <h1>Type less. Remember less.</h1>
           <p>
-            Build a pack of Apple text replacements for addresses, IDs, links,
-            and canned replies so you can type less and remember less.
+            A pack of Apple text replacements for the addresses, IDs, links, and
+            replies you retype a hundred times a week.
           </p>
 
           <div class="hero-actions">
@@ -870,73 +1166,94 @@ p {
               >Download offline builder</a
             >
           </div>
+          <p class="trust-line">Free · No signup · Your details stay in your browser</p>
         </div>
 
-        <aside class="example-panel" aria-label="Shortcut examples">
+        <aside class="example-panel hero-phone-wrap" aria-label="Shortcut examples">
           <div class="example-panel-header">
             <div>
               <span>See it work</span>
-              <p>Type a shortcut. Apple expands it.</p>
+              <p>Type a shortcut. Apple suggests the full text.</p>
             </div>
           </div>
 
-          <div class="demo-card" aria-live="polite">
-            <div class="demo-stage">
-              <div class="demo-row">
-                <span class="demo-row-label">Typing</span>
-                <div class="demo-field">
-                  <span id="demoShortcut"></span>
-                  <span class="demo-caret" aria-hidden="true"></span>
-                </div>
-              </div>
-
-              <div class="demo-row">
-                <span class="demo-row-label">Expands to</span>
-                <div class="demo-output" id="demoPhrase"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="example-list">
-            <div class="example-item">
-              <span class="trigger">&gt;home</span>
-              <p>Home address</p>
-            </div>
-
-            <div class="example-item">
-              <span class="trigger">&gt;pp</span>
-              <p>Passport or ID</p>
-            </div>
-
-            <div class="example-item">
-              <span class="trigger">&gt;intro</span>
-              <p>Saved replies</p>
-            </div>
-
-            <div class="example-item">
-              <span class="trigger">&gt;custom</span>
-              <p>Your own shortcuts</p>
-            </div>
-          </div>
+          <div id="heroIphonePreview" aria-live="polite"></div>
+          <p class="hero-phone-caption">
+            You type <code id="demoShortcut" class="code-chip">&gt;em</code>. Apple expands it.
+            <span id="demoPhrase" hidden></span>
+          </p>
         </aside>
       </section>
 
-      <section class="section section-tight">
-        <div class="hero-strip">
-          <article class="hero-strip-item">
-            <h3>Less typing</h3>
-            <p>Turn repeated text into short triggers.</p>
-          </article>
+      <section id="starter-packs" class="section section-tight">
+        <div class="section-head">
+          <span class="section-label">Start Fast</span>
+          <h2>Pick a starter pack.</h2>
+          <p>Choose one or stack several. The builder opens with those shortcuts switched on.</p>
+        </div>
 
-          <article class="hero-strip-item">
-            <h3>Less remembering</h3>
-            <p>Stop keeping low-value details in your head.</p>
-          </article>
+        <div class="starter-pack-grid" data-pack-grid>
+          <button class="starter-pack-card is-selected" type="button" data-pack="personal" aria-pressed="true">
+            <span class="starter-pack-head">
+              <h3>Personal</h3>
+              <span class="starter-pack-check" aria-hidden="true">✓</span>
+            </span>
+            <p>Names, email, phone, address.</p>
+            <span class="pack-trigger-row">
+              <code class="pack-trigger">&gt;nm</code>
+              <code class="pack-trigger">&gt;em</code>
+              <code class="pack-trigger">&gt;ph</code>
+              <code class="pack-trigger">&gt;home</code>
+            </span>
+          </button>
 
-          <article class="hero-strip-item">
-            <h3>More speed</h3>
-            <p>Move faster with shortcuts built into Apple’s system.</p>
-          </article>
+          <button class="starter-pack-card is-selected" type="button" data-pack="work" aria-pressed="true">
+            <span class="starter-pack-head">
+              <h3>Work</h3>
+              <span class="starter-pack-check" aria-hidden="true">✓</span>
+            </span>
+            <p>Intro reply, signature, scheduling.</p>
+            <span class="pack-trigger-row">
+              <code class="pack-trigger">&gt;intro</code>
+              <code class="pack-trigger">&gt;sig</code>
+              <code class="pack-trigger">&gt;cal</code>
+            </span>
+          </button>
+
+          <button class="starter-pack-card" type="button" data-pack="travel" aria-pressed="false">
+            <span class="starter-pack-head">
+              <h3>Travel</h3>
+              <span class="starter-pack-check" aria-hidden="true"></span>
+            </span>
+            <p>Passport, KTN, airline number.</p>
+            <span class="pack-trigger-row">
+              <code class="pack-trigger">&gt;pp</code>
+              <code class="pack-trigger">&gt;pexp</code>
+              <code class="pack-trigger">&gt;ktn</code>
+              <code class="pack-trigger">&gt;air</code>
+            </span>
+          </button>
+
+          <button class="starter-pack-card" type="button" data-pack="founder" aria-pressed="false">
+            <span class="starter-pack-head">
+              <h3>Founder</h3>
+              <span class="starter-pack-check" aria-hidden="true"></span>
+            </span>
+            <p>Bio, links, scheduling.</p>
+            <span class="pack-trigger-row">
+              <code class="pack-trigger">&gt;bio</code>
+              <code class="pack-trigger">&gt;li</code>
+              <code class="pack-trigger">&gt;x</code>
+              <code class="pack-trigger">&gt;cal</code>
+            </span>
+          </button>
+        </div>
+
+        <div class="starter-pack-footer">
+          <span data-pack-summary>2 packs selected · combine as many as you want</span>
+          <a class="button button-primary" href="./generator.html?packs=personal,work" data-pack-cta>
+            Open builder with 2 packs →
+          </a>
         </div>
       </section>
 
@@ -950,20 +1267,33 @@ p {
           </p>
         </div>
 
-        <div class="benefit-grid">
-          <article class="benefit-card">
-            <h3>Apple-native</h3>
-            <p>Built into Apple’s text replacements. No extra app to manage.</p>
+        <div class="how-steps">
+          <article class="how-step">
+            <span class="step-number">1</span>
+            <h3>Build it in the browser.</h3>
+            <p>Add the details you reuse. Pick which shortcuts to keep. Rename anything.</p>
+            <div class="builder-mini" aria-hidden="true">
+              <div class="builder-mini-row"><code>&gt;nm</code><span>Full name</span></div>
+              <div class="builder-mini-row"><code>&gt;em</code><span>Email</span></div>
+              <div class="builder-mini-row"><code>&gt;home</code><span>Home address</span></div>
+              <div class="builder-mini-row"><code>&gt;intro</code><span>Intro reply</span></div>
+            </div>
           </article>
 
-          <article class="benefit-card">
-            <h3>One Mac setup</h3>
-            <p>Import the plist on your Mac once. That setup step is Mac-only.</p>
+          <article class="how-step">
+            <span class="step-number">2</span>
+            <h3>Import once on your Mac.</h3>
+            <p>Drag <code class="code-chip">Text Substitutions.plist</code> into System Settings.</p>
+            <div class="settings-mini">
+              <img src="./assets/screenshots/import-text-replacements.png" alt="System Settings showing Text Replacements on a Mac." />
+            </div>
           </article>
 
-          <article class="benefit-card">
-            <h3>Same shortcuts everywhere</h3>
+          <article class="how-step">
+            <span class="step-number">3</span>
+            <h3>Use it everywhere.</h3>
             <p>Use the same shortcuts on Mac, iPhone, and iPad with iCloud sync.</p>
+            <div id="howIphonePreview"></div>
           </article>
         </div>
       </section>
@@ -1001,31 +1331,35 @@ p {
           <h2>Questions, answered.</h2>
         </div>
 
-        <div class="faq-grid">
-          <article class="faq-card">
-            <h3>Is it free?</h3>
+        <div class="mini-proof-row">
+          Less typing · Less remembering · More speed
+        </div>
+
+        <div class="faq-details">
+          <details open>
+            <summary>Is it free?</summary>
             <p>Yes. The builder and starter pack are free to use.</p>
-          </article>
+          </details>
 
-          <article class="faq-card">
-            <h3>Do you save my data?</h3>
+          <details>
+            <summary>Do you save my data?</summary>
             <p>No. Your personal text is not collected or stored by us.</p>
-          </article>
+          </details>
 
-          <article class="faq-card">
-            <h3>Can I customize it?</h3>
+          <details>
+            <summary>Can I customize it?</summary>
             <p>Yes. The starter pack is only the starting point.</p>
-          </article>
+          </details>
 
-          <article class="faq-card">
-            <h3>Can I use it offline?</h3>
+          <details>
+            <summary>Can I use it offline?</summary>
             <p>Yes. Download the builder file and use the same flow locally in one HTML file.</p>
-          </article>
+          </details>
 
-          <article class="faq-card">
-            <h3>Can I set this up from iPhone or iPad?</h3>
+          <details>
+            <summary>Can I set this up from iPhone or iPad?</summary>
             <p>No. The plist import step works on Mac only, then Apple can sync the replacements to your other devices.</p>
-          </article>
+          </details>
         </div>
       </section>
     </main>
@@ -1037,13 +1371,15 @@ p {
           <h2>Start simple.</h2>
           <p>Start with addresses, IDs, and replies.</p>
           <p class="footer-meta">
-            Community-built and open source.
+            Built by
+            <a class="inline-link" href="https://github.com/amamujee" target="_blank" rel="noreferrer">@amamujee</a>.
+            Free forever.
             <a
               class="inline-link"
               href="https://github.com/amamujee/shortcut-pack"
               target="_blank"
               rel="noreferrer"
-              >View on GitHub</a
+              >Source on GitHub</a
             >.
           </p>
         </div>
@@ -1065,9 +1401,21 @@ p {
       const offlineBuilderFilename = "Shortcut Pack Builder.html";
       const offlineBuilderBase64 = "__OFFLINE_BUILDER_BASE64__";
       const liveDemoSteps = [
-        { shortcut: ">em", phrase: "you@example.com" },
-        { shortcut: ">home", phrase: "123 Main Street, Apt 4B, Brooklyn, NY 11201" },
-        { shortcut: ">intro", phrase: "Great to meet you. Here is my Calendly: calendly.com/your-name" },
+        {
+          inbound: "What's the address again?",
+          shortcut: ">add",
+          phrase: "123 Main Street, Apt 4B, Brooklyn, NY 11201",
+        },
+        {
+          inbound: "What's the best email?",
+          shortcut: ">em",
+          phrase: "jordan@me.com",
+        },
+        {
+          inbound: "Do you have time to chat soon?",
+          shortcut: ">intro",
+          phrase: "Great to hear from you. I have time tomorrow afternoon.",
+        },
       ];
 
       function decodeBase64Utf8(base64) {
@@ -1099,17 +1447,79 @@ p {
       });
 
       (function () {
+        const packCards = Array.from(document.querySelectorAll("[data-pack]"));
+        const summary = document.querySelector("[data-pack-summary]");
+        const cta = document.querySelector("[data-pack-cta]");
+
+        if (!packCards.length || !summary || !cta) {
+          return;
+        }
+
+        function selectedPacks() {
+          return packCards
+            .filter((card) => card.classList.contains("is-selected"))
+            .map((card) => card.dataset.pack);
+        }
+
+        function refreshPackCta() {
+          const packs = selectedPacks();
+          const count = packs.length;
+          summary.textContent = count
+            ? `${count} pack${count === 1 ? "" : "s"} selected · combine as many as you want`
+            : "Pick one or more packs — they stack.";
+          cta.textContent = `Open builder with ${count} pack${count === 1 ? "" : "s"} →`;
+          cta.href = count ? `./generator.html?packs=${encodeURIComponent(packs.join(","))}` : "./generator.html";
+          cta.setAttribute("aria-disabled", count ? "false" : "true");
+        }
+
+        packCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            const selected = !card.classList.contains("is-selected");
+            card.classList.toggle("is-selected", selected);
+            card.setAttribute("aria-pressed", String(selected));
+            card.querySelector(".starter-pack-check").textContent = selected ? "✓" : "";
+            refreshPackCta();
+          });
+        });
+
+        refreshPackCta();
+      })();
+
+      (function () {
         const shortcutNode = document.querySelector("#demoShortcut");
         const phraseNode = document.querySelector("#demoPhrase");
+        const heroPreview = document.querySelector("#heroIphonePreview");
+        const howPreview = document.querySelector("#howIphonePreview");
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (!shortcutNode || !phraseNode) {
           return;
         }
 
+        function renderDemo(step) {
+          shortcutNode.textContent = step.shortcut;
+          phraseNode.textContent = step.phrase;
+          window.ShortcutDevicePreviews?.renderIphonePreview(heroPreview, {
+            trigger: step.shortcut,
+            expansion: step.phrase,
+            initials: "JL",
+            name: "Jordan",
+            inbound: step.inbound,
+            width: 300,
+          });
+        }
+
+        window.ShortcutDevicePreviews?.renderIphonePreview(howPreview, {
+          trigger: ">pp",
+          expansion: "A1234567",
+          initials: "JL",
+          name: "Jordan",
+          inbound: "What's the address again?",
+          width: 220,
+        });
+
         if (prefersReducedMotion) {
-          shortcutNode.textContent = liveDemoSteps[0].shortcut;
-          phraseNode.textContent = liveDemoSteps[0].phrase;
+          renderDemo(liveDemoSteps[0]);
           return;
         }
 
@@ -1124,6 +1534,14 @@ p {
             const step = liveDemoSteps[stepIndex];
             shortcutNode.textContent = "";
             phraseNode.textContent = "";
+            window.ShortcutDevicePreviews?.renderIphonePreview(heroPreview, {
+              trigger: step.shortcut,
+              expansion: step.phrase,
+              initials: "JL",
+              name: "Jordan",
+              inbound: step.inbound,
+              width: 300,
+            });
 
             for (const char of step.shortcut) {
               shortcutNode.textContent += char;
