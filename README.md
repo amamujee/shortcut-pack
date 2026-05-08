@@ -58,7 +58,8 @@ Shortcut Pack removes the blank-page problem and gives you a usable system fast.
 4. Review the starter shortcuts, then change anything you want.
 5. Download `Text Substitutions.plist`.
 6. On your Mac, open `System Settings` -> `Keyboard` -> `Text Replacements`.
-7. Drag the downloaded plist into the list.
+7. Back up your current replacements: select one row, press `Command-A`, then drag the selected rows to your Desktop or a Finder folder.
+8. Drag the downloaded `Text Substitutions.plist` into the Text Replacements window, then click Done if prompted.
 
 Note: You can build the pack in any browser, but the plist import step works on Mac only.
 
