@@ -12,5 +12,6 @@ Blog post: https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/
 - No signup or backend is required.
 - Personal details stay in the browser.
 - The generated plist imports into macOS Text Replacements.
+- Users should back up their current macOS Text Replacements before importing a generated plist.
 - Imported text replacements can sync to iPhone and iPad through iCloud.
 - The project is open source under the MIT license.

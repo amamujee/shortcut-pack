@@ -45,11 +45,12 @@ function formatMarkdown(entries) {
 }
 
 function runSetup() {
-  console.log("Open Keyboard settings and import or enter your shortcuts.");
+  console.log("Open Keyboard settings, back up your current replacements, then import or enter your shortcuts.");
   console.log("Recommended naming style: use a memorable prefix like @@ or > to avoid accidental triggers.");
 
   if (process.platform !== "darwin") {
     console.log("This helper is Mac-first. On macOS, go to System Settings -> Keyboard -> Text Replacements.");
+    console.log("Before importing, select your current replacements and drag them to Finder as a backup.");
     return;
   }
 
@@ -62,6 +63,8 @@ function runSetup() {
     console.log("Could not open the settings pane automatically.");
     console.log("Open System Settings -> Keyboard -> Text Replacements manually.");
   }
+
+  console.log("Before importing, select your current replacements and drag them to Finder as a backup.");
 }
 
 function runList() {
