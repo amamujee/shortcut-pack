@@ -1495,26 +1495,49 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const navLinks = Array.from(document.querySelectorAll("[data-section-nav]"));
-  const sections = navLinks
+  const navTargets = navLinks
     .map((link) => document.getElementById(link.dataset.sectionNav))
     .filter(Boolean);
 
-  if ("IntersectionObserver" in window && sections.length) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const active = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  function setActiveNav(sectionId) {
+    navLinks.forEach((link) => {
+      link.classList.toggle("is-active", link.dataset.sectionNav === sectionId);
+    });
+  }
 
-        if (!active) return;
+  function updateActiveNav() {
+    if (!navTargets.length) return;
 
-        navLinks.forEach((link) => {
-          link.classList.toggle("is-active", link.dataset.sectionNav === active.target.id);
-        });
-      },
-      { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
-    );
-    sections.forEach((section) => observer.observe(section));
+    const topbarHeight = document.querySelector(".topbar")?.getBoundingClientRect().height || 0;
+    const markerY = window.scrollY + topbarHeight + 28;
+    let activeTarget = navTargets[0];
+
+    navTargets.forEach((target) => {
+      const targetTop = target.getBoundingClientRect().top + window.scrollY;
+      if (targetTop <= markerY) {
+        activeTarget = target;
+      }
+    });
+
+    const pageBottom = window.scrollY + window.innerHeight;
+    const documentBottom = document.documentElement.scrollHeight;
+    if (documentBottom - pageBottom < 4) {
+      activeTarget = navTargets[navTargets.length - 1];
+    }
+
+    setActiveNav(activeTarget.id);
+  }
+
+  if (navTargets.length) {
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        setActiveNav(link.dataset.sectionNav);
+      });
+    });
+
+    updateActiveNav();
+    window.addEventListener("scroll", updateActiveNav, { passive: true });
+    window.addEventListener("resize", updateActiveNav);
   }
 
   render();

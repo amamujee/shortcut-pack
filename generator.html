@@ -510,6 +510,7 @@ h3,
   text-underline-offset: 0.16em;
 }
 
+#step-prefix,
 #step-details,
 #step-starters,
 #step-custom,
@@ -1729,7 +1730,7 @@ tbody tr.duplicate-row {
       <div id="activePackStack" class="active-pack-stack" aria-label="Active starter packs"></div>
 
       <nav class="section-nav" aria-label="Builder sections">
-        <a href="#prefix" data-section-nav="prefix">Prefix</a>
+        <a href="#step-prefix" data-section-nav="step-prefix">Prefix</a>
         <a href="#step-details" data-section-nav="step-details">Details</a>
         <a href="#step-starters" data-section-nav="step-starters">Shortcuts</a>
         <a href="#step-custom" data-section-nav="step-custom">Custom</a>
@@ -1771,7 +1772,7 @@ tbody tr.duplicate-row {
           <p class="card-label">Quick setup</p>
           <ol class="quick-setup-list">
             <li>
-              <a href="#prefix">Configure your trigger prefix</a>
+              <a href="#step-prefix">Configure your trigger prefix</a>
             </li>
             <li>
               <a href="#step-details">Add your details</a>
@@ -1791,7 +1792,7 @@ tbody tr.duplicate-row {
 
       <main id="top" class="layout">
         <div class="builder-form">
-        <section id="step-details" class="panel">
+        <section id="step-prefix" class="panel">
           <div class="panel-header">
             <div>
               <p class="section-kicker">Step 1</p>
@@ -1853,7 +1854,7 @@ tbody tr.duplicate-row {
               </span>
             </label>
 
-            <div class="step-divider span-3">
+            <div id="step-details" class="step-divider span-3">
               <div>
                 <p class="section-kicker">Step 2</p>
                 <h3>Your details</h3>
@@ -4578,26 +4579,49 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const navLinks = Array.from(document.querySelectorAll("[data-section-nav]"));
-  const sections = navLinks
+  const navTargets = navLinks
     .map((link) => document.getElementById(link.dataset.sectionNav))
     .filter(Boolean);
 
-  if ("IntersectionObserver" in window && sections.length) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const active = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  function setActiveNav(sectionId) {
+    navLinks.forEach((link) => {
+      link.classList.toggle("is-active", link.dataset.sectionNav === sectionId);
+    });
+  }
 
-        if (!active) return;
+  function updateActiveNav() {
+    if (!navTargets.length) return;
 
-        navLinks.forEach((link) => {
-          link.classList.toggle("is-active", link.dataset.sectionNav === active.target.id);
-        });
-      },
-      { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
-    );
-    sections.forEach((section) => observer.observe(section));
+    const topbarHeight = document.querySelector(".topbar")?.getBoundingClientRect().height || 0;
+    const markerY = window.scrollY + topbarHeight + 28;
+    let activeTarget = navTargets[0];
+
+    navTargets.forEach((target) => {
+      const targetTop = target.getBoundingClientRect().top + window.scrollY;
+      if (targetTop <= markerY) {
+        activeTarget = target;
+      }
+    });
+
+    const pageBottom = window.scrollY + window.innerHeight;
+    const documentBottom = document.documentElement.scrollHeight;
+    if (documentBottom - pageBottom < 4) {
+      activeTarget = navTargets[navTargets.length - 1];
+    }
+
+    setActiveNav(activeTarget.id);
+  }
+
+  if (navTargets.length) {
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        setActiveNav(link.dataset.sectionNav);
+      });
+    });
+
+    updateActiveNav();
+    window.addEventListener("scroll", updateActiveNav, { passive: true });
+    window.addEventListener("resize", updateActiveNav);
   }
 
   render();
