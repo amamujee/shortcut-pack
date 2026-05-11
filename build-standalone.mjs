@@ -54,10 +54,6 @@ const landingHtml = landingSource
     '<link rel="icon" href="/favicon.svg" type="image/svg+xml" />',
   )
   .replace(
-    '"__OFFLINE_BUILDER_BASE64__"',
-    JSON.stringify(Buffer.from(generatorHtml, "utf8").toString("base64")),
-  )
-  .replace(
     '    <script src="./assets/js/device-previews.js"></script>',
     `    <script>\n${devicePreviewsJs}\n</script>`,
   );

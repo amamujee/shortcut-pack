@@ -1412,7 +1412,6 @@ p {
 
     <script>
       const offlineBuilderFilename = "Shortcut Pack Builder.html";
-      const offlineBuilderBase64 = "__OFFLINE_BUILDER_BASE64__";
       const liveDemoSteps = [
         {
           inbound: "What's the address again?",
@@ -1431,20 +1430,22 @@ p {
         },
       ];
 
-      function decodeBase64Utf8(base64) {
-        const binary = window.atob(base64);
-        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-        return new TextDecoder().decode(bytes);
-      }
-
       document.querySelectorAll("[data-download-offline-builder]").forEach((link) => {
-        link.addEventListener("click", (event) => {
-          if (offlineBuilderBase64 === "__OFFLINE_BUILDER_BASE64__") {
+        link.addEventListener("click", async (event) => {
+          event.preventDefault();
+
+          let offlineBuilderHtml;
+          try {
+            const response = await fetch(link.href);
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}`);
+            }
+            offlineBuilderHtml = await response.text();
+          } catch {
+            window.location.href = link.href;
             return;
           }
 
-          event.preventDefault();
-          const offlineBuilderHtml = decodeBase64Utf8(offlineBuilderBase64);
           const blob = new Blob([offlineBuilderHtml], {
             type: "text/html;charset=utf-8",
           });
