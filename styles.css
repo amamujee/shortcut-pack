@@ -27,6 +27,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: hidden;
   color: var(--ink);
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   background:
@@ -463,6 +464,12 @@ h3,
 .builder-form {
   display: grid;
   gap: 20px;
+  min-width: 0;
+}
+
+.panel,
+.builder-preview {
+  min-width: 0;
 }
 
 .builder-preview {
@@ -712,6 +719,10 @@ label {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.profile-field[hidden] {
+  display: none;
+}
+
 .prefix-field {
   gap: 12px;
   padding: 14px;
@@ -872,6 +883,24 @@ label {
   white-space: nowrap;
 }
 
+.detail-view-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.compact-button {
+  min-height: 38px;
+  padding: 8px 13px;
+  font-size: 0.82rem;
+}
+
+.compact-button[hidden] {
+  display: none;
+}
+
 .hide-empty-toggle input {
   width: 16px;
   height: 16px;
@@ -883,6 +912,10 @@ label {
   grid-column: 1 / -1;
   border-top: 1px solid var(--line-soft);
   padding-top: 18px;
+}
+
+.detail-group[hidden] {
+  display: none;
 }
 
 .detail-group:not(.is-relevant) summary {
@@ -1111,6 +1144,27 @@ textarea {
 .starter-table {
   display: grid;
   gap: 10px;
+}
+
+.starter-search-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+}
+
+.starter-scope-control {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: 48px;
+}
+
+.starter-scope-summary {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 .starter-table-head,
@@ -1550,14 +1604,35 @@ tbody tr.duplicate-row {
   }
 
   .topbar {
-    position: static;
-    padding-bottom: 0;
-    flex-wrap: wrap;
+    position: sticky;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    padding: 10px 16px 12px;
+    overflow: hidden;
   }
 
   .section-nav,
   .active-pack-stack {
-    justify-self: start;
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .section-nav::-webkit-scrollbar,
+  .active-pack-stack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .active-pack-stack {
+    padding-bottom: 2px;
+  }
+
+  .section-nav {
+    justify-content: flex-start;
   }
 
   .builder-preview {
@@ -1566,7 +1641,14 @@ tbody tr.duplicate-row {
   }
 
   .topbar-actions {
-    justify-content: space-between;
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-end;
+  }
+
+  .topbar-save-status,
+  .topbar-link {
+    display: none;
   }
 
   .form-grid {
@@ -1611,9 +1693,89 @@ tbody tr.duplicate-row {
   .panel-meta {
     text-align: left;
   }
+
+  .starter-search-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .starter-scope-control {
+    justify-content: space-between;
+    min-height: 0;
+  }
 }
 
 @media (max-width: 640px) {
+  .page-shell {
+    padding: 14px 12px 40px;
+  }
+
+  .topbar {
+    padding-inline: 12px;
+  }
+
+  .brand-word {
+    font-size: 1.02rem;
+  }
+
+  .builder-tag {
+    display: none;
+  }
+
+  .topbar-download {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+  }
+
+  .section-nav a {
+    padding: 7px 10px;
+    font-size: 0.76rem;
+  }
+
+  .panel {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .step-divider,
+  .subsection-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .detail-view-actions {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .detail-group-body {
+    grid-template-columns: 1fr;
+  }
+
+  .prefix-segmented {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .prefix-custom-input {
+    min-width: 110px;
+  }
+
+  .starter-scope-control {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 540px;
+  }
+
   .pack-modal-grid {
     grid-template-columns: 1fr;
   }

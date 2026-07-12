@@ -7,6 +7,7 @@ const landingSourcePath = path.join(root, "index.source.html");
 const landingOutputPath = path.join(root, "index.html");
 const generatorSourcePath = path.join(root, "generator.source.html");
 const generatorOutputPath = path.join(root, "generator.html");
+const offlineGeneratorOutputPath = path.join(root, "shortcut-pack-offline.html");
 const generatorStylesPath = path.join(root, "styles.css");
 const starterDataPath = path.join(root, "starter-pack.cjs");
 const appJsPath = path.join(root, "app.js");
@@ -30,7 +31,7 @@ const importGuideImage = fs.readFileSync(importGuideImagePath);
 const faviconDataUri = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
 const importGuideImageDataUri = `data:image/png;base64,${importGuideImage.toString("base64")}`;
 
-const generatorHtml = generatorSource
+const offlineGeneratorHtml = generatorSource
   .replace(
     '<link rel="icon" href="./favicon.svg" type="image/svg+xml" />',
     `<link rel="icon" href="${faviconDataUri}" type="image/svg+xml" />`,
@@ -59,6 +60,8 @@ const landingHtml = landingSource
   );
 
 fs.writeFileSync(landingOutputPath, landingHtml);
-fs.writeFileSync(generatorOutputPath, generatorHtml);
+fs.writeFileSync(generatorOutputPath, generatorSource);
+fs.writeFileSync(offlineGeneratorOutputPath, offlineGeneratorHtml);
 console.log(`Wrote ${landingOutputPath}`);
 console.log(`Wrote ${generatorOutputPath}`);
+console.log(`Wrote ${offlineGeneratorOutputPath}`);

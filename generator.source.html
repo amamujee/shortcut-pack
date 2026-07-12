@@ -206,10 +206,15 @@
                 <h3>Your details</h3>
                 <p>Add only the details you actually reuse. Blank fields stay out of the export.</p>
               </div>
-              <label class="hide-empty-toggle">
-                <input id="hideEmptyFields" type="checkbox" />
-                <span>Hide empty fields</span>
-              </label>
+              <div class="detail-view-actions">
+                <button id="toggleAllDetails" class="secondary-button compact-button" type="button" hidden>
+                  Show all fields
+                </button>
+                <label class="hide-empty-toggle">
+                  <input id="hideEmptyFields" type="checkbox" />
+                  <span>Hide empty fields</span>
+                </label>
+              </div>
             </div>
 
             <div class="live-shortcut-preview span-3">
@@ -568,6 +573,12 @@
                 <span class="field-label">Filter rows</span>
                 <input id="starterSearch" type="search" placeholder="Search by title, trigger, or expanded text" />
               </label>
+              <div class="starter-scope-control">
+                <span id="starterScopeSummary" class="starter-scope-summary"></span>
+                <button id="toggleAllStarters" class="secondary-button compact-button" type="button" hidden>
+                  Browse all shortcuts
+                </button>
+              </div>
             </div>
             <div class="starter-table-head" aria-hidden="true">
               <span>Use</span>

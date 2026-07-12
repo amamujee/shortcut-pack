@@ -23,6 +23,8 @@ const state = {
   previewDevice: "mac",
   previewEntry: null,
   starterFilter: "",
+  showAllDetails: false,
+  showAllStarters: false,
 };
 
 const SHORTCUT_PACKS = {
@@ -125,6 +127,8 @@ function resetStateToDefaults() {
   state.previewDevice = "mac";
   state.previewEntry = null;
   state.starterFilter = "";
+  state.showAllDetails = false;
+  state.showAllStarters = false;
 }
 
 function serializeState() {
@@ -595,9 +599,13 @@ function makeId() {
 }
 
 function refreshGeneratedStarters(force = false) {
+  const selectedIds = selectedPackStarterIds();
+  const hasPackFocus = selectedIds.size > 0;
+
   state.starters = state.starters.map((item) => {
     const definition = definitionById(item.id);
-    const autoEnabled = starterShouldAutoEnable(definition);
+    const autoEnabled =
+      (!hasPackFocus || selectedIds.has(item.id)) && starterShouldAutoEnable(definition);
     let nextItem = item;
 
     if (!item.customized || force) {
@@ -724,6 +732,8 @@ function applyPackDeepLink() {
 
 function setActivePacks(slugs) {
   state.activePacks = [...new Set(slugs.filter((slug) => SHORTCUT_PACKS[slug]))];
+  state.showAllDetails = false;
+  state.showAllStarters = false;
   applyActivePacks();
   resetDetailGroupToggles();
   render();
@@ -907,11 +917,15 @@ function resetDetailGroupToggles() {
 
 function refreshDetailGroupCounts() {
   const relevantFields = relevantProfileFields();
+  const hasPackFocus = state.activePacks.length > 0;
+  const focused = hasPackFocus && !state.showAllDetails;
   document.querySelectorAll(".detail-group").forEach((group) => {
     const fields = (group.dataset.fields || "").split(",").filter(Boolean);
-    const relevant = fields.some((field) => relevantFields.has(field));
+    const visibleFields = focused ? fields.filter((field) => relevantFields.has(field)) : fields;
+    const relevant = visibleFields.length > 0;
     const count = group.querySelector(".detail-group-count");
 
+    group.hidden = focused && !relevant;
     group.classList.toggle("is-relevant", relevant);
     if (group.dataset.userToggled !== "true") {
       group.dataset.autoSyncing = "true";
@@ -922,15 +936,23 @@ function refreshDetailGroupCounts() {
     }
 
     if (count) {
-      count.textContent = `${filledDetailCount(fields)}/${fields.length} filled`;
+      count.textContent = `${filledDetailCount(visibleFields)}/${visibleFields.length} filled`;
     }
 
     const hideEmpty = document.querySelector("#hideEmptyFields")?.checked;
     group.querySelectorAll("[data-preview-field]").forEach((fieldNode) => {
       const field = fieldNode.dataset.previewField;
-      fieldNode.hidden = Boolean(hideEmpty && !profileValuePresent(field));
+      const outsidePack = focused && !relevantFields.has(field);
+      fieldNode.hidden = Boolean(outsidePack || (hideEmpty && !profileValuePresent(field)));
     });
   });
+
+  const toggle = document.querySelector("#toggleAllDetails");
+  if (toggle) {
+    toggle.hidden = !hasPackFocus;
+    toggle.textContent = state.showAllDetails ? "Show selected-pack fields" : "Show all fields";
+    toggle.setAttribute("aria-pressed", String(state.showAllDetails));
+  }
 }
 
 function groupProfileFields() {
@@ -1061,10 +1083,15 @@ function renderStarters() {
   const entries = buildEntries();
   const duplicates = findDuplicates(entries);
   const filter = state.starterFilter.trim().toLowerCase();
+  const selectedIds = selectedPackStarterIds();
+  const focused = selectedIds.size > 0 && !state.showAllStarters;
   let renderedCount = 0;
 
   state.starters.forEach((starter) => {
     const definition = definitionById(starter.id);
+    if (focused && !selectedIds.has(starter.id)) {
+      return;
+    }
     const matchesFilter =
       !filter ||
       definition.title.toLowerCase().includes(filter) ||
@@ -1190,6 +1217,22 @@ function renderStarters() {
     empty.className = "empty-state";
     empty.textContent = "No starter shortcuts match that search.";
     root.appendChild(empty);
+  }
+
+  const toggle = document.querySelector("#toggleAllStarters");
+  const scopeSummary = document.querySelector("#starterScopeSummary");
+  if (toggle) {
+    toggle.hidden = !selectedIds.size;
+    toggle.textContent = state.showAllStarters
+      ? "Show selected-pack shortcuts"
+      : `Browse all ${state.starters.length} shortcuts`;
+    toggle.setAttribute("aria-pressed", String(state.showAllStarters));
+  }
+  if (scopeSummary) {
+    const visibleTotal = focused ? selectedIds.size : state.starters.length;
+    scopeSummary.textContent = focused
+      ? `${visibleTotal} shortcuts from your selected packs`
+      : `${visibleTotal} starter shortcuts`;
   }
 }
 
@@ -1444,6 +1487,15 @@ document.addEventListener("DOMContentLoaded", () => {
     renderStarters();
   });
   document.querySelector("#hideEmptyFields")?.addEventListener("change", refreshDetailGroupCounts);
+  document.querySelector("#toggleAllDetails")?.addEventListener("click", () => {
+    state.showAllDetails = !state.showAllDetails;
+    resetDetailGroupToggles();
+    refreshDetailGroupCounts();
+  });
+  document.querySelector("#toggleAllStarters")?.addEventListener("click", () => {
+    state.showAllStarters = !state.showAllStarters;
+    renderStarters();
+  });
   document.querySelectorAll("[data-prefix-choice]").forEach((button) => {
     button.addEventListener("click", () => {
       const choice = button.dataset.prefixChoice;

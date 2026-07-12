@@ -76,7 +76,7 @@ Shortcut Pack is meant to feel safe to use for personal info.
 
 Most people should just use [shortcutpack.com](https://shortcutpack.com).
 
-If you want the standalone local file instead, use [`generator.html`](./generator.html). Open it in any browser on your Mac and use it the same way as the website.
+If you want the standalone local file instead, use [`shortcut-pack-offline.html`](./shortcut-pack-offline.html). Open it in any browser on your Mac and use it the same way as the website.
 
 ## If You Want To Edit The Defaults
 
@@ -95,7 +95,8 @@ That is where the built-in shortcut definitions live:
 - [`index.source.html`](./index.source.html): landing page source
 - [`index.html`](./index.html): built landing page
 - [`generator.source.html`](./generator.source.html): builder source
-- [`generator.html`](./generator.html): built standalone builder
+- [`generator.html`](./generator.html): lightweight web builder
+- [`shortcut-pack-offline.html`](./shortcut-pack-offline.html): self-contained offline builder
 - [`styles.css`](./styles.css): styling
 - [`app.js`](./app.js): browser logic and plist export
 - [`starter-pack.cjs`](./starter-pack.cjs): default shortcut definitions
