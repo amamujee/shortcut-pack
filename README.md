@@ -1,115 +1,99 @@
 # Shortcut Pack
 
-Shortcut Pack helps you turn repeated personal details, links, replies, and snippets into Apple text shortcuts you can actually use.
+Build a personal pack of Apple text replacements for the details, links, and replies you type all the time.
 
-Blog post: https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/
+[Open Shortcut Pack](https://shortcutpack.com) · [Download the offline builder](https://shortcutpack.com/shortcut-pack-offline.html) · [Read the story behind it](https://aadil.blog/2026/04/22/shortcut-pack-type-less-remember-less/)
 
-Start here: [shortcutpack.com](https://shortcutpack.com)
+Shortcut Pack is free, requires no account, and exports a native `Text Substitutions.plist` file that macOS can import directly.
 
-## Screenshots
+## See It In Action
 
-Landing page:
+| Pick the packs you need | Build and customize your shortcuts |
+| --- | --- |
+| ![Shortcut Pack landing page](./assets/screenshots/landing-page.png) | ![Shortcut Pack builder](./assets/screenshots/builder-page.png) |
 
-![Shortcut Pack landing page](./assets/screenshots/landing-page.png)
+## What You Can Build
 
-Builder:
+Choose any combination of four focused starter packs:
 
-![Shortcut Pack builder](./assets/screenshots/builder-page.png)
+- **Personal:** name, email, phone, and home address
+- **Work:** intro reply, signature, and scheduling link
+- **Travel:** passport details, Known Traveler Number, and airline loyalty number
+- **Founder:** bio, website, social profiles, and scheduling link
 
-## What It Is
+From there, you can:
 
-Shortcut Pack is a simple builder for Apple text replacements.
+- Choose a shared trigger prefix such as `>`, `-`, `@@`, or your own
+- Fill in only the details you want to use
+- Preview shortcuts as you type
+- Edit any trigger or expanded phrase
+- Add completely custom shortcuts
+- Skip blank fields automatically
+- Combine or remove packs without losing your work
+- Export only the shortcuts you enabled
 
-You fill in the details you reuse, keep the shortcuts you want, and export a `Text Substitutions.plist` file that macOS can import directly.
-
-The import step is a Mac workflow. Once you import the file on your Mac, Apple can sync the resulting text replacements to your iPhone and iPad through iCloud.
-
-## Why This Exists
-
-Apple's built-in text replacement is great once it is set up, but setting it up is tedious.
-
-- You have to invent a shortcut system from scratch.
-- You have to add each entry one by one.
-- You usually remember to do it when you are already busy.
-
-Shortcut Pack removes the blank-page problem and gives you a usable system fast.
-
-## Who It Is For
-
-- People who type the same personal details again and again
-- Founders, operators, recruiters, and assistants sending repetitive replies
-- Anyone who likes Apple text replacement but has never taken the time to organize it properly
-
-## What It Does
-
-- Starts with sensible shortcut defaults for identity, links, addresses, and replies
-- Lets you choose a shared trigger prefix like `>` or `@@`
-- Shows live shortcut previews as you fill in your details
-- Lets you edit every trigger and every expanded text value before export
-- Supports custom shortcuts
-- Skips blank fields instead of exporting placeholder text
-- Exports a file macOS already knows how to import
+For example, `>em` can expand to your email address and `>intro` can expand to a full reusable reply.
 
 ## How To Use It
 
-1. Go to [shortcutpack.com](https://shortcutpack.com).
-2. Open the builder.
-3. Fill in only the details you actually reuse.
-4. Review the starter shortcuts, then change anything you want.
-5. Download `Text Substitutions.plist`.
-6. On your Mac, open `System Settings` -> `Keyboard` -> `Text Replacements`.
-7. Back up your current replacements: select one row, press `Command-A`, then drag the selected rows to your Desktop or a Finder folder.
-8. Drag the downloaded `Text Substitutions.plist` into the Text Replacements window, then click Done if prompted.
+1. Open [shortcutpack.com](https://shortcutpack.com) and select one or more starter packs.
+2. Choose a trigger prefix and add the details you reuse.
+3. Review the generated shortcuts, customize them, and add your own.
+4. Download `Text Substitutions.plist`.
+5. On your Mac, open **System Settings → Keyboard → Text Replacements**.
+6. Back up your existing replacements: select one row, press `Command-A`, then drag the selected rows to your Desktop or a Finder folder.
+7. Drag `Text Substitutions.plist` into the Text Replacements window and click **Done** if prompted.
 
-Note: You can build the pack in any browser, but the plist import step works on Mac only.
+The import step requires a Mac. After import, iCloud can sync the text replacements to your iPhone and iPad.
 
-## Privacy
+## Privacy And Local Drafts
 
-Shortcut Pack is meant to feel safe to use for personal info.
+Shortcut Pack has no signup, account, or application backend. The app code does not submit the contents of your shortcuts to a Shortcut Pack server.
 
-- No signup
-- No backend
-- No saved personal data
-- The offline builder works the same way if you would rather use a local file
+The builder does save your working draft—including profile fields, selected shortcuts, custom rows, and active packs—to your browser's local storage so your work is still there when you return. Use **Clear local draft** in the builder to remove it from that browser.
 
-## If You Want To Run It Locally
+For a fully local workflow, download [`shortcut-pack-offline.html`](./shortcut-pack-offline.html) and open it directly in a browser. If you are entering particularly sensitive information on a shared computer, use the offline builder and clear the saved draft after exporting.
 
-Most people should just use [shortcutpack.com](https://shortcutpack.com).
+## Run It Locally
 
-If you want the standalone local file instead, use [`shortcut-pack-offline.html`](./shortcut-pack-offline.html). Open it in any browser on your Mac and use it the same way as the website.
+This project has no runtime dependencies. Clone the repository, then build and check it with Node.js:
 
-## If You Want To Edit The Defaults
+```bash
+npm run build
+npm run doctor
+node --check app.js
+node --check build-standalone.mjs
+```
 
-The main source of truth is [`starter-pack.cjs`](./starter-pack.cjs).
+The build creates two builder artifacts:
 
-That is where the built-in shortcut definitions live:
+- [`generator.html`](./generator.html) is the lightweight web version and loads local CSS and JavaScript files.
+- [`shortcut-pack-offline.html`](./shortcut-pack-offline.html) is a self-contained file with everything embedded for offline use.
 
-- categories
-- default triggers
-- descriptions
-- placeholder text
-- generated text logic
+Edit the source files rather than the generated HTML, then run `npm run build` again.
+
+## Command-Line Helpers
+
+The repository also includes a small CLI for browsing the generic starter set and checking the local Mac setup:
+
+```bash
+npm run list
+npm run generate -- --prefix=@@ --format=markdown
+npm run doctor
+npm run setup
+```
+
+`setup` opens macOS Keyboard settings when possible. `generate` supports `text`, `markdown`, and `json` output.
 
 ## Project Structure
 
-- [`index.source.html`](./index.source.html): landing page source
-- [`index.html`](./index.html): built landing page
-- [`generator.source.html`](./generator.source.html): builder source
-- [`generator.html`](./generator.html): lightweight web builder
-- [`shortcut-pack-offline.html`](./shortcut-pack-offline.html): self-contained offline builder
-- [`styles.css`](./styles.css): styling
-- [`app.js`](./app.js): browser logic and plist export
-- [`starter-pack.cjs`](./starter-pack.cjs): default shortcut definitions
-- [`build-standalone.mjs`](./build-standalone.mjs): rebuilds the standalone files
-
-## Local Development
-
-```bash
-node build-standalone.mjs
-node --check app.js
-node --check build-standalone.mjs
-node cli.mjs doctor
-```
+- [`index.source.html`](./index.source.html) — landing-page source
+- [`generator.source.html`](./generator.source.html) — builder markup source
+- [`styles.css`](./styles.css) — builder styles
+- [`app.js`](./app.js) — builder state, previews, validation, and plist export
+- [`starter-pack.cjs`](./starter-pack.cjs) — source of truth for built-in shortcut definitions
+- [`build-standalone.mjs`](./build-standalone.mjs) — generates the web and offline artifacts
+- [`cli.mjs`](./cli.mjs) — command-line helpers
 
 ## License
 
