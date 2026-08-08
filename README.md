@@ -52,7 +52,9 @@ Shortcut Pack has no signup, account, or application backend. The app code does 
 
 The builder does save your working draft—including profile fields, selected shortcuts, custom rows, and active packs—to your browser's local storage so your work is still there when you return. Use **Clear local draft** in the builder to remove it from that browser.
 
-For a fully local workflow, download [`shortcut-pack-offline.html`](./shortcut-pack-offline.html) and open it directly in a browser. If you are entering particularly sensitive information on a shared computer, use the offline builder and clear the saved draft after exporting.
+The hosted version loads Vercel Web Analytics for site-traffic measurement; the builder code does not add your shortcut content to analytics events.
+
+For a fully local workflow, download [`shortcut-pack-offline.html`](./shortcut-pack-offline.html) and open it directly in a browser. It uses the same local-draft behavior, so clear the saved draft after exporting if you are on a shared computer.
 
 ## Run It Locally
 
